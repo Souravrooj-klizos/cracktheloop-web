@@ -297,7 +297,7 @@ export default function CopilotPage() {
       analyser.connect(audioCtx.destination); // Required to pull audio through script processor
 
       // Connect WebSocket to Deepgram
-      const dgUrl = "wss://api.deepgram.com/v1/listen?model=nova-2&encoding=linear16&sample_rate=16000&channels=1&interim_results=true&punctuate=true&endpointing=300";
+      const dgUrl = "wss://api.deepgram.com/v1/listen?model=nova-3&encoding=linear16&sample_rate=16000&channels=1&interim_results=true&punctuate=true&endpointing=300";
       console.log("[STT] Connecting to Deepgram WebSocket...");
       const ws = new WebSocket(dgUrl, ["token", deepgramKey]);
       wsRef.current = ws;
