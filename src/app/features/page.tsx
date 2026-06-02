@@ -15,7 +15,9 @@ import {
   ArrowRight,
   Check,
   Home,
-  Globe
+  Globe,
+  ChevronDown,
+  Terminal
 } from "lucide-react";
 
 export default function FeaturesPage() {
@@ -29,8 +31,8 @@ export default function FeaturesPage() {
 
       {/* Navigation Header */}
       <header className="w-full max-w-7xl mx-auto px-6 py-6 flex justify-between items-center relative z-20">
-        <a href="/" className="flex items-center gap-2">
-          <img src="/logo-horizontal-dark.svg" className="h-8 w-auto select-none" alt="Logo" />
+        <a href="/" className="flex items-center gap-2 hover:opacity-90 transition">
+          <img src="/logo-horizontal-dark.svg" className="h-18 w-auto select-none" alt="Logo" />
         </a>
         <div className="flex items-center gap-6 font-semibold">
           <a href="/" className="text-sm text-slate-400 hover:text-white transition flex items-center gap-1">
@@ -188,6 +190,9 @@ pub fn apply_stealth_affinity(hwnd: HWND) {
 
       </section>
 
+      {/* Developer FAQ */}
+      <DeveloperFaqSection />
+
       {/* CTA section */}
       <section className="w-full max-w-4xl mx-auto px-6 pt-24 text-center select-none z-20">
         <div className="bg-gradient-to-r from-[#6610F2]/10 to-[#0D6EFD]/10 border border-white/10 rounded-3xl p-10 flex flex-col items-center gap-6">
@@ -222,5 +227,77 @@ pub fn apply_stealth_affinity(hwnd: HWND) {
       </footer>
 
     </div>
+  );
+}
+
+function DeveloperFaqSection() {
+  const [open, setOpen] = useState<number | null>(null);
+
+  const faqs = [
+    {
+      q: "Can interviewers detect CrackTheLoop?",
+      a: "No. The desktop overlay uses Windows' SetWindowDisplayAffinity(WDA_EXCLUDEFROMCAPTURE) API, which makes the window completely invisible to screen-capture tools including Zoom, Google Meet, Microsoft Teams, and OBS. The audio capture happens at the driver level — no virtual audio device appears in any device list.",
+    },
+    {
+      q: "How does the audio capture work without permission dialogs?",
+      a: "On Windows, WASAPI loopback capture is a first-party OS API that requires no special permissions — it reads the audio already being played to your speakers. Microphone access uses the standard OS mic permission dialog that only appears once on first launch.",
+    },
+    {
+      q: "What is the end-to-end latency?",
+      a: "Typical measured latency is 650–950ms from the end of a spoken question to the first token appearing on the HUD. This breaks down as: ~150ms WASAPI buffer drain, ~200ms Deepgram VAD silence debounce, ~80ms WebSocket RTT to Deepgram, and ~300ms Groq LLM TTFT (time-to-first-token).",
+    },
+    {
+      q: "Why Deepgram nova-3 instead of Whisper?",
+      a: "Deepgram nova-3 is a streaming model — it returns partial and final transcript objects in real-time over WebSocket, achieving ~40ms streaming latency. OpenAI Whisper requires a full audio buffer to be uploaded before transcription begins, adding 1–3 seconds of unavoidable delay.",
+    },
+    {
+      q: "Is my API key ever sent to your servers?",
+      a: "Your Deepgram and LLM API keys are stored only in your browser's localStorage. The Deepgram key is used directly from the browser via WebSocket subprotocol authentication. LLM keys route through our Next.js /api/completion proxy only to prevent client-side exposure in response headers — they are never logged or persisted server-side.",
+    },
+    {
+      q: "Does it work on macOS and Linux?",
+      a: "The Browser Copilot works on any OS since it runs inside Chrome/Firefox. The native desktop client with Win32 affinity stealth is Windows-only. A macOS version using CGWindowListCreateImage exclusion APIs is on our roadmap for Q3 2026.",
+    },
+    {
+      q: "Which LLMs are supported?",
+      a: "Currently: Groq llama-3.1-8b-instant (default, fastest), Groq llama-3.3-70b-versatile (high accuracy), Anthropic Claude Sonnet 4.5, and OpenAI GPT-4o. The proxy route is model-agnostic — you can point it at any OpenAI-compatible endpoint by changing the base URL in your session settings.",
+    },
+  ];
+
+  return (
+    <section id="developer-faq" className="w-full max-w-4xl mx-auto px-6 pt-20 pb-8 relative z-20">
+      <div className="text-center mb-12 select-none">
+        <div className="inline-flex items-center gap-2 bg-[#6610F2]/10 border border-[#6610F2]/25 px-4 py-1.5 rounded-full text-xs font-bold text-purple-300 mb-5">
+          <Terminal className="w-3.5 h-3.5" /> Developer FAQ
+        </div>
+        <h2 className="text-3xl font-extrabold tracking-tight text-white">Questions Engineers Ask</h2>
+        <p className="text-slate-400 text-sm mt-2 max-w-xl mx-auto">Technical answers about architecture, security, and performance.</p>
+      </div>
+
+      <div className="flex flex-col gap-3">
+        {faqs.map((faq, i) => (
+          <div
+            key={i}
+            className="glow-card rounded-2xl border border-white/5 bg-[#0c1125] overflow-hidden transition-all duration-300"
+          >
+            <button
+              id={`faq-q-${i}`}
+              onClick={() => setOpen(open === i ? null : i)}
+              className="w-full flex items-center justify-between px-6 py-4 text-left gap-4 group cursor-pointer"
+            >
+              <span className="text-sm font-bold text-slate-200 group-hover:text-white transition-colors">{faq.q}</span>
+              <ChevronDown
+                className={`w-4 h-4 text-slate-500 shrink-0 transition-transform duration-300 ${open === i ? "rotate-180 text-sky-400" : ""}`}
+              />
+            </button>
+            {open === i && (
+              <div className="px-6 pb-5 text-slate-400 text-sm leading-relaxed border-t border-white/5 pt-4">
+                {faq.a}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }

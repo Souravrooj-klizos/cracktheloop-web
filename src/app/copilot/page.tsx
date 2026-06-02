@@ -257,8 +257,14 @@ export default function CopilotPage() {
         }
       }
 
-      if (!micStream && !systemStream) {
-        throw new Error("No audio capture sources are selected/enabled.");
+      const micHasAudio = micStream && micStream.getAudioTracks().length > 0;
+      const systemHasAudio = systemStream && systemStream.getAudioTracks().length > 0;
+
+      if (!micHasAudio && !systemHasAudio) {
+        if (captureSystem && (!systemStream || systemStream.getAudioTracks().length === 0)) {
+          throw new Error("No audio tracks captured. When sharing screen/tab, you MUST check the 'Share audio' box in the browser prompt.");
+        }
+        throw new Error("No active audio capture sources found (check microphone permissions).");
       }
 
       // Create Web Audio Node Graph
@@ -266,14 +272,14 @@ export default function CopilotPage() {
       let micConnected = false;
       let systemConnected = false;
 
-      if (micStream && micStream.getAudioTracks().length > 0) {
-        const micSource = audioCtx.createMediaStreamSource(micStream);
+      if (micHasAudio) {
+        const micSource = audioCtx.createMediaStreamSource(micStream!);
         micSource.connect(merger, 0, 0);
         micConnected = true;
       }
 
-      if (systemStream && systemStream.getAudioTracks().length > 0) {
-        const systemSource = audioCtx.createMediaStreamSource(systemStream);
+      if (systemHasAudio) {
+        const systemSource = audioCtx.createMediaStreamSource(systemStream!);
         systemSource.connect(merger, 0, 1);
         systemConnected = true;
       }
@@ -296,10 +302,15 @@ export default function CopilotPage() {
       processor.connect(analyser);
       analyser.connect(audioCtx.destination); // Required to pull audio through script processor
 
+      // Ensure AudioContext is fully running (bypass browser suspension policies)
+      if (audioCtx.state === "suspended") {
+        await audioCtx.resume();
+      }
+
       // Connect WebSocket to Deepgram
       const dgUrl = "wss://api.deepgram.com/v1/listen?model=nova-3&encoding=linear16&sample_rate=16000&channels=1&interim_results=true&punctuate=true&endpointing=300";
       console.log("[STT] Connecting to Deepgram WebSocket...");
-      const ws = new WebSocket(dgUrl, ["token", deepgramKey]);
+      const ws = new WebSocket(dgUrl, ["token", deepgramKey.trim()]);
       wsRef.current = ws;
 
       ws.onopen = () => {
@@ -493,7 +504,7 @@ export default function CopilotPage() {
         body: JSON.stringify({
           provider: activeLlmProvider,
           prompt: promptText,
-          apiKey: llmKey,
+          apiKey: llmKey.trim(),
           role: interviewRole,
           jobDescription: jobDescription || null,
           candidateResume: candidateResume || null,
