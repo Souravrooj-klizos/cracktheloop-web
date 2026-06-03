@@ -2,9 +2,23 @@ import { NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/db";
 import { InterviewSession } from "@/models/InterviewSession";
 import { User } from "@/models/User";
+import { logCreditTransaction } from "@/lib/transactions";
 import jwt from "jsonwebtoken";
 
 const NEXTAUTH_SECRET = process.env.NEXTAUTH_SECRET || "cracktheloop_secret_auth_key_2026_z8y";
+
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+};
+
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 204,
+    headers: corsHeaders,
+  });
+}
 
 function getUserIdFromRequest(req: Request) {
   const authHeader = req.headers.get("authorization");
@@ -21,22 +35,22 @@ function getUserIdFromRequest(req: Request) {
 export async function POST(req: Request) {
   const userId = getUserIdFromRequest(req);
   if (!userId) {
-    return NextResponse.json({ error: "Unauthorized. Valid token required." }, { status: 401 });
+    return NextResponse.json({ error: "Unauthorized. Valid token required." }, { status: 401, headers: corsHeaders });
   }
 
   try {
     const body = await req.json();
     const { role, company, transcript } = body;
 
-    if (!role || !transcript || !Array.isArray(transcript)) {
-      return NextResponse.json({ error: "Role and transcript array are required" }, { status: 400 });
+    if (!role || !transcript || !Array.isArray(transcript) || transcript.length === 0) {
+      return NextResponse.json({ error: "A non-empty transcript is required to save an interview session" }, { status: 400, headers: corsHeaders });
     }
 
     await connectToDatabase();
 
     const user = await User.findById(userId);
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ error: "User not found" }, { status: 404, headers: corsHeaders });
     }
 
     // Trial limit check (maximum 1 saved interview session)
@@ -45,7 +59,7 @@ export async function POST(req: Request) {
       if (interviewCount >= 1) {
         return NextResponse.json(
           { error: "Free Trial limit reached. You can only save exactly 1 interview session. Please purchase a plan to continue." },
-          { status: 403 }
+          { status: 403, headers: corsHeaders }
         );
       }
     }
@@ -72,7 +86,7 @@ export async function POST(req: Request) {
     if (user.credits < creditsToDeduct) {
       return NextResponse.json(
         { error: `Insufficient credits. Saving this session requires ${creditsToDeduct} credits, but you only have ${user.credits} remaining.` },
-        { status: 402 }
+        { status: 402, headers: corsHeaders }
       );
     }
 
@@ -80,32 +94,41 @@ export async function POST(req: Request) {
       user_id: userId,
       role,
       company: company || null,
-      transcript: transcript.map((turn: any) => ({
-        sender: turn.sender,
-        text: turn.text,
-        timestamp: turn.timestamp ? new Date(turn.timestamp) : new Date()
-      }))
+      transcript: transcript.map((turn: any) => {
+        let cleanSender = turn.sender;
+        if (cleanSender === "user") {
+          cleanSender = "candidate";
+        }
+        return {
+          sender: cleanSender,
+          text: turn.text,
+          timestamp: turn.timestamp ? new Date(turn.timestamp) : new Date()
+        };
+      })
     });
 
     await newSession.save();
 
     // Deduct credits and save user
     user.credits = Math.max(0, user.credits - creditsToDeduct);
+    user.total_burn_credits = (user.total_burn_credits || 0) + creditsToDeduct;
     await user.save();
+
+    await logCreditTransaction(user._id, creditsToDeduct, "burn", "interview_save");
 
     console.log(`[INTERVIEW COMPLETED] Saved session for ${user.email}. Charged ${creditsToDeduct} credits (duration: ${durationMinutes.toFixed(2)} min). Remaining: ${user.credits}`);
 
-    return NextResponse.json({ success: true, interview: newSession });
+    return NextResponse.json({ success: true, interview: newSession }, { headers: corsHeaders });
   } catch (err: any) {
     console.error("[INTERVIEWS POST ERROR]", err);
-    return NextResponse.json({ error: err.message || "Failed to save session" }, { status: 500 });
+    return NextResponse.json({ error: err.message || "Failed to save session" }, { status: 500, headers: corsHeaders });
   }
 }
 
 export async function GET(req: Request) {
   const userId = getUserIdFromRequest(req);
   if (!userId) {
-    return NextResponse.json({ error: "Unauthorized. Valid token required." }, { status: 401 });
+    return NextResponse.json({ error: "Unauthorized. Valid token required." }, { status: 401, headers: corsHeaders });
   }
 
   try {
@@ -116,9 +139,9 @@ export async function GET(req: Request) {
       .populate("user_id")
       .sort({ created_at: -1 });
 
-    return NextResponse.json({ success: true, interviews: sessions });
+    return NextResponse.json({ success: true, interviews: sessions }, { headers: corsHeaders });
   } catch (err: any) {
     console.error("[INTERVIEWS GET ERROR]", err);
-    return NextResponse.json({ error: err.message || "Failed to load sessions" }, { status: 500 });
+    return NextResponse.json({ error: err.message || "Failed to load sessions" }, { status: 500, headers: corsHeaders });
   }
 }

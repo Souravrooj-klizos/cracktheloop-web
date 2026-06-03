@@ -5,11 +5,24 @@ import jwt from "jsonwebtoken";
 
 const NEXTAUTH_SECRET = process.env.NEXTAUTH_SECRET || "cracktheloop_secret_auth_key_2026_z8y";
 
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+};
+
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 204,
+    headers: corsHeaders,
+  });
+}
+
 export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const authHeader = req.headers.get("authorization");
   const jwtToken = authHeader && authHeader.startsWith("Bearer ") ? authHeader.substring(7) : null;
   if (!jwtToken) {
-    return NextResponse.json({ error: "Unauthorized. Token required." }, { status: 401 });
+    return NextResponse.json({ error: "Unauthorized. Token required." }, { status: 401, headers: corsHeaders });
   }
 
   try {
@@ -24,12 +37,12 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     }).populate("user_id");
 
     if (!session) {
-      return NextResponse.json({ error: "Interview session not found or access denied" }, { status: 404 });
+      return NextResponse.json({ error: "Interview session not found or access denied" }, { status: 404, headers: corsHeaders });
     }
 
-    return NextResponse.json({ success: true, interview: session });
+    return NextResponse.json({ success: true, interview: session }, { headers: corsHeaders });
   } catch (err: any) {
     console.error("[GET INTERVIEW ID ERROR]", err);
-    return NextResponse.json({ error: err.message || "Failed to load session" }, { status: 500 });
+    return NextResponse.json({ error: err.message || "Failed to load session" }, { status: 500, headers: corsHeaders });
   }
 }

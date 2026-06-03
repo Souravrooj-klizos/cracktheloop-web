@@ -14,6 +14,9 @@ export interface IUser extends Document {
   otp_code?: string;
   otp_expiry?: Date;
   trial_expires_at?: Date;
+  plan_allocated_credits: number;
+  total_gain_credits: number;
+  total_burn_credits: number;
   created_at: Date;
   updated_at: Date;
 }
@@ -77,6 +80,18 @@ const UserSchema = new Schema<IUser>(
     trial_expires_at: {
       type: Date,
       default: null,
+    },
+    plan_allocated_credits: {
+      type: Number,
+      default: 0,
+    },
+    total_gain_credits: {
+      type: Number,
+      default: 0,
+    },
+    total_burn_credits: {
+      type: Number,
+      default: 0,
     },
   },
   {

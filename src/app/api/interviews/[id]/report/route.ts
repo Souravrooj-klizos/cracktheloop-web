@@ -2,9 +2,23 @@ import { NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/db";
 import { InterviewSession } from "@/models/InterviewSession";
 import { User } from "@/models/User";
+import { logCreditTransaction } from "@/lib/transactions";
 import jwt from "jsonwebtoken";
 
 const NEXTAUTH_SECRET = process.env.NEXTAUTH_SECRET || "cracktheloop_secret_auth_key_2026_z8y";
+
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+};
+
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 204,
+    headers: corsHeaders,
+  });
+}
 
 export async function POST(
   req: Request,
@@ -13,38 +27,33 @@ export async function POST(
   const authHeader = req.headers.get("authorization");
   const jwtToken = authHeader && authHeader.startsWith("Bearer ") ? authHeader.substring(7) : null;
   if (!jwtToken) {
-    return NextResponse.json({ error: "Unauthorized. Token required." }, { status: 401 });
+    return NextResponse.json({ error: "Unauthorized. Token required." }, { status: 401, headers: corsHeaders });
   }
 
   try {
     const decoded: any = jwt.verify(jwtToken, NEXTAUTH_SECRET);
     const { id } = await params;
-    const reqJson = await req.json().catch(() => ({}));
-    const { provider, apiKey } = reqJson;
 
-    // Use server key if available and no client key is provided
+    // Force server-managed OpenAI key and gpt-4o-mini
     const serverOpenAIKey = process.env.OPENAI_API_KEY;
-    const useServerKeys = !!serverOpenAIKey && (!apiKey || apiKey.trim() === "" || apiKey === "server");
-    const finalApiKey = useServerKeys ? serverOpenAIKey : apiKey;
-
-    if (!finalApiKey) {
-      return NextResponse.json({ error: "API Key is required" }, { status: 400 });
+    if (!serverOpenAIKey) {
+      return NextResponse.json({ error: "Server API Key is not configured." }, { status: 500, headers: corsHeaders });
     }
-
-    const providerLower = useServerKeys ? "openai" : (provider || "openai").toLowerCase();
+    const finalApiKey = serverOpenAIKey;
+    const providerLower: string = "openai";
 
     await connectToDatabase();
 
     const user = await User.findById(decoded.user_id);
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ error: "User not found" }, { status: 404, headers: corsHeaders });
     }
 
     // Verify credit balance (5 credits per analysis)
     if (user.credits < 5) {
       return NextResponse.json(
         { error: "Insufficient credits. Running an evaluation report requires 5 credits." },
-        { status: 402 }
+        { status: 402, headers: corsHeaders }
       );
     }
 
@@ -57,7 +66,7 @@ export async function POST(
       if (reportCount >= 1) {
         return NextResponse.json(
           { error: "Free Trial limit reached. You can only generate exactly 1 AI report. Please purchase a plan to continue." },
-          { status: 403 }
+          { status: 403, headers: corsHeaders }
         );
       }
     }
@@ -68,11 +77,11 @@ export async function POST(
     });
 
     if (!session) {
-      return NextResponse.json({ error: "Interview session not found or access denied" }, { status: 404 });
+      return NextResponse.json({ error: "Interview session not found or access denied" }, { status: 404, headers: corsHeaders });
     }
 
     if (!session.transcript || session.transcript.length === 0) {
-      return NextResponse.json({ error: "Cannot evaluate an empty interview transcript" }, { status: 400 });
+      return NextResponse.json({ error: "Cannot evaluate an empty interview transcript" }, { status: 400, headers: corsHeaders });
     }
 
     // Build the grading prompt for the LLM
@@ -176,7 +185,7 @@ Generate the evaluation report.`;
         break;
 
       default:
-        return NextResponse.json({ error: `Unsupported provider: ${providerLower}` }, { status: 400 });
+        return NextResponse.json({ error: `Unsupported provider: ${providerLower}` }, { status: 400, headers: corsHeaders });
     }
 
     const response = await fetch(url, {
@@ -207,9 +216,24 @@ Generate the evaluation report.`;
         break;
     }
 
-    // Clean up any markdown code fences in case the model ignored formatting rules
-    textOutput = textOutput.replace(/```json/g, "").replace(/```/g, "").trim();
-    const evaluation = JSON.parse(textOutput);
+    // Clean up any markdown code fences or preambles in case the model ignored formatting rules
+    let cleanedOutput = textOutput.trim();
+    cleanedOutput = cleanedOutput.replace(/```json/g, "").replace(/```/g, "").trim();
+
+    // Safely extract the first valid JSON object block if the LLM output includes preambles
+    const firstBrace = cleanedOutput.indexOf('{');
+    const lastBrace = cleanedOutput.lastIndexOf('}');
+    if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+      cleanedOutput = cleanedOutput.substring(firstBrace, lastBrace + 1);
+    }
+
+    let evaluation: any;
+    try {
+      evaluation = JSON.parse(cleanedOutput);
+    } catch (parseErr) {
+      console.error("[REPORT GENERATION] Failed to parse LLM response JSON:", cleanedOutput, parseErr);
+      throw new Error("Invalid report JSON returned by the AI provider");
+    }
 
     // Save report in Mongoose document
     session.report = {
@@ -224,13 +248,16 @@ Generate the evaluation report.`;
 
     // Deduct 5 credits from user
     user.credits = Math.max(0, user.credits - 5);
+    user.total_burn_credits = (user.total_burn_credits || 0) + 5;
     await user.save();
+
+    await logCreditTransaction(user._id, 5, "burn", "report_evaluation", "gpt-4o-mini");
 
     console.log(`[REPORT GENERATION] Compiled report for ${user.email}. Charged 5 credits. Remaining: ${user.credits}`);
 
-    return NextResponse.json({ success: true, report: session.report });
+    return NextResponse.json({ success: true, report: session.report }, { headers: corsHeaders });
   } catch (err: any) {
     console.error("[REPORT GENERATION ERROR]", err);
-    return NextResponse.json({ error: err.message || "Failed to generate report evaluation" }, { status: 500 });
+    return NextResponse.json({ error: err.message || "Failed to generate report evaluation" }, { status: 500, headers: corsHeaders });
   }
 }

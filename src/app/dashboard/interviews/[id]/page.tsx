@@ -14,7 +14,6 @@ import {
   MessageSquare,
   Volume2,
   User,
-  Settings,
   HelpCircle
 } from "lucide-react";
 
@@ -27,23 +26,14 @@ export default function InterviewDetailPage({ params }: { params: Promise<{ id: 
   const [generatingReport, setGeneratingReport] = useState(false);
   const [token, setToken] = useState<string | null>(null);
 
-  // LLM setup for report generation
-  const [provider, setProvider] = useState("groq");
-  const [apiKey, setApiKey] = useState("");
-  const [showConfig, setShowConfig] = useState(false);
-
   useEffect(() => {
     const savedToken = localStorage.getItem("ctl_token");
-    const savedProvider = localStorage.getItem("ctl_active_llm_provider") || "groq";
-    const savedApiKey = localStorage.getItem("ctl_llm_key") || "";
 
     if (!savedToken) {
       router.push("/login");
       return;
     }
     setToken(savedToken);
-    setProvider(savedProvider);
-    setApiKey(savedApiKey);
 
     async function loadSession() {
       try {
@@ -69,11 +59,6 @@ export default function InterviewDetailPage({ params }: { params: Promise<{ id: 
   }, [id, router]);
 
   async function handleGenerateReport() {
-    if (!apiKey.trim()) {
-      alert("An API Key is required to run LLM evaluation.");
-      setShowConfig(true);
-      return;
-    }
     setGeneratingReport(true);
     try {
       const res = await fetch(`/api/interviews/${id}/report`, {
@@ -82,7 +67,7 @@ export default function InterviewDetailPage({ params }: { params: Promise<{ id: 
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`
         },
-        body: JSON.stringify({ provider, apiKey })
+        body: JSON.stringify({ provider: "openai", apiKey: "server" })
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to create evaluation");
@@ -148,13 +133,6 @@ export default function InterviewDetailPage({ params }: { params: Promise<{ id: 
         </button>
         <div className="flex gap-3">
           <button
-            onClick={() => setShowConfig(!showConfig)}
-            className="px-4 py-2 bg-slate-800 hover:bg-slate-750 border border-slate-700 rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-pointer transition active:scale-95"
-          >
-            <Settings className="w-3.5 h-3.5 text-slate-400" />
-            Config LLM Evaluator
-          </button>
-          <button
             onClick={handlePrint}
             className="px-4 py-2 bg-gradient-to-r from-sky-400 to-indigo-500 rounded-xl text-xs font-black flex items-center gap-1.5 cursor-pointer transition active:scale-95 shadow-md shadow-indigo-500/10 text-white"
           >
@@ -166,51 +144,7 @@ export default function InterviewDetailPage({ params }: { params: Promise<{ id: 
 
       <main className="w-full max-w-5xl mx-auto px-6 pt-6 flex flex-col gap-8 relative z-20 print:pt-0">
         
-        {/* LLM Evaluator Config Console */}
-        {showConfig && (
-          <section className="glow-card rounded-2xl p-5 bg-[#0a0e1c] border border-white/10 flex flex-col gap-4 no-print animate-fade-in">
-            <span className="text-[10px] text-white/50 font-black uppercase tracking-widest border-b border-white/5 pb-1.5 flex items-center gap-1">
-              ⚙️ LLM Evaluator Configuration
-            </span>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Select LLM Provider</label>
-                <select
-                  value={provider}
-                  onChange={(e) => setProvider(e.target.value)}
-                  className="bg-[#050811] border border-white/10 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-sky-400 cursor-pointer"
-                >
-                  <option value="groq">Groq (Llama-3.1)</option>
-                  <option value="openai">OpenAI (GPT-4o-mini)</option>
-                  <option value="xai">Grok (xAI)</option>
-                  <option value="anthropic">Claude (Claude-3.5-Haiku)</option>
-                  <option value="gemini">Gemini (Gemini-1.5-Flash)</option>
-                </select>
-              </div>
-              <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">LLM API Key</label>
-                <input
-                  type="password"
-                  value={apiKey}
-                  onChange={(e) => setApiKey(e.target.value)}
-                  placeholder="Paste LLM API key here..."
-                  className="w-full bg-[#050811] border border-white/10 px-3.5 py-2.5 rounded-xl text-xs focus:outline-none focus:border-sky-400 transition"
-                />
-              </div>
-            </div>
-            <button
-              onClick={() => {
-                localStorage.setItem("ctl_active_llm_provider", provider);
-                localStorage.setItem("ctl_llm_key", apiKey);
-                setShowConfig(false);
-                alert("Keys configured successfully!");
-              }}
-              className="py-2.5 bg-slate-800 hover:bg-slate-750 border border-slate-700 rounded-xl text-xs font-bold cursor-pointer transition uppercase tracking-wider text-slate-200"
-            >
-              Save Settings
-            </button>
-          </section>
-        )}
+        {/* LLM Evaluator Config Console removed */}
 
         {/* Title and metadata block */}
         <section className="border-b border-white/5 pb-6 flex justify-between items-start print:border-black print:pb-4">

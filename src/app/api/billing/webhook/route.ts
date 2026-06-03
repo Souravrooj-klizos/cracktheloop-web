@@ -4,6 +4,7 @@ import Stripe from "stripe";
 import { connectToDatabase } from "@/lib/db";
 import { User } from "@/models/User";
 import { Referral } from "@/models/Referral";
+import { logCreditTransaction, logSubscriptionHistory } from "@/lib/transactions";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
   apiVersion: "2026-05-27.dahlia" as any,
@@ -124,7 +125,12 @@ export async function POST(request: Request) {
           console.log(`[WEBHOOK WARNING] No priceId match. Used amount_paid fallback → tier: ${plan.tier}`);
         }
 
+        // Determine action
+        const oldTier = user.subscription_tier || "free";
+        const action = oldTier === "free" ? "start" : (oldTier === plan.tier ? "renew" : "change");
+
         user.subscription_tier = plan.tier;
+        user.plan_allocated_credits = plan.credits;
 
         // ── Referral Bonus Logic ─────────────────────────────────────────
         const referral = await Referral.findOne({ referred_user: user._id });
@@ -136,13 +142,16 @@ export async function POST(request: Request) {
             // Referred user gets +20% on top of base credits
             const bonusCredits = Math.ceil(plan.credits * REFERRED_USER_MULTIPLIER);
             user.credits = bonusCredits;
+            user.total_gain_credits = (user.total_gain_credits || 0) + bonusCredits;
             
             let referrerBonus = 0;
             if (referrer) {
               referrerBonus = Math.ceil(plan.credits * REFERRER_BONUS_RATIO);
               referrer.credits = (referrer.credits || 0) + referrerBonus;
+              referrer.total_gain_credits = (referrer.total_gain_credits || 0) + referrerBonus;
               await referrer.save();
               console.log(`[REFERRAL] Referrer ${referrer.email} credited +${referrerBonus} credits (50% of ${plan.credits})`);
+              await logCreditTransaction(referrer._id, referrerBonus, "add", "referral_purchase_bonus");
             }
 
             // Update referral status and paid flag
@@ -154,11 +163,15 @@ export async function POST(request: Request) {
             await referral.save();
 
             console.log(`[REFERRAL] Referred user ${user.email} gets ${bonusCredits} credits (+20% of ${plan.credits})`);
+            await logCreditTransaction(user._id, plan.credits, "add", "subscription_purchase");
+            await logCreditTransaction(user._id, bonusCredits - plan.credits, "add", "referral_purchase_bonus");
           } else {
             // Already paid out purchase bonus on a previous cycle/invoice.
             // Give them standard plan credits.
             user.credits = plan.credits;
+            user.total_gain_credits = (user.total_gain_credits || 0) + plan.credits;
             console.log(`[REFERRAL] User ${user.email} already had purchase bonus paid. Loaded standard plan credits: ${plan.credits}`);
+            await logCreditTransaction(user._id, plan.credits, "add", "subscription_purchase");
           }
         } else if (user.referred_by) {
           // Fallback: If referral record was missing but user has referred_by, create it, pay out bonus
@@ -166,10 +179,13 @@ export async function POST(request: Request) {
           if (referrer && referrer._id.toString() !== user._id.toString()) {
             const bonusCredits = Math.ceil(plan.credits * REFERRED_USER_MULTIPLIER);
             user.credits = bonusCredits;
+            user.total_gain_credits = (user.total_gain_credits || 0) + bonusCredits;
 
             const referrerBonus = Math.ceil(plan.credits * REFERRER_BONUS_RATIO);
             referrer.credits = (referrer.credits || 0) + referrerBonus;
+            referrer.total_gain_credits = (referrer.total_gain_credits || 0) + referrerBonus;
             await referrer.save();
+            await logCreditTransaction(referrer._id, referrerBonus, "add", "referral_purchase_bonus");
 
             await Referral.create({
               referrer: referrer._id,
@@ -183,14 +199,28 @@ export async function POST(request: Request) {
               purchase_tier: plan.tier,
             });
             console.log(`[REFERRAL FALLBACK] Subscribed referral created for ${user.email}. Referrer ${referrer.email} credited +${referrerBonus}.`);
+            await logCreditTransaction(user._id, plan.credits, "add", "subscription_purchase");
+            await logCreditTransaction(user._id, bonusCredits - plan.credits, "add", "referral_purchase_bonus");
           } else {
             user.credits = plan.credits;
+            user.total_gain_credits = (user.total_gain_credits || 0) + plan.credits;
+            await logCreditTransaction(user._id, plan.credits, "add", "subscription_purchase");
           }
         } else {
           // Non-referred user gets standard base credits
           user.credits = plan.credits;
+          user.total_gain_credits = (user.total_gain_credits || 0) + plan.credits;
+          await logCreditTransaction(user._id, plan.credits, "add", "subscription_purchase");
         }
         // ─────────────────────────────────────────────────────────────────
+
+        await logSubscriptionHistory(
+          user._id,
+          plan.tier,
+          action,
+          plan.credits,
+          subscriptionId
+        );
 
         await user.save();
         console.log(`[WEBHOOK] Subscription active for ${user.email}. Tier: ${user.subscription_tier}, Credits: ${user.credits}`);
@@ -203,9 +233,26 @@ export async function POST(request: Request) {
           stripe_subscription_id: subscription.id,
         });
         if (user) {
+          const oldTier = user.subscription_tier || "free";
+          const lostCredits = user.credits || 0;
+
           user.is_subscribed = false;
           user.subscription_tier = "free";
           user.credits = 0;
+          user.plan_allocated_credits = 0;
+
+          if (lostCredits > 0) {
+            user.total_burn_credits = (user.total_burn_credits || 0) + lostCredits;
+            await logCreditTransaction(user._id, lostCredits, "burn", "subscription_ended");
+          }
+          await logSubscriptionHistory(
+            user._id,
+            oldTier,
+            "cancel",
+            0,
+            subscription.id
+          );
+
           await user.save();
           console.log(`[WEBHOOK] Subscription revoked for: ${user.email}`);
         }

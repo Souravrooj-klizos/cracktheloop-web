@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/db";
 import { User } from "@/models/User";
 import { Referral } from "@/models/Referral";
+import { logCreditTransaction, logSubscriptionHistory } from "@/lib/transactions";
 import jwt from "jsonwebtoken";
 
 const NEXTAUTH_SECRET = process.env.NEXTAUTH_SECRET || "cracktheloop_secret_auth_key_2026_z8y";
@@ -32,8 +33,10 @@ export async function POST(req: Request) {
     const trialExpiry = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
     user.subscription_tier = "trial";
     user.trial_expires_at = trialExpiry;
+    user.plan_allocated_credits = 15;
 
     let grantedCredits = 15;
+    let isReferred = false;
 
     // Apply Referral Credit Bonuses using Referral collection
     const referral = await Referral.findOne({ referred_user: user._id });
@@ -42,9 +45,11 @@ export async function POST(req: Request) {
       if (referrer) {
         // Referred user gets +20% (15 * 1.2 = 18 credits)
         grantedCredits = 18;
+        isReferred = true;
 
         // Referrer gets +50% of base (15 * 0.5 = 7.5, rounded up to 8 credits)
         referrer.credits = (referrer.credits || 0) + 8;
+        referrer.total_gain_credits = (referrer.total_gain_credits || 0) + 8;
         await referrer.save();
 
         referral.status = "trial_activated";
@@ -54,13 +59,16 @@ export async function POST(req: Request) {
         await referral.save();
         
         console.log(`[REFERRAL SUCCESS] Trial activated for ${user.email}. Referrer ${referrer.email} credited +8 credits, referee got +3 credits.`);
+        await logCreditTransaction(referrer._id, 8, "add", "referral_trial_bonus");
       }
     } else if (!referral && user.referred_by) {
       // Fallback: If referral record was missing but user.referred_by exists
       const referrer = await User.findOne({ referral_code: user.referred_by });
       if (referrer && referrer._id.toString() !== user._id.toString()) {
         grantedCredits = 18;
+        isReferred = true;
         referrer.credits = (referrer.credits || 0) + 8;
+        referrer.total_gain_credits = (referrer.total_gain_credits || 0) + 8;
         await referrer.save();
 
         await Referral.create({
@@ -74,11 +82,23 @@ export async function POST(req: Request) {
           referred_trial_bonus: 3,
         });
         console.log(`[REFERRAL FALLBACK] Trial activated for ${user.email} (created referral). Referrer ${referrer.email} got +8 credits.`);
+        await logCreditTransaction(referrer._id, 8, "add", "referral_trial_bonus");
       }
     }
 
     user.credits = grantedCredits;
+    user.total_gain_credits = (user.total_gain_credits || 0) + grantedCredits;
     await user.save();
+
+    // Log user trial credit transaction and subscription history
+    if (isReferred) {
+      await logCreditTransaction(user._id, 15, "add", "trial_activation");
+      await logCreditTransaction(user._id, 3, "add", "referral_trial_bonus");
+    } else {
+      await logCreditTransaction(user._id, 15, "add", "trial_activation");
+    }
+
+    await logSubscriptionHistory(user._id, "trial", "start", 15);
 
     console.log(`[TRIAL ACTIVATION] Activated 7-day trial with ${grantedCredits} credits for ${user.email}`);
 
