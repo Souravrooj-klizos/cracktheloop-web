@@ -40,7 +40,7 @@ export async function POST(req: Request) {
 
   try {
     const body = await req.json();
-    const { role, company, transcript } = body;
+    const { role, company, transcript, sessionId } = body;
 
     if (!role || !transcript || !Array.isArray(transcript) || transcript.length === 0) {
       return NextResponse.json({ error: "A non-empty transcript is required to save an interview session" }, { status: 400, headers: corsHeaders });
@@ -53,8 +53,14 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "User not found" }, { status: 404, headers: corsHeaders });
     }
 
-    // Trial limit check (maximum 1 saved interview session)
-    if (user.subscription_tier === "trial") {
+    // Check if session already exists
+    let existingSession = null;
+    if (sessionId) {
+      existingSession = await InterviewSession.findOne({ session_id: sessionId });
+    }
+
+    // Trial limit check (maximum 1 saved interview session) - skip for existing session updates!
+    if (user.subscription_tier === "trial" && !existingSession) {
       const interviewCount = await InterviewSession.countDocuments({ user_id: userId });
       if (interviewCount >= 1) {
         return NextResponse.json(
@@ -83,42 +89,82 @@ export async function POST(req: Request) {
       creditsToDeduct = 10 + Math.ceil(durationMinutes - 10);
     }
 
-    if (user.credits < creditsToDeduct) {
-      return NextResponse.json(
-        { error: `Insufficient credits. Saving this session requires ${creditsToDeduct} credits, but you only have ${user.credits} remaining.` },
-        { status: 402, headers: corsHeaders }
-      );
-    }
-
-    const newSession = new InterviewSession({
-      user_id: userId,
-      role,
-      company: company || null,
-      transcript: transcript.map((turn: any) => {
-        let cleanSender = turn.sender;
-        if (cleanSender === "user") {
-          cleanSender = "candidate";
-        }
-        return {
-          sender: cleanSender,
-          text: turn.text,
-          timestamp: turn.timestamp ? new Date(turn.timestamp) : new Date()
-        };
-      })
+    const cleanTranscript = transcript.map((turn: any) => {
+      let cleanSender = turn.sender;
+      if (cleanSender === "user") {
+        cleanSender = "candidate";
+      }
+      return {
+        sender: cleanSender,
+        text: turn.text,
+        timestamp: turn.timestamp ? new Date(turn.timestamp) : new Date()
+      };
     });
 
-    await newSession.save();
+    if (existingSession) {
+      // Calculate delta credits relative to what was already charged
+      const alreadyCharged = existingSession.credits_charged || 0;
+      const delta = creditsToDeduct - alreadyCharged;
 
-    // Deduct credits and save user
-    user.credits = Math.max(0, user.credits - creditsToDeduct);
-    user.total_burn_credits = (user.total_burn_credits || 0) + creditsToDeduct;
-    await user.save();
+      if (delta > 0) {
+        if (user.credits < delta) {
+          return NextResponse.json(
+            { error: `Insufficient credits. Updating this session requires ${delta} additional credits, but you only have ${user.credits} remaining.` },
+            { status: 402, headers: corsHeaders }
+          );
+        }
+        
+        user.credits = Math.max(0, user.credits - delta);
+        user.total_burn_credits = (user.total_burn_credits || 0) + delta;
+        await user.save();
+        await logCreditTransaction(user._id, delta, "burn", "interview_save");
+      }
 
-    await logCreditTransaction(user._id, creditsToDeduct, "burn", "interview_save");
+      existingSession.role = role;
+      existingSession.company = company || existingSession.company || "General Interview Session";
+      existingSession.transcript = cleanTranscript;
+      existingSession.credits_charged = Math.max(alreadyCharged, creditsToDeduct);
+      
+      await existingSession.save();
 
-    console.log(`[INTERVIEW COMPLETED] Saved session for ${user.email}. Charged ${creditsToDeduct} credits (duration: ${durationMinutes.toFixed(2)} min). Remaining: ${user.credits}`);
+      console.log(`[INTERVIEW UPDATED] Updated session ${existingSession._id} for ${user.email}. Charged delta ${delta > 0 ? delta : 0} credits. Remaining: ${user.credits}`);
 
-    return NextResponse.json({ success: true, interview: newSession }, { headers: corsHeaders });
+      return NextResponse.json({ success: true, interview: existingSession }, { headers: corsHeaders });
+    } else {
+      // Save new session
+      if (user.credits < creditsToDeduct) {
+        return NextResponse.json(
+          { error: `Insufficient credits. Saving this session requires ${creditsToDeduct} credits, but you only have ${user.credits} remaining.` },
+          { status: 402, headers: corsHeaders }
+        );
+      }
+
+      const sessionData: any = {
+        user_id: userId,
+        role,
+        company: company || "General Interview Session",
+        transcript: cleanTranscript,
+        credits_charged: creditsToDeduct
+      };
+      
+      if (sessionId) {
+        sessionData.session_id = sessionId;
+      }
+
+      const newSession = new InterviewSession(sessionData);
+      await newSession.save();
+
+      // Deduct credits and save user
+      user.credits = Math.max(0, user.credits - creditsToDeduct);
+      user.total_burn_credits = (user.total_burn_credits || 0) + creditsToDeduct;
+      await user.save();
+
+      await logCreditTransaction(user._id, creditsToDeduct, "burn", "interview_save");
+
+      console.log(`[INTERVIEW COMPLETED] Saved new session for ${user.email}. Charged ${creditsToDeduct} credits (duration: ${durationMinutes.toFixed(2)} min). Remaining: ${user.credits}`);
+
+      return NextResponse.json({ success: true, interview: newSession }, { headers: corsHeaders });
+    }
   } catch (err: any) {
     console.error("[INTERVIEWS POST ERROR]", err);
     return NextResponse.json({ error: err.message || "Failed to save session" }, { status: 500, headers: corsHeaders });

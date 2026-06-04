@@ -20,6 +20,8 @@ export interface IInterviewSession extends Document {
   company?: string;
   transcript: ITranscriptTurn[];
   report?: IEvaluationReport;
+  session_id?: string;
+  credits_charged?: number;
   created_at: Date;
   updated_at: Date;
 }
@@ -95,6 +97,16 @@ const InterviewSessionSchema = new Schema<IInterviewSession>(
       type: EvaluationReportSchema,
       default: null,
     },
+    session_id: {
+      type: String,
+      unique: true,
+      sparse: true,
+      index: true,
+    },
+    credits_charged: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: {
@@ -104,6 +116,10 @@ const InterviewSessionSchema = new Schema<IInterviewSession>(
     versionKey: false,
   }
 );
+
+if (mongoose.models.InterviewSession) {
+  delete (mongoose.models as any).InterviewSession;
+}
 
 export const InterviewSession: Model<IInterviewSession> =
   mongoose.models.InterviewSession ||

@@ -42,8 +42,7 @@ export default function CopilotPage() {
   // Credentials and Config (persisted locally)
   const [deepgramKey, setDeepgramKey] = useState("");
   const [llmKey, setLlmKey] = useState("");
-  const [activeLlmProvider, setActiveLlmProvider] = useState("groq");
-  const [isManualProvider, setIsManualProvider] = useState(false);
+  const [activeLlmProvider, setActiveLlmProvider] = useState("openai");
   const [opacity, setOpacity] = useState(0.85);
 
   // Pre-Interview Context Setup States
@@ -59,7 +58,7 @@ export default function CopilotPage() {
   // App States
   const [isOverlayMode, setIsOverlayMode] = useState(false);
   const [isCapturing, setIsCapturing] = useState(false);
-  const [status, setStatus] = useState("Idle");
+  const [status, setStatus] = useState("");
   const [isLocked, setIsLocked] = useState(false);
 
   // Audio & Stream Buffers
@@ -104,6 +103,61 @@ export default function CopilotPage() {
   const [user, setUser] = useState<{ email: string; credits: number; is_subscribed: boolean } | null>(null);
   const [token, setToken] = useState<string | null>(null);
 
+  const historyRef = useRef(history);
+  useEffect(() => {
+    historyRef.current = history;
+  }, [history]);
+
+  const lastSavedHistoryLengthRef = useRef(0);
+
+  const [sessionId, setSessionId] = useState("");
+  const sessionIdRef = useRef(sessionId);
+  useEffect(() => {
+    sessionIdRef.current = sessionId;
+  }, [sessionId]);
+
+  const tokenRef = useRef(token);
+  useEffect(() => {
+    tokenRef.current = token;
+  }, [token]);
+
+  const interviewRoleRef = useRef(interviewRole);
+  useEffect(() => {
+    interviewRoleRef.current = interviewRole;
+  }, [interviewRole]);
+
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      if (historyRef.current.length > 0 && historyRef.current.length !== lastSavedHistoryLengthRef.current && tokenRef.current) {
+        const body = JSON.stringify({
+          role: interviewRoleRef.current,
+          company: "General Interview Session",
+          transcript: historyRef.current.map(t => ({
+            sender: t.sender,
+            text: t.text,
+            timestamp: t.timestamp
+          })),
+          sessionId: sessionIdRef.current
+        });
+
+        lastSavedHistoryLengthRef.current = historyRef.current.length;
+
+        fetch("/api/interviews", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${tokenRef.current}`
+          },
+          body,
+          keepalive: true
+        }).catch(err => console.error("Keepalive auto-save failed:", err));
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, []);
+
   // Login Modal state
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [loginEmail, setLoginEmail] = useState("");
@@ -114,10 +168,6 @@ export default function CopilotPage() {
 
   // Load configuration from localStorage
   useEffect(() => {
-    setDeepgramKey(localStorage.getItem("ctl_deepgram_key") || "");
-    setLlmKey(localStorage.getItem("ctl_llm_key") || "");
-    setActiveLlmProvider(localStorage.getItem("ctl_active_llm_provider") || "groq");
-    setIsManualProvider(localStorage.getItem("ctl_is_manual_provider") === "true");
     setInterviewRole(localStorage.getItem("ctl_interview_role") || "");
     setJobDescription(localStorage.getItem("ctl_job_description") || "");
     setCandidateResume(localStorage.getItem("ctl_candidate_resume") || "");
@@ -133,58 +183,39 @@ export default function CopilotPage() {
 
   // Synchronize with backend profile to load premium config keys
   useEffect(() => {
-    if (isManualProvider) {
-      setDeepgramKey(localStorage.getItem("ctl_deepgram_key") || "");
-      setLlmKey(localStorage.getItem("ctl_llm_key") || "");
-      setDeepgramKeyStatus((localStorage.getItem("ctl_deepgram_key") || "").trim().startsWith("dg_") ? 'verified' : 'idle');
-    } else {
-      // Fetch from server
-      if (token) {
-        fetch("/api/auth/me", {
-          headers: { "Authorization": `Bearer ${token}` }
+    if (token) {
+      fetch("/api/auth/me", {
+        headers: { "Authorization": `Bearer ${token}` }
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.config?.deepgram_api_key) {
+            setDeepgramKey(data.config.deepgram_api_key);
+            setDeepgramKeyStatus('verified');
+            setLlmKey("server");
+            setLlmProviderStatus('verified');
+            setActiveLlmProvider("openai");
+          } else {
+            setDeepgramKey("");
+            setDeepgramKeyStatus('idle');
+            setLlmKey("");
+            setLlmProviderStatus('idle');
+          }
+          if (data.user) {
+            setUser(data.user);
+            localStorage.setItem("ctl_user", JSON.stringify(data.user));
+          }
         })
-          .then(res => res.json())
-          .then(data => {
-            if (data.config?.deepgram_api_key) {
-              setDeepgramKey(data.config.deepgram_api_key);
-              setDeepgramKeyStatus('verified');
-              setLlmKey("server");
-              setLlmProviderStatus('verified');
-              setActiveLlmProvider("openai");
-            } else {
-              setDeepgramKey("");
-              setDeepgramKeyStatus('idle');
-            }
-            if (data.user) {
-              setUser(data.user);
-              localStorage.setItem("ctl_user", JSON.stringify(data.user));
-            }
-          })
-          .catch(() => {});
-      } else {
-        setDeepgramKey("");
-        setDeepgramKeyStatus('idle');
-      }
+        .catch(() => {});
+    } else {
+      setDeepgramKey("");
+      setDeepgramKeyStatus('idle');
+      setLlmKey("");
+      setLlmProviderStatus('idle');
     }
-  }, [isManualProvider, token]);
+  }, [token]);
 
   // Save configurations on changes
-  useEffect(() => {
-    localStorage.setItem("ctl_deepgram_key", deepgramKey);
-  }, [deepgramKey]);
-
-  useEffect(() => {
-    localStorage.setItem("ctl_llm_key", llmKey);
-  }, [llmKey]);
-
-  useEffect(() => {
-    localStorage.setItem("ctl_active_llm_provider", activeLlmProvider);
-  }, [activeLlmProvider]);
-
-  useEffect(() => {
-    localStorage.setItem("ctl_is_manual_provider", String(isManualProvider));
-  }, [isManualProvider]);
-
   useEffect(() => {
     localStorage.setItem("ctl_interview_role", interviewRole);
   }, [interviewRole]);
@@ -200,32 +231,6 @@ export default function CopilotPage() {
   useEffect(() => {
     localStorage.setItem("ctl_resume_file_name", resumeFileName);
   }, [resumeFileName]);
-
-  // Key detection
-  useEffect(() => {
-    if (!isManualProvider && llmKey) {
-      const k = llmKey.trim();
-      let detected = "manual";
-      if (k.startsWith("gsk_")) detected = "groq";
-      else if (k.startsWith("sk-ant-")) detected = "anthropic";
-      else if (k.startsWith("AIzaSy")) detected = "gemini";
-      else if (k.startsWith("xai-")) detected = "xai";
-      else if (k.startsWith("sk-")) detected = "openai";
-
-      if (detected !== "manual") {
-        setActiveLlmProvider(detected);
-      }
-    }
-  }, [llmKey, isManualProvider]);
-
-  // Key validation state updater
-  useEffect(() => {
-    setDeepgramKeyStatus(deepgramKey.trim().startsWith("dg_") || deepgramKey.length > 20 ? 'verified' : 'idle');
-  }, [deepgramKey]);
-
-  useEffect(() => {
-    setLlmProviderStatus(llmKey.trim().length > 10 ? 'verified' : 'idle');
-  }, [llmKey]);
 
   // Handle resume parsing
   async function handleResumeUpload(e: React.ChangeEvent<HTMLInputElement>) {
@@ -294,6 +299,18 @@ export default function CopilotPage() {
   // Start direct-in-browser capture engine
   async function startCaptureEngine() {
     if (isCapturing) return;
+
+    if (historyRef.current.length > 0) {
+      await saveInterviewSession();
+      setHistory([]);
+      lastSavedHistoryLengthRef.current = 0;
+    }
+
+    const newSessionId = typeof window !== 'undefined' && window.crypto && window.crypto.randomUUID 
+      ? window.crypto.randomUUID() 
+      : Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    setSessionId(newSessionId);
+
     setStatus("Initializing audio context...");
     setTranscript("");
     setAnswer("");
@@ -502,7 +519,7 @@ export default function CopilotPage() {
   }
 
   // Stop direct browser capture
-  function stopCaptureEngine() {
+  async function stopCaptureEngine() {
     console.log("[CAPTURE] Stopping audio engine...");
     
     if (micStreamRef.current) {
@@ -545,7 +562,9 @@ export default function CopilotPage() {
     }
 
     setIsCapturing(false);
-    setStatus("Stopped");
+    setStatus("");
+
+    await saveInterviewSession();
   }
 
   // Trigger stateless CORS proxy completion stream
@@ -767,6 +786,7 @@ export default function CopilotPage() {
       voiceSegmentTimeoutRef.current = null;
     }
     setHistory([]);
+    lastSavedHistoryLengthRef.current = 0;
     setStatus(isCapturing ? "Console Cleared (Listening)" : "Console Cleared");
   }
 
@@ -833,17 +853,16 @@ export default function CopilotPage() {
 
   // Save conversation session to MongoDB
   async function saveInterviewSession() {
-    if (history.length === 0) {
-      alert("No conversation history recorded yet.");
+    if (historyRef.current.length === 0 || historyRef.current.length === lastSavedHistoryLengthRef.current) {
       return;
     }
 
-    const savedToken = localStorage.getItem("ctl_token");
+    const savedToken = localStorage.getItem("ctl_token") || tokenRef.current;
     if (!savedToken) {
-      alert("You must be logged in to save your interview sessions.");
       return;
     }
 
+    lastSavedHistoryLengthRef.current = historyRef.current.length;
     setStatus("Saving session...");
     try {
       const res = await fetch("/api/interviews", {
@@ -853,25 +872,31 @@ export default function CopilotPage() {
           "Authorization": `Bearer ${savedToken}`
         },
         body: JSON.stringify({
-          role: interviewRole,
+          role: interviewRoleRef.current,
           company: "General Interview Session",
-          transcript: history.map(t => ({
+          transcript: historyRef.current.map(t => ({
             sender: t.sender,
             text: t.text,
             timestamp: t.timestamp
-          }))
+          })),
+          sessionId: sessionIdRef.current
         })
       });
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to save session");
 
-      alert("Interview session transcript saved successfully!");
       setStatus("Session Saved");
+      setTimeout(() => {
+        setStatus(prev => prev === "Session Saved" ? "" : prev);
+      }, 3000);
     } catch (err: any) {
       console.error(err);
-      alert(`Save failed: ${err.message || err}`);
+      lastSavedHistoryLengthRef.current = 0;
       setStatus("Save Error");
+      setTimeout(() => {
+        setStatus(prev => prev === "Save Error" ? "" : prev);
+      }, 3500);
     }
   }
 
@@ -1057,15 +1082,7 @@ export default function CopilotPage() {
                 </button>
               )}
 
-              {!isLocked && (
-                <button
-                  onClick={saveInterviewSession}
-                  className="text-[11px] px-2.5 py-1 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 font-black border border-emerald-500/25 rounded-lg transition active:scale-95 cursor-pointer flex items-center gap-1"
-                >
-                  <Save className="w-3.5 h-3.5" />
-                  Save Session
-                </button>
-              )}
+
 
               {!isLocked && (
                 <button
@@ -1178,7 +1195,9 @@ export default function CopilotPage() {
               <Shield className="w-4 h-4 text-emerald-400" />
               Direct Browser Tab Streaming Affinity Protected
             </span>
-            <span className="font-extrabold uppercase tracking-widest text-slate-300 bg-white/5 border border-white/5 px-2.5 py-0.5 rounded">{status}</span>
+            {status && (
+              <span className="font-extrabold uppercase tracking-widest text-slate-300 bg-white/5 border border-white/5 px-2.5 py-0.5 rounded">{status}</span>
+            )}
           </div>
         </div>
       )}
@@ -1237,10 +1256,12 @@ export default function CopilotPage() {
                 </button>
               )}
               
-              <div className="flex items-center gap-2 bg-white/5 border border-white/10 px-4 py-2 rounded-full text-xs font-bold shadow-sm">
-                <span className={`w-2.5 h-2.5 rounded-full ${isCapturing ? "bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]" : "bg-white/20"}`}></span>
-                <span className="text-white/80 font-bold uppercase tracking-wider">{status}</span>
-              </div>
+              {status && (
+                <div className="flex items-center gap-2 bg-white/5 border border-white/10 px-4 py-2 rounded-full text-xs font-bold shadow-sm">
+                  <span className={`w-2.5 h-2.5 rounded-full ${isCapturing ? "bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]" : "bg-white/20"}`}></span>
+                  <span className="text-white/80 font-bold uppercase tracking-wider">{status}</span>
+                </div>
+              )}
               <a
                 href="/dashboard"
                 className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 text-slate-350 flex justify-center items-center border border-white/10 font-black transition active:scale-90 cursor-pointer"
@@ -1264,105 +1285,7 @@ export default function CopilotPage() {
             </div>
           )}
 
-          {/* Credentials Inputs (Double Columns) */}
-          {isManualProvider ? (
-            <div className="grid grid-cols-2 gap-4 bg-white/5 border border-white/5 p-4 rounded-2xl relative z-10">
-              {/* Deepgram Column */}
-              <div className="flex flex-col gap-1.5">
-                <div className="flex justify-between items-center">
-                  <label className="text-[11px] text-white/50 font-bold uppercase tracking-wider flex items-center gap-1.5">
-                    🎤 Deepgram API Key
-                    {deepgramKeyStatus === "verified" && (
-                      <span className="text-[9px] px-2 py-0.5 rounded font-black uppercase tracking-wider badge-deepgram">
-                        ✅ Key Configured
-                      </span>
-                    )}
-                  </label>
-                  {deepgramKey && <span className="text-[9px] text-emerald-400 font-bold">✓ Saved</span>}
-                </div>
-                <input
-                  type="password"
-                  value={deepgramKey}
-                  onChange={(e) => setDeepgramKey(e.target.value)}
-                  placeholder="dg_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-                  className={`w-full bg-[#090e1a]/85 border ${
-                    deepgramKeyStatus === "verified" ? "border-deepgram" : "border-white/10"
-                  } px-3.5 py-2.5 rounded-xl text-xs focus:outline-none focus:border-deepgram transition placeholder-white/10 text-white/90`}
-                />
-              </div>
-
-              {/* Universal LLM Column */}
-              <div className="flex flex-col gap-1.5">
-                <div className="flex justify-between items-center">
-                  <label className="text-[11px] text-white/50 font-bold uppercase tracking-wider flex items-center gap-1.5">
-                    {renderProviderLogo(activeLlmProvider)}
-                    <span className={`text-gradient-${activeLlmProvider} font-black`}>LLM Key ({activeLlmProvider.toUpperCase()})</span>
-                    {llmProviderStatus === "verified" && (
-                      <span className={`text-[9px] px-2 py-0.5 rounded font-black uppercase tracking-wider badge-${activeLlmProvider}`}>
-                        ✅ Key Configured
-                      </span>
-                    )}
-                  </label>
-
-                  {/* Manual Override controls */}
-                  <div className="flex items-center gap-2">
-                    <label className="text-[10px] text-slate-500 flex items-center gap-1 cursor-pointer select-none">
-                      <input 
-                        type="checkbox"
-                        checked={isManualProvider}
-                        onChange={(e) => setIsManualProvider(e.target.checked)}
-                        className="rounded bg-[#0d1326] border-white/10 text-sky-400 accent-sky-400 cursor-pointer"
-                      />
-                      Manual
-                    </label>
-                    {isManualProvider && (
-                      <select
-                        value={activeLlmProvider}
-                        onChange={(e) => setActiveLlmProvider(e.target.value)}
-                        className="bg-[#0b0f1c] border border-white/10 rounded px-1.5 py-0.5 text-[10px] text-slate-355 focus:outline-none focus:border-sky-455 cursor-pointer"
-                      >
-                        <option value="groq">Groq</option>
-                        <option value="openai">OpenAI</option>
-                        <option value="anthropic">Claude</option>
-                        <option value="gemini">Gemini</option>
-                        <option value="xai">Grok (xAI)</option>
-                      </select>
-                    )}
-                  </div>
-                </div>
-                <input
-                  type="password"
-                  value={llmKey}
-                  onChange={(e) => setLlmKey(e.target.value)}
-                  placeholder="Paste any Groq, OpenAI, Claude, Gemini or Grok key..."
-                  className={`w-full bg-[#090e1a]/85 border ${
-                    llmProviderStatus === "verified" ? `border-${activeLlmProvider}` : "border-white/10"
-                  } px-3.5 py-2.5 rounded-xl text-xs focus:outline-none focus:border-${activeLlmProvider} transition placeholder-white/10 text-white/90`}
-                />
-              </div>
-            </div>
-          ) : (
-            <div className="flex justify-between items-center bg-sky-500/5 border border-sky-500/20 p-4 rounded-2xl relative z-10 text-xs">
-              <div className="flex items-center gap-3">
-                <Sparkles className="w-5 h-5 text-sky-400 animate-pulse" />
-                <div>
-                  <p className="font-bold text-white uppercase tracking-wider text-[10px]">Premium Copilot Fuel Active</p>
-                  <p className="text-slate-400 mt-0.5 text-[10px]">Using system-managed Deepgram STT and OpenAI GPT-4o-mini.</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-[9px] bg-sky-500/10 text-sky-300 border border-sky-500/20 px-2.5 py-0.5 rounded-full font-black uppercase tracking-wider">
-                  Server Managed
-                </span>
-                <button
-                  onClick={() => setIsManualProvider(true)}
-                  className="text-[10px] text-slate-400 hover:text-white transition underline cursor-pointer bg-transparent border-none font-bold"
-                >
-                  Use Custom Keys
-                </button>
-              </div>
-            </div>
-          )}
+          {/* Credentials Inputs Removed */}
 
           {/* Pre-Interview Context Setup Widget */}
           <div className="flex flex-col gap-3 bg-white/5 border border-white/5 p-4 rounded-2xl relative z-10">
