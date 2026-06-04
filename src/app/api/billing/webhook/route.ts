@@ -67,8 +67,231 @@ export async function POST(request: Request) {
             user.stripe_customer_id = customerId;
             user.stripe_subscription_id = subscriptionId;
             await user.save();
-            console.log(`[WEBHOOK] Linked Stripe IDs for ${email}`);
+            console.log(`[WEBHOOK] Linked Stripe IDs for ${email} on checkout.session.completed`);
           }
+        }
+        break;
+      }
+
+      case "checkout.session.expired": {
+        const session = event.data.object as Stripe.Checkout.Session;
+        console.log(`[WEBHOOK] Checkout session expired: ${session.id}`);
+        break;
+      }
+
+      case "customer.created": {
+        const customer = event.data.object as Stripe.Customer;
+        console.log(`[WEBHOOK] Stripe customer created: ${customer.id}`);
+        if (customer.email) {
+          const user = await User.findOne({ email: customer.email });
+          if (user) {
+            user.stripe_customer_id = customer.id;
+            await user.save();
+            console.log(`[WEBHOOK] Linked Stripe customer ID ${customer.id} to user ${user.email} on customer.created`);
+          }
+        }
+        break;
+      }
+
+      case "customer.updated": {
+        const customer = event.data.object as Stripe.Customer;
+        console.log(`[WEBHOOK] Stripe customer updated: ${customer.id}`);
+        break;
+      }
+
+      case "customer.deleted": {
+        const customer = event.data.object as Stripe.Customer;
+        console.log(`[WEBHOOK] Stripe customer deleted: ${customer.id}`);
+        const user = await User.findOne({ stripe_customer_id: customer.id });
+        if (user) {
+          const oldTier = user.subscription_tier || "free";
+          user.is_subscribed = false;
+          user.subscription_tier = "free";
+          user.credits = 0;
+          user.plan_allocated_credits = 0;
+          user.stripe_customer_id = undefined;
+          user.stripe_subscription_id = undefined;
+          await user.save();
+          await logSubscriptionHistory(
+            user._id,
+            oldTier,
+            "cancel",
+            0,
+            "deleted_customer"
+          );
+          console.log(`[WEBHOOK] Revoked subscription and cleared Stripe IDs for deleted customer: ${user.email}`);
+        }
+        break;
+      }
+
+      case "customer.subscription.created": {
+        const subscription = event.data.object as Stripe.Subscription;
+        const customerId = subscription.customer as string;
+        let user = await User.findOne({ stripe_customer_id: customerId });
+
+        if (!user) {
+          try {
+            const customer = await stripe.customers.retrieve(customerId) as Stripe.Customer;
+            if (customer && customer.email) {
+              user = await User.findOne({ email: customer.email });
+              if (user) {
+                user.stripe_customer_id = customerId;
+              }
+            }
+          } catch (err: any) {
+            console.error(`[WEBHOOK] Error retrieving customer for subscription.created:`, err.message);
+          }
+        }
+
+        if (user) {
+          user.stripe_subscription_id = subscription.id;
+          const status = subscription.status;
+          if (status === "active" || status === "trialing") {
+            user.is_subscribed = true;
+          }
+          await user.save();
+          console.log(`[WEBHOOK] Linked subscription ${subscription.id} for user ${user.email} on subscription.created (status: ${status})`);
+        }
+        break;
+      }
+
+      case "customer.subscription.updated": {
+        const subscription = event.data.object as Stripe.Subscription;
+        const customerId = subscription.customer as string;
+        let user = await User.findOne({
+          $or: [
+            { stripe_subscription_id: subscription.id },
+            { stripe_customer_id: customerId }
+          ]
+        });
+
+        if (user) {
+          user.stripe_subscription_id = subscription.id;
+          const status = subscription.status;
+          const isActive = status === "active" || status === "trialing";
+
+          if (isActive) {
+            user.is_subscribed = true;
+            const priceId = subscription.items.data[0]?.price.id;
+            if (priceId && PLAN_MAP[priceId]) {
+              const plan = PLAN_MAP[priceId];
+              const oldTier = user.subscription_tier || "free";
+              if (user.subscription_tier !== plan.tier) {
+                user.subscription_tier = plan.tier;
+                user.plan_allocated_credits = plan.credits;
+                const action = oldTier === "free" ? "start" : "change";
+                await logSubscriptionHistory(
+                  user._id,
+                  plan.tier,
+                  action,
+                  plan.credits,
+                  subscription.id
+                );
+                console.log(`[WEBHOOK] Subscription updated to tier: ${plan.tier} for user ${user.email}`);
+              }
+            }
+          } else {
+            const oldTier = user.subscription_tier || "free";
+            user.is_subscribed = false;
+            user.subscription_tier = "free";
+            user.credits = 0;
+            user.plan_allocated_credits = 0;
+            await logSubscriptionHistory(
+              user._id,
+              oldTier,
+              "cancel",
+              0,
+              subscription.id
+            );
+            console.log(`[WEBHOOK] Subscription inactive (status: ${status}) for user ${user.email}`);
+          }
+          await user.save();
+        }
+        break;
+      }
+
+      case "customer.subscription.paused": {
+        const subscription = event.data.object as Stripe.Subscription;
+        const customerId = subscription.customer as string;
+        const user = await User.findOne({ stripe_customer_id: customerId });
+        if (user) {
+          user.is_subscribed = false;
+          await user.save();
+          console.log(`[WEBHOOK] Subscription paused for user ${user.email}`);
+        }
+        break;
+      }
+
+      case "customer.subscription.resumed": {
+        const subscription = event.data.object as Stripe.Subscription;
+        const customerId = subscription.customer as string;
+        const user = await User.findOne({ stripe_customer_id: customerId });
+        if (user) {
+          const isActive = subscription.status === "active" || subscription.status === "trialing";
+          if (isActive) {
+            user.is_subscribed = true;
+            await user.save();
+            console.log(`[WEBHOOK] Subscription resumed for user ${user.email}`);
+          }
+        }
+        break;
+      }
+
+      case "invoice.payment_failed": {
+        const invoice = event.data.object as Stripe.Invoice;
+        const customerId = invoice.customer as string;
+        const user = await User.findOne({ stripe_customer_id: customerId });
+        if (user) {
+          user.is_subscribed = false;
+          await user.save();
+          console.warn(`[WEBHOOK] Payment failed for ${user.email}. Access suspended.`);
+        }
+        break;
+      }
+
+      case "invoice.payment_action_required": {
+        const invoice = event.data.object as Stripe.Invoice;
+        const customerId = invoice.customer as string;
+        const user = await User.findOne({ stripe_customer_id: customerId });
+        if (user) {
+          user.is_subscribed = false;
+          await user.save();
+          console.warn(`[WEBHOOK] Payment action required for ${user.email}. Access suspended.`);
+        }
+        break;
+      }
+
+      case "invoice.upcoming": {
+        const invoice = event.data.object as Stripe.Invoice;
+        console.log(`[WEBHOOK] Upcoming invoice for customer ${invoice.customer}: attempt on ${invoice.next_payment_attempt ? new Date(invoice.next_payment_attempt * 1000).toISOString() : 'unknown'}`);
+        break;
+      }
+
+      case "charge.refunded": {
+        const charge = event.data.object as Stripe.Charge;
+        console.log(`[WEBHOOK] Charge refunded: ${charge.id}`);
+        const user = await User.findOne({ stripe_customer_id: charge.customer as string });
+        if (user) {
+          const oldTier = user.subscription_tier || "free";
+          user.is_subscribed = false;
+          user.subscription_tier = "free";
+          const lostCredits = user.credits || 0;
+          user.credits = 0;
+          user.plan_allocated_credits = 0;
+
+          if (lostCredits > 0) {
+            user.total_burn_credits = (user.total_burn_credits || 0) + lostCredits;
+            await logCreditTransaction(user._id, lostCredits, "burn", "charge_refunded");
+          }
+          await logSubscriptionHistory(
+            user._id,
+            oldTier,
+            "cancel",
+            0,
+            charge.payment_intent as string || ""
+          );
+          await user.save();
+          console.log(`[WEBHOOK] Refund processed. Revoked subscription/credits for user: ${user.email}`);
         }
         break;
       }
@@ -230,7 +453,10 @@ export async function POST(request: Request) {
       case "customer.subscription.deleted": {
         const subscription = event.data.object as Stripe.Subscription;
         const user = await User.findOne({
-          stripe_subscription_id: subscription.id,
+          $or: [
+            { stripe_subscription_id: subscription.id },
+            { stripe_customer_id: subscription.customer as string }
+          ]
         });
         if (user) {
           const oldTier = user.subscription_tier || "free";
