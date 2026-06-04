@@ -89,7 +89,15 @@ export async function POST(request: Request) {
         await user.save();
       }
     } else {
-      // New User: Registration
+      // New User: Registration / Login check
+      // If name is not provided, it means they were trying to sign in with an unregistered email
+      if (name === undefined || name === null) {
+        return NextResponse.json(
+          { error: "invalid_credentials", message: "Invalid email or password" },
+          { status: 401, headers: corsHeaders }
+        );
+      }
+
       if (!name || !name.trim()) {
         return NextResponse.json(
           { 

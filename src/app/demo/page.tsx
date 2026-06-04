@@ -557,7 +557,7 @@ export default function DemoPage() {
           <p className="text-slate-400 text-xs max-w-md">
             Deploy the live copilot straight inside your browser or grab the native Win32 desktop client installer.
           </p>
-          <div className="flex gap-4">
+          <div className="flex flex-wrap justify-center gap-4">
             <a
               href="/copilot"
               className="px-6 py-3 bg-gradient-to-r from-[#6610F2] to-[#0D6EFD] hover:brightness-110 rounded-xl font-bold text-xs transition active:scale-95 flex items-center gap-1.5"
@@ -565,8 +565,16 @@ export default function DemoPage() {
               Launch Browser Copilot <Globe className="w-4 h-4" />
             </a>
             <a
+              href="https://github.com/Souravrooj-klizos/cracktheloop-desktop/releases"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-6 py-3 bg-slate-800 hover:bg-slate-700 border border-slate-750 rounded-xl font-bold text-xs transition active:scale-95 flex items-center gap-1.5"
+            >
+              Download Desktop App
+            </a>
+            <a
               href="/pricing"
-              className="px-6 py-3 bg-slate-800 hover:bg-slate-750 border border-slate-700 rounded-xl font-bold text-xs transition active:scale-95"
+              className="px-6 py-3 bg-[#0B0D19] hover:bg-slate-900 border border-slate-700 rounded-xl font-bold text-xs transition active:scale-95"
             >
               Get License Key
             </a>

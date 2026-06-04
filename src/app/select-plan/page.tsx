@@ -76,7 +76,7 @@ function SelectPlanContent() {
         }
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to activate Free Trial");
+      if (!res.ok) throw new Error(data.message || data.error || "Failed to activate Free Trial");
 
       // Update local cache & cookies
       localStorage.setItem("ctl_user", JSON.stringify(data.user));
@@ -102,7 +102,7 @@ function SelectPlanContent() {
         body: JSON.stringify({ priceId, email: activeUser.email }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to create checkout session");
+      if (!res.ok) throw new Error(data.message || data.error || "Failed to create checkout session");
 
       if (data.url) {
         window.location.href = data.url;
@@ -129,7 +129,7 @@ function SelectPlanContent() {
         body: JSON.stringify({ priceId, email: user.email }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to create checkout session");
+      if (!res.ok) throw new Error(data.message || data.error || "Failed to create checkout session");
 
       if (data.url) {
         window.location.href = data.url;

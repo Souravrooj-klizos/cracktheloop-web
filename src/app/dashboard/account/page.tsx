@@ -20,6 +20,7 @@ import {
   Star,
   Link2,
   TrendingUp,
+  Laptop,
 } from "lucide-react";
 
 interface ReferredUser {
@@ -458,6 +459,44 @@ function AccountDetailsContent() {
             )}
           </>
         )}
+      </section>
+
+      {/* Download Stealth Desktop Client Section */}
+      <section className="glow-card rounded-2xl p-6 md:p-8 bg-[#0c1125]/90 border border-white/5 flex flex-col gap-6">
+        <h2 className="text-base font-black text-white uppercase tracking-widest border-b border-white/5 pb-4 flex items-center gap-2">
+          <Laptop className="w-5 h-5 text-indigo-400" />
+          Download Stealth Desktop Client
+        </h2>
+
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+          <div className="flex flex-col gap-1.5">
+            <h4 className="text-sm font-bold text-white">
+              Native Client with Win32 Display Affinity
+            </h4>
+            <p className="text-xs text-slate-400 max-w-xl leading-relaxed">
+              Run the AI Copilot inside a transparent overlay that is completely invisible to Zoom, Teams, Meet, and other screen-sharing tools.
+            </p>
+          </div>
+
+          <div className="flex flex-wrap gap-3 w-full md:w-auto">
+            <a
+              href="https://github.com/Souravrooj-klizos/cracktheloop-desktop/releases"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-5 py-3 bg-gradient-to-r from-sky-500/10 to-indigo-500/10 hover:from-sky-500/20 hover:to-indigo-500/20 border border-indigo-500/25 rounded-xl font-bold text-xs uppercase tracking-wider text-sky-300 shadow-md transition active:scale-95 flex items-center gap-2 cursor-pointer justify-center flex-1 md:flex-none text-center"
+            >
+              Download for Windows (.msi / .exe)
+            </a>
+            <a
+              href="https://github.com/Souravrooj-klizos/cracktheloop-desktop/releases"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-5 py-3 bg-gradient-to-r from-sky-500/10 to-indigo-500/10 hover:from-sky-500/20 hover:to-indigo-500/20 border border-indigo-500/25 rounded-xl font-bold text-xs uppercase tracking-wider text-sky-300 shadow-md transition active:scale-95 flex items-center gap-2 cursor-pointer justify-center flex-1 md:flex-none text-center"
+            >
+              Download for macOS (.dmg)
+            </a>
+          </div>
+        </div>
       </section>
 
       {/* Main Billing Actions Box */}

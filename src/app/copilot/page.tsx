@@ -884,7 +884,7 @@ export default function CopilotPage() {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to save session");
+      if (!res.ok) throw new Error(data.message || data.error || "Failed to save session");
 
       setStatus("Session Saved");
       setTimeout(() => {
@@ -913,7 +913,7 @@ export default function CopilotPage() {
         })
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || data.message || "Authentication failed");
+      if (!res.ok) throw new Error(data.message || data.error || "Authentication failed");
       
       localStorage.setItem("ctl_token", data.token);
       localStorage.setItem("ctl_user", JSON.stringify(data.user));

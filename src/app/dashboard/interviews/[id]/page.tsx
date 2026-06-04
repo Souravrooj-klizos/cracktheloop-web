@@ -44,7 +44,7 @@ export default function InterviewDetailPage({ params }: { params: Promise<{ id: 
         if (res.ok) {
           setSession(data.interview);
         } else {
-          alert(data.error || "Failed to load session details");
+          alert(data.message || data.error || "Failed to load session details");
           router.push("/dashboard/interviews");
         }
       } catch (err) {
@@ -70,7 +70,7 @@ export default function InterviewDetailPage({ params }: { params: Promise<{ id: 
         body: JSON.stringify({ provider: "openai", apiKey: "server" })
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to create evaluation");
+      if (!res.ok) throw new Error(data.message || data.error || "Failed to create evaluation");
       setSession((prev: any) => ({ ...prev, report: data.report }));
       alert("Evaluation Report generated successfully!");
     } catch (err: any) {
