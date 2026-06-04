@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/db";
 import { InterviewSession } from "@/models/InterviewSession";
 import { User } from "@/models/User";
+import { TokenUsage } from "@/models/TokenUsage";
 import { logCreditTransaction } from "@/lib/transactions";
 import jwt from "jsonwebtoken";
 
@@ -51,6 +52,22 @@ export async function POST(req: Request) {
     const user = await User.findById(userId);
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404, headers: corsHeaders });
+    }
+
+    // Fetch and aggregate token usages from this session
+    let totalInputTokens = 0;
+    let totalOutputTokens = 0;
+    let totalCost = 0;
+    let tokenUsagesIds: any[] = [];
+
+    if (sessionId) {
+      const usages = await TokenUsage.find({ session_id: sessionId });
+      for (const usage of usages) {
+        totalInputTokens += usage.input_tokens || 0;
+        totalOutputTokens += usage.output_tokens || 0;
+        totalCost += usage.cost || 0;
+        tokenUsagesIds.push(usage._id);
+      }
     }
 
     // Check if session already exists
@@ -124,6 +141,10 @@ export async function POST(req: Request) {
       existingSession.company = company || existingSession.company || "General Interview Session";
       existingSession.transcript = cleanTranscript;
       existingSession.credits_charged = Math.max(alreadyCharged, creditsToDeduct);
+      existingSession.total_input_tokens = totalInputTokens;
+      existingSession.total_output_tokens = totalOutputTokens;
+      existingSession.total_cost = totalCost;
+      existingSession.token_usages = tokenUsagesIds;
       
       await existingSession.save();
 
@@ -144,7 +165,11 @@ export async function POST(req: Request) {
         role,
         company: company || "General Interview Session",
         transcript: cleanTranscript,
-        credits_charged: creditsToDeduct
+        credits_charged: creditsToDeduct,
+        total_input_tokens: totalInputTokens,
+        total_output_tokens: totalOutputTokens,
+        total_cost: totalCost,
+        token_usages: tokenUsagesIds
       };
       
       if (sessionId) {

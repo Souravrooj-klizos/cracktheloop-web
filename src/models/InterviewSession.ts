@@ -22,6 +22,10 @@ export interface IInterviewSession extends Document {
   report?: IEvaluationReport;
   session_id?: string;
   credits_charged?: number;
+  total_input_tokens?: number;
+  total_output_tokens?: number;
+  total_cost?: number;
+  token_usages?: mongoose.Types.ObjectId[];
   created_at: Date;
   updated_at: Date;
 }
@@ -106,6 +110,25 @@ const InterviewSessionSchema = new Schema<IInterviewSession>(
     credits_charged: {
       type: Number,
       default: 0,
+    },
+    total_input_tokens: {
+      type: Number,
+      default: 0,
+    },
+    total_output_tokens: {
+      type: Number,
+      default: 0,
+    },
+    total_cost: {
+      type: Number,
+      default: 0,
+    },
+    token_usages: {
+      type: [{
+        type: Schema.Types.ObjectId,
+        ref: "TokenUsage"
+      }],
+      default: [],
     },
   },
   {

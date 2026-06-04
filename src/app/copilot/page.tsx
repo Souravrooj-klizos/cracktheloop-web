@@ -1,19 +1,19 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { 
-  Shield, 
-  ArrowLeft, 
-  Settings, 
-  Volume2, 
-  Mic, 
-  Maximize2, 
-  Layers, 
-  Trash2, 
-  Upload, 
-  ChevronDown, 
-  Check, 
-  Play, 
+import {
+  Shield,
+  ArrowLeft,
+  Settings,
+  Volume2,
+  Mic,
+  Maximize2,
+  Layers,
+  Trash2,
+  Upload,
+  ChevronDown,
+  Check,
+  Play,
   Square,
   Lock,
   Unlock,
@@ -206,7 +206,7 @@ export default function CopilotPage() {
             localStorage.setItem("ctl_user", JSON.stringify(data.user));
           }
         })
-        .catch(() => {});
+        .catch(() => { });
     } else {
       setDeepgramKey("");
       setDeepgramKeyStatus('idle');
@@ -238,7 +238,7 @@ export default function CopilotPage() {
     if (!file) return;
     setResumeFileName(file.name);
     setStatus(`Parsing: ${file.name}...`);
-    
+
     try {
       const arrayBuffer = await file.arrayBuffer();
       let extractedText = "";
@@ -306,8 +306,8 @@ export default function CopilotPage() {
       lastSavedHistoryLengthRef.current = 0;
     }
 
-    const newSessionId = typeof window !== 'undefined' && window.crypto && window.crypto.randomUUID 
-      ? window.crypto.randomUUID() 
+    const newSessionId = typeof window !== 'undefined' && window.crypto && window.crypto.randomUUID
+      ? window.crypto.randomUUID()
       : Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     setSessionId(newSessionId);
 
@@ -386,7 +386,7 @@ export default function CopilotPage() {
       } else {
         throw new Error("Failed to connect audio sources to Web Audio graph");
       }
-      
+
       processor.connect(analyser);
       analyser.connect(audioCtx.destination); // Required to pull audio through script processor
 
@@ -458,9 +458,9 @@ export default function CopilotPage() {
             if (channelIndex === 1) {
               const fullQuery = cleanText;
               const wordCount = fullQuery.split(/\s+/).filter(Boolean).length;
-              const isLikelyQuestion = 
-                fullQuery.endsWith("?") || 
-                wordCount >= 4 || 
+              const isLikelyQuestion =
+                fullQuery.endsWith("?") ||
+                wordCount >= 4 ||
                 (fullQuery.length >= 15 && (
                   fullQuery.toLowerCase().includes("describe") ||
                   fullQuery.toLowerCase().includes("explain") ||
@@ -521,7 +521,7 @@ export default function CopilotPage() {
   // Stop direct browser capture
   async function stopCaptureEngine() {
     console.log("[CAPTURE] Stopping audio engine...");
-    
+
     if (micStreamRef.current) {
       micStreamRef.current.getTracks().forEach((track) => track.stop());
       micStreamRef.current = null;
@@ -597,6 +597,8 @@ export default function CopilotPage() {
           role: interviewRole,
           jobDescription: jobDescription || null,
           candidateResume: candidateResume || null,
+          history: history.map(h => ({ sender: h.sender, text: h.text })),
+          sessionId: sessionId || null,
         }),
       });
 
@@ -624,7 +626,7 @@ export default function CopilotPage() {
         if (done) break;
 
         buffer += decoder.decode(value, { stream: true });
-        
+
         while (true) {
           const pos = buffer.indexOf("\n");
           if (pos === -1) break;
@@ -659,7 +661,7 @@ export default function CopilotPage() {
               if (token) {
                 finalAnswer += token;
                 setAnswer(finalAnswer);
-                
+
                 if (speechStartRef.current) {
                   const delta = (Date.now() - speechStartRef.current) / 1000;
                   setLatency(Number(delta.toFixed(2)));
@@ -716,7 +718,7 @@ export default function CopilotPage() {
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       ctx.lineWidth = 2.5;
-      
+
       const grad = ctx.createLinearGradient(0, 0, canvas.width, 0);
       grad.addColorStop(0, "#6610F2"); // Purple
       grad.addColorStop(0.5, "#0D6EFD"); // Blue
@@ -797,7 +799,7 @@ export default function CopilotPage() {
       x: e.clientX - hudPosition.x,
       y: e.clientY - hudPosition.y
     };
-    
+
     const handleMouseMove = (event: MouseEvent) => {
       if (!dragStartRef.current) return;
       setHudPosition({
@@ -914,7 +916,7 @@ export default function CopilotPage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || data.error || "Authentication failed");
-      
+
       localStorage.setItem("ctl_token", data.token);
       localStorage.setItem("ctl_user", JSON.stringify(data.user));
       document.cookie = `ctl_token=${data.token}; path=/; max-age=604800; SameSite=Lax`;
@@ -981,39 +983,37 @@ export default function CopilotPage() {
 
   return (
     <div className="w-screen h-screen flex flex-col justify-center items-center bg-transparent p-2 relative overflow-hidden select-none">
-      
+
       {/* Background Radial Glows */}
       <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] rounded-full bg-[#6610F2]/5 bg-blur-glow text-slate-100"></div>
       <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-[#0D6EFD]/5 bg-blur-glow"></div>
 
       {/* Floating overlay hud card (rendered on toggle overlay) */}
       {isOverlayMode && (
-        <div 
+        <div
           ref={hudRef}
-          style={{ 
+          style={{
             transform: `translate(${hudPosition.x}px, ${hudPosition.y}px)`,
             background: `rgba(11, 13, 25, ${opacity})`,
             zIndex: 100
           }}
-          className={`absolute top-0 left-0 w-[800px] h-[520px] glass-panel rounded-3xl p-5 flex flex-col gap-4 animate-fade-in text-white transition-all duration-300 ${
-            isLocked 
-              ? "border-transparent pointer-events-none" 
+          className={`absolute top-0 left-0 w-[800px] h-[520px] glass-panel rounded-3xl p-5 flex flex-col gap-4 animate-fade-in text-white transition-all duration-300 ${isLocked
+              ? "border-transparent pointer-events-none"
               : `border-2 border-dashed border-${activeLlmProvider} pointer-events-auto shadow-2xl`
-          }`}
+            }`}
         >
           {/* HUD Drag Header */}
-          <div 
+          <div
             onMouseDown={handleMouseDown}
             className={`flex justify-between items-center border-b border-white/10 pb-3 select-none z-30 ${isLocked ? "cursor-default" : "cursor-move"}`}
           >
             <div className="flex items-center gap-2">
-              <span className={`w-2.5 h-2.5 rounded-full ${
-                activeLlmProvider === "openai" ? "bg-emerald-400 shadow-[0_0_10px_#10a37f]" :
-                activeLlmProvider === "anthropic" ? "bg-amber-500 shadow-[0_0_10px_#d97706]" :
-                activeLlmProvider === "gemini" ? "bg-blue-500 shadow-[0_0_10px_#2563eb]" :
-                activeLlmProvider === "groq" ? "bg-teal-400 shadow-[0_0_10px_#14b8a6]" :
-                "bg-slate-300 shadow-[0_0_10px_#f8fafc]"
-              }`}></span>
+              <span className={`w-2.5 h-2.5 rounded-full ${activeLlmProvider === "openai" ? "bg-emerald-400 shadow-[0_0_10px_#10a37f]" :
+                  activeLlmProvider === "anthropic" ? "bg-amber-500 shadow-[0_0_10px_#d97706]" :
+                    activeLlmProvider === "gemini" ? "bg-blue-500 shadow-[0_0_10px_#2563eb]" :
+                      activeLlmProvider === "groq" ? "bg-teal-400 shadow-[0_0_10px_#14b8a6]" :
+                        "bg-slate-300 shadow-[0_0_10px_#f8fafc]"
+                }`}></span>
               <span className={`text-[10px] font-black tracking-widest uppercase select-none text-gradient-${activeLlmProvider}`}>
                 WEB HUD OVERLAY
               </span>
@@ -1021,15 +1021,14 @@ export default function CopilotPage() {
 
             {/* Custom Control Actions */}
             <div className="flex items-center gap-2 pointer-events-auto">
-              
+
               {!isLocked && (
                 <button
                   onClick={handleToggleCapture}
-                  className={`text-[11px] px-2 py-1 rounded-lg font-black transition active:scale-95 cursor-pointer flex items-center gap-1 border ${
-                    isCapturing
+                  className={`text-[11px] px-2 py-1 rounded-lg font-black transition active:scale-95 cursor-pointer flex items-center gap-1 border ${isCapturing
                       ? "bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border-rose-500/35"
                       : "bg-gradient-to-r from-sky-500/25 to-indigo-500/25 hover:brightness-110 text-sky-300 border-sky-500/35"
-                  }`}
+                    }`}
                 >
                   {isCapturing ? "⏹ Stop" : "▶ Start"}
                 </button>
@@ -1039,17 +1038,15 @@ export default function CopilotPage() {
                 <div className="flex items-center gap-1 bg-white/5 border border-white/10 px-1.5 py-0.5 rounded-lg text-[10px]">
                   <button
                     onClick={handleToggleMic}
-                    className={`px-1.5 py-0.5 rounded transition cursor-pointer font-bold ${
-                      captureMic ? "bg-sky-500/25 text-sky-300" : "text-slate-500"
-                    }`}
+                    className={`px-1.5 py-0.5 rounded transition cursor-pointer font-bold ${captureMic ? "bg-sky-500/25 text-sky-300" : "text-slate-500"
+                      }`}
                   >
                     🎤 {captureMic ? "ON" : "OFF"}
                   </button>
                   <button
                     onClick={handleToggleSystem}
-                    className={`px-1.5 py-0.5 rounded transition cursor-pointer font-bold ${
-                      captureSystem ? "bg-emerald-500/25 text-emerald-300" : "text-slate-500"
-                    }`}
+                    className={`px-1.5 py-0.5 rounded transition cursor-pointer font-bold ${captureSystem ? "bg-emerald-500/25 text-emerald-300" : "text-slate-500"
+                      }`}
                   >
                     🔊 {captureSystem ? "ON" : "OFF"}
                   </button>
@@ -1094,7 +1091,7 @@ export default function CopilotPage() {
               )}
 
               {isLocked ? (
-                <button 
+                <button
                   onClick={() => setIsLocked(false)}
                   className="text-[10px] text-white/55 bg-white/5 border border-white/10 px-2.5 py-1 rounded-lg font-bold uppercase tracking-wider flex items-center gap-1 cursor-pointer hover:bg-white/10"
                 >
@@ -1152,13 +1149,12 @@ export default function CopilotPage() {
           <div className="flex flex-col gap-1.5 flex-1 min-h-0 z-10">
             <div className="flex justify-between items-center px-1">
               <span className={`text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 text-gradient-${activeLlmProvider}`}>
-                <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${
-                  activeLlmProvider === "openai" ? "bg-emerald-400" :
-                  activeLlmProvider === "anthropic" ? "bg-amber-500" :
-                  activeLlmProvider === "gemini" ? "bg-blue-500" :
-                  activeLlmProvider === "groq" ? "bg-teal-400" :
-                  "bg-slate-300"
-                }`}></span>
+                <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${activeLlmProvider === "openai" ? "bg-emerald-400" :
+                    activeLlmProvider === "anthropic" ? "bg-amber-500" :
+                      activeLlmProvider === "gemini" ? "bg-blue-500" :
+                        activeLlmProvider === "groq" ? "bg-teal-400" :
+                          "bg-slate-300"
+                  }`}></span>
                 AI Copilot Guidance
               </span>
               {latency && (
@@ -1172,13 +1168,12 @@ export default function CopilotPage() {
                 <div className="whitespace-pre-wrap leading-relaxed select-text font-bold text-emerald-50/95 text-shadow-sm animate-fade-in pointer-events-auto">
                   {answer}
                   {status === "Streaming Copilot..." && (
-                    <span className={`inline-block w-2.5 h-4.5 ml-1.5 animate-pulse align-middle ${
-                      activeLlmProvider === "openai" ? "bg-emerald-400 shadow-[0_0_8px_#10a37f]" :
-                      activeLlmProvider === "anthropic" ? "bg-amber-500 shadow-[0_0_8px_#d97706]" :
-                      activeLlmProvider === "gemini" ? "bg-blue-500 shadow-[0_0_8px_#2563eb]" :
-                      activeLlmProvider === "groq" ? "bg-teal-400 shadow-[0_0_8px_#14b8a6]" :
-                      "bg-slate-300 shadow-[0_0_8px_#f8fafc]"
-                    }`}></span>
+                    <span className={`inline-block w-2.5 h-4.5 ml-1.5 animate-pulse align-middle ${activeLlmProvider === "openai" ? "bg-emerald-400 shadow-[0_0_8px_#10a37f]" :
+                        activeLlmProvider === "anthropic" ? "bg-amber-500 shadow-[0_0_8px_#d97706]" :
+                          activeLlmProvider === "gemini" ? "bg-blue-500 shadow-[0_0_8px_#2563eb]" :
+                            activeLlmProvider === "groq" ? "bg-teal-400 shadow-[0_0_8px_#14b8a6]" :
+                              "bg-slate-300 shadow-[0_0_8px_#f8fafc]"
+                      }`}></span>
                   )}
                 </div>
               ) : (
@@ -1204,7 +1199,7 @@ export default function CopilotPage() {
 
       {/* Main dashboard configuration panel */}
       {!isOverlayMode && (
-        <div 
+        <div
           style={{ background: `rgba(11, 13, 25, ${opacity})` }}
           className="w-[780px] h-[640px] glass-panel rounded-3xl p-6 flex flex-col justify-between text-white border-white/10 relative overflow-hidden shadow-2xl animate-fade-in"
         >
@@ -1223,7 +1218,7 @@ export default function CopilotPage() {
                 <p className="text-xs text-white/40 mt-0.5 font-medium">Anti-Share Stealth Browser Audio Copilot</p>
               </div>
             </div>
-            
+
             {/* Authenticated user status vs Login controls */}
             <div className="flex items-center gap-2 relative z-20">
               {user ? (
@@ -1232,7 +1227,7 @@ export default function CopilotPage() {
                   <span className="bg-sky-500/20 text-sky-400 px-2 py-0.5 rounded-full text-[10px]">
                     {user.credits} credits
                   </span>
-                  <button 
+                  <button
                     onClick={handleLogout}
                     title="Log Out"
                     className="p-1 bg-white/5 hover:bg-rose-500/20 text-slate-400 hover:text-rose-300 rounded-full transition cursor-pointer border border-white/10"
@@ -1255,7 +1250,7 @@ export default function CopilotPage() {
                   Sign In
                 </button>
               )}
-              
+
               {status && (
                 <div className="flex items-center gap-2 bg-white/5 border border-white/10 px-4 py-2 rounded-full text-xs font-bold shadow-sm">
                   <span className={`w-2.5 h-2.5 rounded-full ${isCapturing ? "bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]" : "bg-white/20"}`}></span>
@@ -1314,9 +1309,8 @@ export default function CopilotPage() {
                   value={interviewRole}
                   onChange={(e) => setInterviewRole(e.target.value)}
                   placeholder="e.g. Senior Frontend Engineer"
-                  className={`w-full bg-[#090e1a]/85 border ${
-                    !interviewRole.trim() ? "border-rose-500/30 shadow-[0_0_8px_rgba(244,63,94,0.1)]" : "border-white/10"
-                  } px-3.5 py-2 rounded-xl text-xs focus:outline-none focus:border-sky-400 transition placeholder-white/20 text-white/95 font-medium`}
+                  className={`w-full bg-[#090e1a]/85 border ${!interviewRole.trim() ? "border-rose-500/30 shadow-[0_0_8px_rgba(244,63,94,0.1)]" : "border-white/10"
+                    } px-3.5 py-2 rounded-xl text-xs focus:outline-none focus:border-sky-400 transition placeholder-white/20 text-white/95 font-medium`}
                 />
               </div>
 
@@ -1343,7 +1337,7 @@ export default function CopilotPage() {
                   <label className="flex flex-col items-center justify-center border border-dashed border-white/15 hover:border-sky-400/40 bg-white/2 rounded-xl p-2 cursor-pointer select-none transition group h-[50px]">
                     <span className="text-xs group-hover:scale-110 transition duration-300">📎</span>
                     <span className="text-[9px] text-slate-300 font-black uppercase tracking-wider mt-0.5 group-hover:text-white transition">Upload Resume PDF or DOCX</span>
-                    <input 
+                    <input
                       type="file"
                       accept=".pdf,.docx"
                       onChange={handleResumeUpload}
@@ -1380,7 +1374,7 @@ export default function CopilotPage() {
             <div className="flex items-center gap-2 font-bold uppercase tracking-wider select-none shrink-0 text-slate-400">
               Waveform:
             </div>
-            
+
             {/* Visual Waveform Canvas */}
             <div className="flex-1 h-9 bg-[#0b0e1b] rounded-xl overflow-hidden border border-white/5 shadow-inner shrink min-w-0">
               <canvas ref={canvasRef} width="320" height="36" className="w-full h-full" />
@@ -1390,11 +1384,10 @@ export default function CopilotPage() {
               {/* Mic Toggle Button */}
               <button
                 onClick={handleToggleMic}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold transition border cursor-pointer ${
-                  captureMic 
-                    ? "bg-sky-500/10 text-sky-300 border-sky-500/20 hover:bg-sky-500/20" 
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold transition border cursor-pointer ${captureMic
+                    ? "bg-sky-500/10 text-sky-300 border-sky-500/20 hover:bg-sky-500/20"
                     : "bg-white/5 text-slate-500 border-white/5 hover:bg-white/10"
-                }`}
+                  }`}
               >
                 <Mic className="w-3.5 h-3.5" />
                 {captureMic ? "Mic ON" : "Mic Muted"}
@@ -1403,11 +1396,10 @@ export default function CopilotPage() {
               {/* System Toggle Button */}
               <button
                 onClick={handleToggleSystem}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold transition border cursor-pointer ${
-                  captureSystem 
-                    ? "bg-emerald-500/10 text-emerald-300 border-emerald-500/20 hover:bg-emerald-500/20" 
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold transition border cursor-pointer ${captureSystem
+                    ? "bg-emerald-500/10 text-emerald-300 border-emerald-500/20 hover:bg-emerald-500/20"
                     : "bg-white/5 text-slate-500 border-white/5 hover:bg-white/10"
-                }`}
+                  }`}
                 title="Captures shared Chrome/Edge tab audio"
               >
                 <Volume2 className="w-3.5 h-3.5" />
@@ -1461,14 +1453,13 @@ export default function CopilotPage() {
               history.map((turn, index) => (
                 <div key={index} className="flex flex-col gap-1">
                   <div className="flex justify-between items-center">
-                    <span className={`text-[9px] font-black uppercase tracking-wider ${
-                      turn.sender === "interviewer" ? "text-sky-400" :
-                      turn.sender === "candidate" ? "text-purple-400" :
-                      "text-emerald-400"
-                    }`}>
+                    <span className={`text-[9px] font-black uppercase tracking-wider ${turn.sender === "interviewer" ? "text-sky-400" :
+                        turn.sender === "candidate" ? "text-purple-400" :
+                          "text-emerald-400"
+                      }`}>
                       {turn.sender === "interviewer" ? "🗣️ Interviewer" :
-                       turn.sender === "candidate" ? "🎙️ You" :
-                       "🤖 Copilot"}
+                        turn.sender === "candidate" ? "🎙️ You" :
+                          "🤖 Copilot"}
                     </span>
                     <span className="text-[8px] text-slate-500 font-semibold">
                       {new Date(turn.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
@@ -1488,13 +1479,13 @@ export default function CopilotPage() {
       {showLoginModal && (
         <div className="fixed inset-0 bg-black/75 backdrop-blur-md flex justify-center items-center z-[200] p-6 animate-fade-in">
           <div className="w-[360px] bg-[#0c1125] border border-white/10 rounded-2xl p-6 flex flex-col gap-6 shadow-2xl relative">
-            <button 
+            <button
               onClick={() => setShowLoginModal(false)}
               className="text-slate-400 hover:text-white transition cursor-pointer font-bold absolute top-4 right-4"
             >
               ✕
             </button>
-            
+
             {/* Header / Tabs */}
             <div className="flex flex-col gap-3">
               <div className="text-center">
@@ -1507,18 +1498,16 @@ export default function CopilotPage() {
                 <button
                   type="button"
                   onClick={() => setAuthMode("signin")}
-                  className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
-                    authMode === "signin" ? "bg-sky-500 text-white" : "text-slate-400 hover:text-white"
-                  }`}
+                  className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${authMode === "signin" ? "bg-sky-500 text-white" : "text-slate-400 hover:text-white"
+                    }`}
                 >
                   Sign In
                 </button>
                 <button
                   type="button"
                   onClick={() => setAuthMode("signup")}
-                  className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
-                    authMode === "signup" ? "bg-sky-500 text-white" : "text-slate-400 hover:text-white"
-                  }`}
+                  className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${authMode === "signup" ? "bg-sky-500 text-white" : "text-slate-400 hover:text-white"
+                    }`}
                 >
                   Sign Up
                 </button>
