@@ -112,6 +112,9 @@ export default function CopilotPage() {
   }, [history]);
 
   const lastSavedHistoryLengthRef = useRef(0);
+  const sessionStartRef = useRef<number | null>(null);
+  const sttStartRef = useRef<number | null>(null);
+  const accumulatedSttTimeRef = useRef<number>(0);
 
   const [sessionId, setSessionId] = useState("");
   const sessionIdRef = useRef(sessionId);
@@ -132,6 +135,9 @@ export default function CopilotPage() {
   useEffect(() => {
     const handleBeforeUnload = () => {
       if (historyRef.current.length > 0 && historyRef.current.length !== lastSavedHistoryLengthRef.current && tokenRef.current) {
+        const totalTime = sessionStartRef.current ? Math.round((Date.now() - sessionStartRef.current) / 1000) : 0;
+        const totalSttOnTime = Math.round(accumulatedSttTimeRef.current + (sttStartRef.current ? (Date.now() - sttStartRef.current) / 1000 : 0));
+        
         const body = JSON.stringify({
           role: interviewRoleRef.current,
           company: "General Interview Session",
@@ -140,7 +146,9 @@ export default function CopilotPage() {
             text: t.text,
             timestamp: t.timestamp
           })),
-          sessionId: sessionIdRef.current
+          sessionId: sessionIdRef.current,
+          totalTime,
+          totalSttOnTime
         });
 
         lastSavedHistoryLengthRef.current = historyRef.current.length;
@@ -307,7 +315,15 @@ export default function CopilotPage() {
       await saveInterviewSession();
       setHistory([]);
       lastSavedHistoryLengthRef.current = 0;
+      sessionStartRef.current = null;
+      accumulatedSttTimeRef.current = 0;
+      sttStartRef.current = null;
     }
+
+    if (!sessionStartRef.current) {
+      sessionStartRef.current = Date.now();
+    }
+    sttStartRef.current = Date.now();
 
     const newSessionId = typeof window !== 'undefined' && window.crypto && window.crypto.randomUUID
       ? window.crypto.randomUUID()
@@ -524,6 +540,11 @@ export default function CopilotPage() {
   // Stop direct browser capture
   async function stopCaptureEngine() {
     console.log("[CAPTURE] Stopping audio engine...");
+
+    if (sttStartRef.current) {
+      accumulatedSttTimeRef.current += (Date.now() - sttStartRef.current) / 1000;
+      sttStartRef.current = null;
+    }
 
     if (micStreamRef.current) {
       micStreamRef.current.getTracks().forEach((track) => track.stop());
@@ -897,6 +918,9 @@ export default function CopilotPage() {
       return;
     }
 
+    const totalTime = sessionStartRef.current ? Math.round((Date.now() - sessionStartRef.current) / 1000) : 0;
+    const totalSttOnTime = Math.round(accumulatedSttTimeRef.current + (sttStartRef.current ? (Date.now() - sttStartRef.current) / 1000 : 0));
+
     lastSavedHistoryLengthRef.current = historyRef.current.length;
     setStatus("Saving session...");
     try {
@@ -914,7 +938,9 @@ export default function CopilotPage() {
             text: t.text,
             timestamp: t.timestamp
           })),
-          sessionId: sessionIdRef.current
+          sessionId: sessionIdRef.current,
+          totalTime,
+          totalSttOnTime
         })
       });
 
