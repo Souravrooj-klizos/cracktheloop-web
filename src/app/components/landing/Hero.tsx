@@ -1,18 +1,24 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "framer-motion";
-import { Shield, ArrowRight, Video, Users, Mic, Eye, EyeOff } from "lucide-react";
+import { Sparkles, ArrowRight, FileText, CheckCircle2, MessageSquare, Users, Star, Zap } from "lucide-react";
 import { Parallax } from "./ScrollReveal";
 
 export default function Hero() {
-  const [showInterviewerView, setShowInterviewerView] = useState(false);
-
   return (
-    <section id="hero" className="section-frost relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden">
+    <section id="hero" className="hero-gradient-mesh relative min-h-screen flex flex-col justify-center pt-24 pb-16 overflow-hidden">
+      {/* Subtle grid pattern overlay */}
+      <div
+        className="absolute inset-0 opacity-[0.03] pointer-events-none"
+        style={{
+          backgroundImage: `linear-gradient(rgba(15,23,42,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(15,23,42,0.4) 1px, transparent 1px)`,
+          backgroundSize: '60px 60px',
+        }}
+      />
+
       {/* Floating Orbs with parallax */}
       <Parallax speed={0.2} className="absolute -top-20 -right-40">
-        <div className="orb orb-peach w-[500px] h-[500px] animate-float-orb" />
+        <div className="orb orb-peach w-[600px] h-[600px] animate-float-orb" />
       </Parallax>
       <Parallax speed={0.4} className="absolute top-1/2 -left-40">
         <div className="orb orb-slate w-[400px] h-[400px] animate-float-orb-slow" />
@@ -21,7 +27,7 @@ export default function Hero() {
         <div className="orb orb-frost w-[350px] h-[350px] animate-float-orb" style={{ animationDelay: "5s" }} />
       </Parallax>
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
+      <div className="max-w-7xl mx-auto px-6 relative z-10 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Left — Copy */}
           <motion.div
@@ -30,138 +36,185 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
           >
-            <div className="inline-flex w-fit items-center gap-2 glass-light rounded-full px-4 py-1.5">
-              <Shield className="w-3.5 h-3.5 text-[var(--accent)]" />
-              <span className="text-xs font-semibold text-[var(--text-secondary)]">
-                Invisible to Screen Share
-              </span>
+            <div className="inline-flex w-fit items-center gap-2 glass-light rounded-full px-4 py-1.5 border border-[var(--border-light)] text-xs font-semibold text-[var(--text-secondary)]">
+              <Sparkles className="w-3.5 h-3.5 text-[var(--accent)]" />
+              <span>AI-Powered Interview Support</span>
             </div>
 
             <h1
-              className="text-4xl md:text-5xl lg:text-[56px] font-extrabold leading-[1.1] tracking-tight"
+              className="text-4xl md:text-5xl lg:text-[56px] font-extrabold leading-[1.12] tracking-tight"
               style={{ fontFamily: "var(--font-display)" }}
             >
-              Your Invisible Edge in{" "}
-              <span className="text-gradient-hero">Every Interview</span>
+              Your AI Buddy for{" "}
+              <span className="text-gradient-hero">Confident Answers</span>
             </h1>
 
-            <p className="text-lg text-[var(--text-muted)] leading-relaxed max-w-xl">
-              Real-time AI guidance that only you can see. Whether it&apos;s a technical,
-              behavioral, consulting, or product interview — CrackTheLoop delivers
-              structured answers through an overlay that&apos;s completely invisible to
-              screen sharing tools.
+            <p className="text-base md:text-lg text-[var(--text-muted)] leading-relaxed max-w-xl">
+              Upload your resume and job description. During your interview or practice session,
+              CrackTheLoop helps you respond with clear, structured, and role-specific answer guidance.
             </p>
 
             <div className="flex flex-wrap gap-4 mt-2">
-              <a href="/copilot" className="btn-primary cursor-pointer">
-                Launch Browser Copilot
+              <a href="/pricing" className="btn-primary cursor-pointer">
+                Start Preparing Free
                 <ArrowRight className="w-4 h-4" />
               </a>
-              <a href="/pricing" className="btn-ghost-light cursor-pointer">
-                View Pricing
+              <a href="#product-demo" className="btn-ghost-light cursor-pointer">
+                See How It Works
               </a>
             </div>
+
+            {/* Social Proof Micro-Stats */}
+            <motion.div
+              className="flex flex-wrap items-center gap-6 mt-4 pt-6 border-t border-[var(--border-light)]"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+            >
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full bg-[var(--accent-soft)] flex items-center justify-center">
+                  <Users className="w-4 h-4 text-[var(--accent)]" />
+                </div>
+                <div>
+                  <span className="text-sm font-bold text-[var(--text-primary)]">12,000+</span>
+                  <span className="text-[11px] text-[var(--text-muted)] block leading-tight">interviews supported</span>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full bg-[var(--accent-soft)] flex items-center justify-center">
+                  <Star className="w-4 h-4 text-[var(--accent)]" />
+                </div>
+                <div>
+                  <span className="text-sm font-bold text-[var(--text-primary)]">94%</span>
+                  <span className="text-[11px] text-[var(--text-muted)] block leading-tight">feel more confident</span>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full bg-[var(--accent-soft)] flex items-center justify-center">
+                  <Zap className="w-4 h-4 text-[var(--accent)]" />
+                </div>
+                <div>
+                  <span className="text-sm font-bold text-[var(--text-primary)]">1.5s</span>
+                  <span className="text-[11px] text-[var(--text-muted)] block leading-tight">avg. answer speed</span>
+                </div>
+              </div>
+            </motion.div>
           </motion.div>
 
-          {/* Right — HUD Simulator */}
+          {/* Right — Mock Interview Dashboard Visual with perspective */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+            className="perspective-[1200px]"
           >
-            <div className="glass-light rounded-2xl p-5 relative">
+            <div
+              className="glass-light rounded-[20px] p-4 md:p-5 border border-[var(--border-light)] relative bg-white/80 backdrop-blur-md transition-transform duration-700 hover:rotate-y-0"
+              style={{
+                transform: 'perspective(1200px) rotateY(-3deg) rotateX(2deg)',
+                boxShadow: '0 25px 50px -12px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.03)',
+              }}
+            >
+              {/* Accent glow behind card */}
+              <div className="absolute -inset-1 bg-gradient-to-br from-[var(--accent)]/5 via-transparent to-slate-200/20 rounded-[22px] -z-10 blur-sm" />
+
               {/* Header */}
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between mb-4 border-b border-[var(--border-light)] pb-4">
                 <div className="flex items-center gap-2">
-                  <Video className="w-4 h-4 text-[var(--accent)]" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-[var(--accent)] animate-pulse" />
                   <span className="text-xs font-bold text-[var(--text-primary)] uppercase tracking-wider">
-                    Live Interview Session
+                    Interview Assistant Active
                   </span>
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-                  <span className="text-[10px] font-semibold text-red-500">REC</span>
+                <div className="text-[10px] font-mono text-[var(--text-muted)] bg-[var(--bg-cloud)] px-2.5 py-1 rounded-[4px] border border-[var(--border-light)]">
+                  Practice Mode
                 </div>
               </div>
 
-              {/* Video Grid */}
-              <div className="grid grid-cols-2 gap-3 mb-4">
-                {/* Interviewer */}
-                <div className="bg-[var(--bg-mist)] rounded-xl p-4 flex flex-col items-center justify-center h-40 border border-[var(--border-light)] relative">
-                  <div className="w-12 h-12 rounded-full bg-[var(--bg-cloud)] flex items-center justify-center text-[var(--text-muted)] mb-2">
-                    <Users className="w-6 h-6" />
+              {/* Main Panel Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                {/* Left Panel: Question Detected */}
+                <div className="bg-[var(--bg-mist)] rounded-[6px] p-4 border border-[var(--border-light)] flex flex-col gap-3">
+                  <div className="flex items-center gap-1.5 text-xs font-bold text-[var(--text-secondary)]">
+                    <MessageSquare className="w-3.5 h-3.5 text-[var(--accent)]" />
+                    Question Detected
                   </div>
-                  <span className="text-xs font-medium text-[var(--text-muted)]">Interviewer</span>
-                  <Mic className="w-3 h-3 text-green-500 absolute top-3 right-3" />
-                </div>
-
-                {/* Candidate */}
-                <div className="bg-[var(--bg-mist)] rounded-xl p-4 flex flex-col items-center justify-center h-40 border border-[var(--border-light)] relative">
-                  <div className="w-12 h-12 rounded-full bg-[var(--accent-soft)] flex items-center justify-center mb-2">
-                    <Users className="w-6 h-6 text-[var(--accent)]" />
+                  <div className="bg-white p-3 rounded-[4px] border border-[var(--border-light)] shadow-xs">
+                    <p className="text-xs font-medium text-[var(--text-primary)] italic leading-relaxed">
+                      &quot;Tell me about a time you handled a difficult stakeholder conflict.&quot;
+                    </p>
                   </div>
-                  <span className="text-xs font-medium text-[var(--text-muted)]">You</span>
-                  <Mic className="w-3 h-3 text-green-500 absolute top-3 right-3" />
+                  <div className="flex items-center justify-between text-[10px] text-[var(--text-muted)] mt-auto pt-1">
+                    <span>Listening...</span>
+                    <span>Confidence: 98%</span>
+                  </div>
+                </div>
 
-                  {/* HUD Overlay */}
-                  {!showInterviewerView && (
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      className="absolute inset-0 rounded-xl bg-white/60 backdrop-blur-sm border border-[var(--accent)]/20 p-3 flex flex-col gap-1.5"
-                    >
-                      <span className="text-[9px] font-bold text-[var(--accent)] uppercase tracking-widest">
-                        AI Copilot
-                      </span>
-                      <span className="text-[10px] text-[var(--text-secondary)] font-medium leading-snug">
-                        ✦ Use STAR method: Situation → Task → Action → Result
-                      </span>
-                      <span className="text-[10px] text-[var(--text-secondary)] font-medium leading-snug">
-                        ✦ Highlight: 40% revenue increase via pipeline optimization
-                      </span>
-                      <span className="text-[10px] text-[var(--text-muted)] font-medium leading-snug">
-                        ✦ Mention cross-functional leadership…
-                      </span>
-                    </motion.div>
-                  )}
+                {/* Right Panel: AI Suggested Answer Points */}
+                <div className="bg-[var(--bg-mist)] rounded-[6px] p-4 border border-[var(--border-light)] flex flex-col gap-3">
+                  <div className="flex items-center gap-1.5 text-xs font-bold text-[var(--text-secondary)]">
+                    <Sparkles className="w-3.5 h-3.5 text-[var(--accent)]" />
+                    Suggested Answer Flow (STAR)
+                  </div>
+                  <div className="flex flex-col gap-2.5 font-mono text-[10px] leading-relaxed">
+                    <div>
+                      <span className="text-[var(--accent)] font-bold">Situation:</span>{" "}
+                      <span className="text-[var(--text-secondary)] font-medium">Acme Corp redesign, conflicting roadmap.</span>
+                    </div>
+                    <div>
+                      <span className="text-[var(--accent)] font-bold">Task:</span>{" "}
+                      <span className="text-[var(--text-secondary)] font-medium">Align roadmap to avoid 2-week launch delay.</span>
+                    </div>
+                    <div>
+                      <span className="text-[var(--accent)] font-bold">Action:</span>{" "}
+                      <span className="text-[var(--text-secondary)] font-medium">Led prioritisation workshop to align metrics.</span>
+                    </div>
+                    <div>
+                      <span className="text-[var(--accent)] font-bold">Result:</span>{" "}
+                      <span className="text-[var(--text-secondary)] font-bold">Approved roadmap; launched on time (+20% conv).</span>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              {/* Toggle */}
-              <div className="flex items-center justify-center gap-3">
-                <button
-                  onClick={() => setShowInterviewerView(false)}
-                  className={`text-xs font-semibold px-4 py-2 rounded-full transition cursor-pointer ${
-                    !showInterviewerView
-                      ? "bg-[var(--accent)] text-white"
-                      : "bg-[var(--bg-mist)] text-[var(--text-muted)] hover:bg-[var(--bg-cloud)]"
-                  }`}
-                >
-                  <Eye className="w-3 h-3 inline mr-1.5" />
-                  Your View
-                </button>
-                <button
-                  onClick={() => setShowInterviewerView(true)}
-                  className={`text-xs font-semibold px-4 py-2 rounded-full transition cursor-pointer ${
-                    showInterviewerView
-                      ? "bg-[var(--accent)] text-white"
-                      : "bg-[var(--bg-mist)] text-[var(--text-muted)] hover:bg-[var(--bg-cloud)]"
-                  }`}
-                >
-                  <EyeOff className="w-3 h-3 inline mr-1.5" />
-                  Interviewer&apos;s View
-                </button>
-              </div>
+              {/* Bottom Context Mapping Area */}
+              <div className="bg-[var(--bg-cloud)]/60 rounded-[6px] p-4 border border-[var(--border-light)] flex flex-col gap-3">
+                <span className="text-[9px] font-bold text-[var(--text-muted)] uppercase tracking-wider block">
+                  Resume & JD Context Connection
+                </span>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                  <div className="flex items-start gap-2.5">
+                    <FileText className="w-4 h-4 text-[var(--accent)] shrink-0 mt-0.5" />
+                    <div>
+                      <span className="font-semibold text-[var(--text-primary)] block text-[11px] mb-0.5">
+                        Resume Context Used
+                      </span>
+                      <span className="text-[10px] text-[var(--text-muted)] leading-relaxed">
+                        Acme Corp e-commerce redesign project & prioritisation
+                      </span>
+                    </div>
+                  </div>
 
-              {showInterviewerView && (
-                <motion.p
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="text-center text-[11px] text-green-600 font-semibold mt-3"
-                >
-                  ✓ The AI overlay is completely invisible to the interviewer
-                </motion.p>
-              )}
+                  <div className="flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-[var(--accent)] shrink-0 mt-0.5" />
+                    <div>
+                      <span className="font-semibold text-[var(--text-primary)] block text-[11px] mb-1">
+                        JD Keywords Matched
+                      </span>
+                      <div className="flex flex-wrap gap-1.5 mt-0.5">
+                        {["Stakeholders", "Roadmap", "Prioritisation"].map((kw) => (
+                          <span
+                            key={kw}
+                            className="bg-white border border-[var(--border-light)] text-[8px] font-bold px-2 py-0.5 rounded-[4px] text-[var(--text-secondary)] shadow-xs"
+                          >
+                            {kw}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </motion.div>
         </div>

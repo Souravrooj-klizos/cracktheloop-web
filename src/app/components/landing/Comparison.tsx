@@ -1,88 +1,154 @@
 "use client";
 
-import { Shield, Check, X } from "lucide-react";
-import { ScrollReveal } from "./ScrollReveal";
+import { Sparkles, Check, X, Minus } from "lucide-react";
+import { ScrollReveal, StaggerContainer, StaggerItem } from "./ScrollReveal";
 
-const features = [
-  ["Invisible to Screen Share", true, false, false],
-  ["Picks Up Audio Automatically", true, true, false],
-  ["Sub-Second Answer Speed", true, true, false],
-  ["No Manual Copy-Paste Needed", true, true, false],
-  ["No Browser Extension Required", true, false, true],
-  ["Answers Stream Word-by-Word", true, true, false],
-  ["Captures Both Sides of Call", true, true, false],
-  ["Works on Windows & macOS", true, true, true],
-  ["Supports All Interview Types", true, true, false],
-] as const;
+const comparisonPoints = [
+  {
+    feature: "General interview tips & advice",
+    generic: true,
+    cracktheloop: true,
+    detail: "Both provide general guidance — but only one is personalized.",
+  },
+  {
+    feature: "Uses your actual resume for context",
+    generic: false,
+    cracktheloop: true,
+    detail: "Maps answers to your real projects, metrics, and achievements.",
+  },
+  {
+    feature: "Understands the target job description",
+    generic: false,
+    cracktheloop: true,
+    detail: "Extracts required skills and keywords to align your responses.",
+  },
+  {
+    feature: "Gives role-specific talking points",
+    generic: "partial",
+    cracktheloop: true,
+    detail: "Generic AI gives surface-level tips. CrackTheLoop tailors to title and seniority.",
+  },
+  {
+    feature: "Assists smoothly during live interview flow",
+    generic: false,
+    cracktheloop: true,
+    detail: "No complex prompting — answers appear automatically as questions are asked.",
+  },
+  {
+    feature: "Structures answers in STAR/CAR format",
+    generic: false,
+    cracktheloop: true,
+    detail: "Automatically maps questions to behavioral frameworks with your experience.",
+  },
+  {
+    feature: "Keeps answers natural & conversational",
+    generic: false,
+    cracktheloop: true,
+    detail: "Suggests talking points — not scripts — so answers sound like you.",
+  },
+];
 
 export default function Comparison() {
   return (
-    <section id="comparison" className="section-frost py-24 md:py-32 relative overflow-hidden">
-      <div className="max-w-5xl mx-auto px-6 relative z-10">
+    <section id="comparison" className="section-mist relative py-20 md:py-24 overflow-hidden">
+      {/* Background elements */}
+      <div className="orb orb-peach w-[500px] h-[500px] -top-40 -left-40 animate-float-orb" />
+      <div className="orb orb-slate w-[400px] h-[400px] bottom-0 -right-20 animate-float-orb-slow" />
+
+      {/* Subtle grid */}
+      <div
+        className="absolute inset-0 opacity-[0.03] pointer-events-none"
+        style={{
+          backgroundImage: `linear-gradient(rgba(15,23,42,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(15,23,42,0.4) 1px, transparent 1px)`,
+          backgroundSize: '60px 60px',
+        }}
+      />
+
+      <div className="max-w-7xl mx-auto px-6 relative z-10 w-full">
         <ScrollReveal>
-          <div className="text-center mb-12">
+          <div className="text-center mb-16">
             <h2
               className="text-3xl md:text-4xl font-extrabold tracking-tight text-[var(--text-primary)]"
               style={{ fontFamily: "var(--font-display)" }}
             >
-              Why <span className="text-gradient-coral">CrackTheLoop</span>?
+              Generic AI vs <span className="text-gradient-coral">CrackTheLoop</span>
             </h2>
             <p className="text-[var(--text-muted)] text-base mt-3 max-w-xl mx-auto">
-              Stack it against the alternatives — no contest.
+              Why a dedicated interview copilot outperforms general-purpose AI every time.
             </p>
           </div>
         </ScrollReveal>
 
-        <ScrollReveal>
-          <div className="glass-card-light overflow-hidden !rounded-2xl">
+        <ScrollReveal className="w-full">
+          <div className="overflow-hidden rounded-[12px] border border-[var(--border-light)] shadow-xs bg-white/85 backdrop-blur-md w-full">
             <table className="w-full text-sm text-left">
               <thead>
                 <tr className="border-b border-[var(--border-light)]">
-                  <th className="px-6 py-4 text-[var(--text-muted)] font-bold uppercase tracking-wider text-xs w-[40%]">
-                    Feature
+                  <th className="px-6 py-4 text-[var(--text-muted)] font-bold uppercase tracking-wider text-xs w-[50%]">
+                    Comparison Point
                   </th>
-                  <th className="px-6 py-4 text-center">
-                    <span className="inline-flex items-center gap-1.5 text-[11px] font-black text-[var(--accent)] uppercase tracking-widest">
-                      <Shield className="w-3.5 h-3.5" /> Stealth Overlay
-                    </span>
+                  <th className="px-6 py-4 text-center text-[var(--text-muted)] font-bold uppercase tracking-wider text-xs">
+                    Generic AI
                   </th>
-                  <th className="px-6 py-4 text-center">
-                    <span className="text-[11px] font-black text-[var(--text-secondary)] uppercase tracking-widest">
-                      Browser Copilot
-                    </span>
-                  </th>
-                  <th className="px-6 py-4 text-center">
-                    <span className="text-[11px] font-black text-[var(--text-muted)] uppercase tracking-widest">
-                      Manual Chat
-                    </span>
+                  <th className="px-6 py-4 text-center text-[var(--accent)] font-bold uppercase tracking-wider text-xs bg-[var(--accent-soft)]">
+                    <div className="flex items-center justify-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5" />
+                      CrackTheLoop
+                    </div>
                   </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[var(--border-light)]">
-                {features.map(([label, col1, col2, col3], i) => (
-                  <tr
-                    key={i}
-                    className={`${
-                      i === 0 ? "bg-[var(--accent-soft)]" : i % 2 === 0 ? "bg-[var(--bg-mist)]" : "bg-white/50"
-                    } hover:bg-[var(--bg-cloud)] transition-colors`}
-                  >
-                    <td className={`px-6 py-3.5 font-medium text-xs ${i === 0 ? "text-[var(--accent)] font-bold" : "text-[var(--text-secondary)]"}`}>
-                      {label}
+                {comparisonPoints.map((point, i) => (
+                  <tr key={i} className="hover:bg-[var(--bg-mist)] transition-colors">
+                    <td className="px-6 py-4">
+                      <span className="font-semibold text-[var(--text-primary)] block text-xs md:text-sm">
+                        {point.feature}
+                      </span>
+                      <span className="text-[10px] text-[var(--text-muted)] mt-0.5 block">
+                        {point.detail}
+                      </span>
                     </td>
-                    <td className="px-6 py-3.5 text-center">
-                      {col1 ? <Check className="w-4 h-4 text-[var(--accent)] mx-auto" /> : <X className="w-4 h-4 text-[var(--bg-cloud)] mx-auto" />}
+                    <td className="px-6 py-4 text-center">
+                      {point.generic === true ? (
+                        <Check className="w-4 h-4 text-emerald-600 mx-auto opacity-80" />
+                      ) : point.generic === "partial" ? (
+                        <Minus className="w-4 h-4 text-amber-600 mx-auto opacity-80" />
+                      ) : (
+                        <X className="w-4 h-4 text-red-500 mx-auto opacity-60" />
+                      )}
                     </td>
-                    <td className="px-6 py-3.5 text-center">
-                      {col2 ? <Check className="w-4 h-4 text-[var(--text-muted)] mx-auto" /> : <X className="w-4 h-4 text-[var(--bg-cloud)] mx-auto" />}
-                    </td>
-                    <td className="px-6 py-3.5 text-center">
-                      {col3 ? <Check className="w-4 h-4 text-[var(--text-muted)] mx-auto" /> : <X className="w-4 h-4 text-[var(--bg-cloud)] mx-auto" />}
+                    <td className="px-6 py-4 text-center bg-[var(--accent-soft)]/20">
+                      {point.cracktheloop ? (
+                        <Check className="w-5 h-5 text-[var(--accent)] mx-auto stroke-[3]" />
+                      ) : (
+                        <X className="w-5 h-5 text-red-500 mx-auto opacity-60" />
+                      )}
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
+        </ScrollReveal>
+
+        {/* Trust callout — merged from TrustEthics */}
+        <ScrollReveal className="mt-12">
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" staggerDelay={0.06}>
+            {[
+              { title: "Resume Data Stays Private", desc: "Never shared, logged, or used for model training." },
+              { title: "User-Controlled Sessions", desc: "Assistant only processes audio when you start a session." },
+              { title: "Preparation-First Design", desc: "Built to strengthen answer structuring and recall skills." },
+              { title: "Responsible Usage", desc: "Users are responsible for adhering to hiring team rules." },
+            ].map((tp, i) => (
+              <StaggerItem key={i}>
+                <div className="rounded-[8px] border border-[var(--border-light)] bg-white/70 backdrop-blur-md p-5 flex flex-col gap-2 hover:border-[var(--accent)]/20 hover:-translate-y-0.5 transition-all duration-300">
+                  <h3 className="text-sm font-bold text-[var(--text-primary)]">{tp.title}</h3>
+                  <p className="text-xs text-[var(--text-muted)] leading-relaxed">{tp.desc}</p>
+                </div>
+              </StaggerItem>
+            ))}
+          </StaggerContainer>
         </ScrollReveal>
       </div>
     </section>
