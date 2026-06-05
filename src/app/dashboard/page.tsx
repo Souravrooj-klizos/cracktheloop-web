@@ -12,7 +12,7 @@ export default function DashboardIndex() {
   }, [router]);
 
   return (
-    <div className="flex-1 flex justify-center items-center py-24 bg-[var(--bg-mist)]">
+    <div className="flex-1 flex justify-center items-center py-24 bg-(--bg-mist)">
       <div className="flex flex-col items-center gap-3">
         <Loader2 className="w-8 h-8 text-sky-400 animate-spin" />
         <span className="text-xs text-slate-500 font-semibold uppercase tracking-widest animate-pulse">

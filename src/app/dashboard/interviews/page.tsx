@@ -67,7 +67,7 @@ export default function InterviewsListPage() {
       
       {/* Title block */}
       <section className="flex flex-col gap-2 select-none">
-        <span className="text-[10px] text-[var(--accent)] font-black uppercase tracking-widest">User Dashboard</span>
+        <span className="text-[10px] text-(--accent) font-black uppercase tracking-widest">User Dashboard</span>
         <h1 className="text-3xl font-black tracking-tight text-slate-800 flex items-center gap-2" style={{ fontFamily: "var(--font-display)" }}>
           Saved Session History
         </h1>
@@ -75,12 +75,12 @@ export default function InterviewsListPage() {
       </section>
 
       {/* Main Table view */}
-      <section className="bg-white border border-[var(--border-light)] rounded-[12px] p-6 md:p-8 flex flex-col gap-6 shadow-sm">
+      <section className="bg-white border border-(--border-light) rounded-[12px] p-6 md:p-8 flex flex-col gap-6 shadow-sm">
         
         {/* Header & Search */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100 pb-5">
           <h2 className="text-sm font-black text-slate-800 uppercase tracking-widest flex items-center gap-2 select-none">
-            <History className="w-5 h-5 text-[var(--accent)]" />
+            <History className="w-5 h-5 text-(--accent)" />
             Interview Transcripts
           </h2>
 
@@ -90,7 +90,7 @@ export default function InterviewsListPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by role or company..."
-              className="w-full bg-slate-50 border border-slate-200 px-4 py-2.5 rounded-xl text-xs text-slate-800 pl-9 focus:outline-none focus:border-[var(--accent)] transition font-bold"
+              className="w-full bg-slate-50 border border-slate-200 px-4 py-2.5 rounded-xl text-xs text-slate-800 pl-9 focus:outline-none focus:border-(--accent) transition font-bold"
             />
             <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
           </div>
@@ -99,7 +99,7 @@ export default function InterviewsListPage() {
         {/* Content list */}
         {loading ? (
           <div className="flex justify-center items-center py-20">
-            <Loader2 className="w-8 h-8 text-[var(--accent)] animate-spin" />
+            <Loader2 className="w-8 h-8 text-(--accent) animate-spin" />
           </div>
         ) : filteredInterviews.length === 0 ? (
           <div className="text-center py-16 flex flex-col items-center gap-4">

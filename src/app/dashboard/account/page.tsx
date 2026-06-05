@@ -147,8 +147,8 @@ function AccountDetailsContent() {
 
   if (loading && !user) {
     return (
-      <div className="flex-1 flex justify-center items-center py-20 bg-[var(--bg-mist)]">
-        <Loader2 className="w-8 h-8 text-[var(--accent)] animate-spin" />
+      <div className="flex-1 flex justify-center items-center py-20 bg-(--bg-mist)">
+        <Loader2 className="w-8 h-8 text-(--accent) animate-spin" />
       </div>
     );
   }
@@ -157,7 +157,7 @@ function AccountDetailsContent() {
     <main className="flex-1 w-full max-w-[1600px] mx-auto px-6 md:px-10 py-8 md:py-10 flex flex-col gap-8 relative">
       {/* Top Welcome Title */}
       <section className="flex flex-col gap-2 select-none">
-        <span className="text-[10px] text-[var(--accent)] font-black uppercase tracking-widest">
+        <span className="text-[10px] text-(--accent) font-black uppercase tracking-widest">
           User Dashboard
         </span>
         <h1 className="text-3xl font-black tracking-tight text-slate-800 flex items-center gap-2" style={{ fontFamily: "var(--font-display)" }}>
@@ -174,13 +174,13 @@ function AccountDetailsContent() {
       {/* Account Info Cards */}
       <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Profile Details */}
-        <div className="bg-white border border-[var(--border-light)] rounded-[12px] p-6 flex flex-col justify-between min-h-[170px] shadow-sm transition hover:shadow-md">
+        <div className="bg-white border border-(--border-light) rounded-[12px] p-6 flex flex-col justify-between min-h-[170px] shadow-sm transition hover:shadow-md">
           <div className="flex flex-col gap-1.5">
             <span className="text-[10px] text-slate-400 uppercase tracking-widest font-black">
               Account Security
             </span>
             <h3 className="text-base font-bold text-slate-800 flex items-center gap-2 mt-2">
-              <UserIcon className="w-5 h-5 text-[var(--accent)]" />
+              <UserIcon className="w-5 h-5 text-(--accent)" />
               {user?.email}
             </h3>
           </div>
@@ -191,7 +191,7 @@ function AccountDetailsContent() {
         </div>
 
         {/* Subscription Tier */}
-        <div className="bg-white border border-[var(--border-light)] rounded-[12px] p-6 flex flex-col justify-between min-h-[170px] shadow-sm transition hover:shadow-md">
+        <div className="bg-white border border-(--border-light) rounded-[12px] p-6 flex flex-col justify-between min-h-[170px] shadow-sm transition hover:shadow-md">
           <div className="flex flex-col gap-1.5">
             <span className="text-[10px] text-slate-400 uppercase tracking-widest font-black">
               Subscription Status
@@ -216,7 +216,7 @@ function AccountDetailsContent() {
           </div>
           <a
             href="/pricing"
-            className="text-[10px] text-[var(--accent)] hover:text-[var(--accent-bright)] font-bold uppercase tracking-wider flex items-center gap-1 hover:gap-1.5 transition-all mt-4 w-fit"
+            className="text-[10px] text-(--accent) hover:text-(--accent-bright) font-bold uppercase tracking-wider flex items-center gap-1 hover:gap-1.5 transition-all mt-4 w-fit"
           >
             {user?.is_subscribed ? "Upgrade / Change Plan" : "Purchase Plan"}{" "}
             <ArrowRight className="w-3.5 h-3.5" />
@@ -224,7 +224,7 @@ function AccountDetailsContent() {
         </div>
 
         {/* Copilot Fuel (Credits) */}
-        <div className="bg-white border border-[var(--border-light)] rounded-[12px] p-6 flex flex-col justify-between min-h-[170px] shadow-sm transition hover:shadow-md">
+        <div className="bg-white border border-(--border-light) rounded-[12px] p-6 flex flex-col justify-between min-h-[170px] shadow-sm transition hover:shadow-md">
           <div className="flex flex-col gap-1.5">
             <span className="text-[10px] text-slate-400 uppercase tracking-widest font-black">
               AI Copilot Fuel
@@ -267,10 +267,10 @@ function AccountDetailsContent() {
             {/* Referral Stats Row */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* Stat: Total Referrals */}
-              <div className="bg-white border border-[var(--border-light)] rounded-[12px] p-5 flex flex-col gap-2 hover:border-purple-500/20 transition hover:shadow-xs">
+              <div className="bg-white border border-(--border-light) rounded-[12px] p-5 flex flex-col gap-2 hover:border-purple-500/20 transition hover:shadow-xs">
                 <div className="flex items-center gap-2">
                   <Users className="w-4 h-4 text-purple-500" />
-                  <span className="text-[10px] text-slate-450 font-black uppercase tracking-widest">
+                  <span className="text-[10px] text-slate-400 font-black uppercase tracking-widest">
                     Total Signups
                   </span>
                 </div>
@@ -283,7 +283,7 @@ function AccountDetailsContent() {
               </div>
 
               {/* Stat: Subscribed Referrals */}
-              <div className="bg-white border border-[var(--border-light)] rounded-[12px] p-5 flex flex-col gap-2 hover:border-emerald-500/20 transition hover:shadow-xs">
+              <div className="bg-white border border-(--border-light) rounded-[12px] p-5 flex flex-col gap-2 hover:border-emerald-500/20 transition hover:shadow-xs">
                 <div className="flex items-center gap-2">
                   <TrendingUp className="w-4 h-4 text-emerald-600" />
                   <span className="text-[10px] text-slate-400 font-black uppercase tracking-widest">
@@ -299,7 +299,7 @@ function AccountDetailsContent() {
               </div>
 
               {/* Stat: Bonus Credits Earned */}
-              <div className="bg-white border border-[var(--border-light)] rounded-[12px] p-5 flex flex-col gap-2 hover:border-sky-500/20 transition hover:shadow-xs">
+              <div className="bg-white border border-(--border-light) rounded-[12px] p-5 flex flex-col gap-2 hover:border-sky-500/20 transition hover:shadow-xs">
                 <div className="flex items-center gap-2">
                   <Star className="w-4 h-4 text-amber-500" />
                   <span className="text-[10px] text-slate-400 font-black uppercase tracking-widest">
@@ -316,7 +316,7 @@ function AccountDetailsContent() {
             </div>
 
             {/* Referral Code + Share Link */}
-            <div className="bg-white border border-[var(--border-light)] rounded-[12px] p-6 flex flex-col gap-5 shadow-sm">
+            <div className="bg-white border border-(--border-light) rounded-[12px] p-6 flex flex-col gap-5 shadow-sm">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Referral Code Box */}
                 <div className="flex flex-col gap-2">
@@ -394,7 +394,7 @@ function AccountDetailsContent() {
 
             {/* Referred Users List */}
             {referralData && referralData.referred_users.length > 0 && (
-              <div className="bg-white border border-[var(--border-light)] rounded-[12px] p-6 flex flex-col gap-4 shadow-sm">
+              <div className="bg-white border border-(--border-light) rounded-[12px] p-6 flex flex-col gap-4 shadow-sm">
                 <h3 className="text-[10px] text-slate-400 font-black uppercase tracking-widest flex items-center gap-1.5 select-none">
                   <Users className="w-3.5 h-3.5 text-purple-500" /> People You
                   Referred ({referralData.total_referrals})
@@ -445,7 +445,7 @@ function AccountDetailsContent() {
 
             {/* Empty state when no referrals */}
             {referralData && referralData.total_referrals === 0 && (
-              <div className="bg-white border border-[var(--border-light)] rounded-[12px] p-8 flex flex-col items-center gap-3 text-center shadow-sm">
+              <div className="bg-white border border-(--border-light) rounded-[12px] p-8 flex flex-col items-center gap-3 text-center shadow-sm">
                 <div className="w-12 h-12 rounded-full bg-purple-50 border border-purple-200 flex items-center justify-center">
                   <Users className="w-6 h-6 text-purple-500" />
                 </div>
@@ -462,7 +462,7 @@ function AccountDetailsContent() {
       </section>
 
       {/* Download Stealth Desktop Client Section */}
-      <section className="bg-white border border-[var(--border-light)] rounded-[12px] p-6 md:p-8 flex flex-col gap-6 shadow-sm">
+      <section className="bg-white border border-(--border-light) rounded-[12px] p-6 md:p-8 flex flex-col gap-6 shadow-sm">
         <h2 className="text-base font-black text-slate-800 uppercase tracking-widest border-b border-slate-100 pb-4 flex items-center gap-2 select-none" style={{ fontFamily: "var(--font-display)" }}>
           <Laptop className="w-5 h-5 text-indigo-500" />
           Download Stealth Desktop Client
@@ -500,7 +500,7 @@ function AccountDetailsContent() {
       </section>
 
       {/* Main Billing Actions Box */}
-      <section className="bg-white border border-[var(--border-light)] rounded-[12px] p-6 md:p-8 flex flex-col gap-6 shadow-sm">
+      <section className="bg-white border border-(--border-light) rounded-[12px] p-6 md:p-8 flex flex-col gap-6 shadow-sm">
         <h2 className="text-base font-black text-slate-800 uppercase tracking-widest border-b border-slate-100 pb-4 flex items-center gap-2 select-none" style={{ fontFamily: "var(--font-display)" }}>
           <CreditCard className="w-5 h-5 text-sky-500" />
           Billing Operations Console
@@ -530,7 +530,7 @@ function AccountDetailsContent() {
       {/* Celebratory Success Modal Dialog */}
       {showCelebration && (
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md flex justify-center items-center z-[100] p-6 animate-fade-in">
-          <div className="w-full max-w-[420px] bg-white border border-[var(--border-light)] rounded-[12px] p-8 flex flex-col items-center text-center shadow-xl relative">
+          <div className="w-full max-w-[420px] bg-white border border-(--border-light) rounded-[12px] p-8 flex flex-col items-center text-center shadow-xl relative">
             <button
               onClick={handleDismissCelebration}
               className="text-slate-400 hover:text-slate-700 transition cursor-pointer font-bold absolute top-4 right-4 text-sm"
@@ -591,8 +591,8 @@ export default function AccountDetailsPage() {
   return (
     <Suspense
       fallback={
-        <div className="flex-1 flex justify-center items-center py-20 bg-[var(--bg-mist)]">
-          <Loader2 className="w-8 h-8 text-[var(--accent)] animate-spin" />
+        <div className="flex-1 flex justify-center items-center py-20 bg-(--bg-mist)">
+          <Loader2 className="w-8 h-8 text-(--accent) animate-spin" />
         </div>
       }
     >

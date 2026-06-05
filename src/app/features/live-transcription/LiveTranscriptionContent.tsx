@@ -115,20 +115,20 @@ export default function LiveTranscriptionContent() {
   ];
 
   return (
-    <div className="min-h-screen bg-[var(--bg-mist)] text-[var(--text-primary)] flex flex-col pt-20">
+    <div className="min-h-screen bg-(--bg-mist) text-(--text-primary) flex flex-col pt-20">
       <Navbar />
 
       {/* Hero Section */}
       <section className="relative w-full max-w-7xl mx-auto px-6 pt-16 pb-12 text-center flex flex-col items-center gap-6">
-        <div className="inline-flex items-center gap-2 bg-[var(--accent-soft)] border border-[var(--accent)]/20 px-4 py-1.5 rounded-full text-xs font-semibold text-[var(--accent)]">
+        <div className="inline-flex items-center gap-2 bg-(--accent-soft) border border-(--accent)/20 px-4 py-1.5 rounded-full text-xs font-semibold text-(--accent)">
           <Activity className="w-3.5 h-3.5 animate-pulse" />
           High-Fidelity Audio Engine Core
         </div>
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-[var(--text-primary)] leading-none max-w-3xl" style={{ fontFamily: "var(--font-display)" }}>
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-(--text-primary) leading-none max-w-3xl" style={{ fontFamily: "var(--font-display)" }}>
           Instant, Real-Time <br />
           <span className="text-gradient-coral">Audio Capture & Transcription</span>
         </h1>
-        <p className="text-[var(--text-muted)] text-base md:text-lg max-w-2xl leading-relaxed">
+        <p className="text-(--text-muted) text-base md:text-lg max-w-2xl leading-relaxed">
           CrackTheLoop hooks directly into your system's speaker buffers to capture and transcribe interview questions with sub-second latency, requiring zero virtual cables.
         </p>
         <div className="flex gap-4 mt-2">
@@ -144,9 +144,9 @@ export default function LiveTranscriptionContent() {
 
       {/* Interactive Mockup Section */}
       <section className="w-full max-w-6xl mx-auto px-6 py-8">
-        <div className="bg-white border border-[var(--border-light)] rounded-[12px] p-6 md:p-8 shadow-sm">
+        <div className="bg-white border border-(--border-light) rounded-[12px] p-6 md:p-8 shadow-sm">
           <h2 className="text-xl font-bold mb-8 flex items-center gap-2">
-            <Cpu className="w-5 h-5 text-[var(--accent)]" /> Audio Pipeline Architecture
+            <Cpu className="w-5 h-5 text-(--accent)" /> Audio Pipeline Architecture
           </h2>
 
           {/* Grid Layout of Pipeline Steps */}
@@ -212,7 +212,7 @@ export default function LiveTranscriptionContent() {
           <h2 className="text-3xl font-extrabold tracking-tight mb-6" style={{ fontFamily: "var(--font-display)" }}>
             Engineered for <span className="text-gradient-coral">Absolute Low-Latency</span>
           </h2>
-          <p className="text-[var(--text-muted)] text-sm leading-relaxed mb-6">
+          <p className="text-(--text-muted) text-sm leading-relaxed mb-6">
             In interview situations, a slow response is as bad as a wrong response. CrackTheLoop uses a customized WebSocket ingestion server optimized specifically for low-latency streaming audio.
           </p>
           <div className="space-y-4">
@@ -246,8 +246,8 @@ export default function LiveTranscriptionContent() {
           </div>
         </div>
 
-        <div className="bg-white border border-[var(--border-light)] rounded-[12px] p-6 shadow-sm flex flex-col gap-4">
-          <span className="text-[10px] text-[var(--accent)] font-mono font-bold tracking-widest uppercase">Benchmark Latency breakdown</span>
+        <div className="bg-white border border-(--border-light) rounded-[12px] p-6 shadow-sm flex flex-col gap-4">
+          <span className="text-[10px] text-(--accent) font-mono font-bold tracking-widest uppercase">Benchmark Latency breakdown</span>
           <div className="space-y-3.5 mt-2">
             {[
               { component: "Audio Buffer Collection & Slicing", time: "150ms", fill: "w-[15%]" },
@@ -262,13 +262,13 @@ export default function LiveTranscriptionContent() {
                   <span className="font-mono text-slate-500">{b.time}</span>
                 </div>
                 <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                  <div className={`bg-[var(--accent)] h-full rounded-full ${b.fill}`} />
+                  <div className={`bg-(--accent) h-full rounded-full ${b.fill}`} />
                 </div>
               </div>
             ))}
             <div className="border-t border-slate-100 pt-4 flex justify-between items-center text-xs font-bold text-slate-800">
               <span>Total Estimated End-to-End Latency:</span>
-              <span className="font-mono text-[var(--accent)] text-sm bg-[var(--accent-soft)] px-2.5 py-0.5 rounded-full">~850ms</span>
+              <span className="font-mono text-(--accent) text-sm bg-(--accent-soft) px-2.5 py-0.5 rounded-full">~850ms</span>
             </div>
           </div>
         </div>

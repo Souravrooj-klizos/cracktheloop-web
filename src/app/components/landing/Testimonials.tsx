@@ -40,13 +40,13 @@ export default function Testimonials() {
         <ScrollReveal>
           <div className="text-center mb-14">
             <h2
-              className="text-3xl md:text-4xl font-extrabold tracking-tight text-[var(--text-primary)]"
+              className="text-3xl md:text-4xl font-extrabold tracking-tight text-(--text-primary)"
               style={{ fontFamily: "var(--font-display)" }}
             >
               Candidates Feel More Prepared with{" "}
               <span className="text-gradient-coral">CrackTheLoop</span>
             </h2>
-            <p className="text-[var(--text-muted)] text-base mt-3 max-w-xl mx-auto">
+            <p className="text-(--text-muted) text-base mt-3 max-w-xl mx-auto">
               Real stories from candidates who used structured AI guidance to prepare and interview with confidence.
             </p>
           </div>
@@ -56,31 +56,31 @@ export default function Testimonials() {
         <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 gap-5" staggerDelay={0.08}>
           {testimonials.map((t, i) => (
             <StaggerItem key={i}>
-              <div className="bg-white/70 backdrop-blur-md border border-[var(--border-light)] rounded-[12px] p-6 md:p-7 flex flex-col justify-between h-full hover:-translate-y-1 transition-all duration-300 shadow-xs hover:shadow-md hover:border-[var(--accent-glow)]">
+              <div className="bg-white/70 backdrop-blur-md border border-(--border-light) rounded-[12px] p-6 md:p-7 flex flex-col justify-between h-full hover:-translate-y-1 transition-all duration-300 shadow-xs hover:shadow-md hover:border-(--accent-glow)">
                 <div>
                   {/* Stars */}
                   <div className="flex gap-0.5 mb-4">
                     {Array.from({ length: t.stars }).map((_, j) => (
-                      <Star key={j} className="w-4 h-4 text-[var(--accent)] fill-[var(--accent)]" />
+                      <Star key={j} className="w-4 h-4 text-(--accent) fill-(--accent)" />
                     ))}
                   </div>
 
                   {/* Quote */}
-                  <p className="text-sm md:text-base text-[var(--text-secondary)] leading-relaxed">
+                  <p className="text-sm md:text-base text-(--text-secondary) leading-relaxed">
                     &ldquo;{t.quote}&rdquo;
                   </p>
                 </div>
 
                 {/* Author */}
-                <div className="mt-6 pt-4 border-t border-[var(--border-light)] flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--accent-bright)] flex items-center justify-center text-white text-xs font-bold shadow-sm select-none shrink-0">
+                <div className="mt-6 pt-4 border-t border-(--border-light) flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-(--accent) to-(--accent-bright) flex items-center justify-center text-white text-xs font-bold shadow-sm select-none shrink-0">
                     {t.name.split(" ").map((n) => n[0]).join("")}
                   </div>
                   <div>
-                    <span className="text-sm font-bold text-[var(--text-primary)] block">
+                    <span className="text-sm font-bold text-(--text-primary) block">
                       {t.name}
                     </span>
-                    <p className="text-xs text-[var(--text-muted)] mt-0.5">
+                    <p className="text-xs text-(--text-muted) mt-0.5">
                       {t.role}
                     </p>
                   </div>

@@ -63,10 +63,10 @@ export default function Navbar() {
         >
           <img
             src="/logo.svg"
-            className="h-9 w-9 rounded-lg select-none border border-[var(--border-light)]"
+            className="h-9 w-9 rounded-lg select-none border border-(--border-light)"
             alt="CrackTheLoop Logo Icon"
           />
-          <span className="font-extrabold tracking-tight text-xl text-[var(--text-primary)]" style={{ fontFamily: "var(--font-display)" }}>
+          <span className="font-extrabold tracking-tight text-xl text-(--text-primary)" style={{ fontFamily: "var(--font-display)" }}>
             CrackTheLoop
           </span>
         </a>
@@ -80,7 +80,7 @@ export default function Navbar() {
                   key={item.label}
                   className="relative group py-2"
                 >
-                  <button className="flex items-center gap-1 text-sm font-medium text-[var(--text-muted)] hover:text-[var(--text-primary)] transition cursor-pointer select-none">
+                  <button className="flex items-center gap-1 text-sm font-medium text-(--text-muted) hover:text-(--text-primary) transition cursor-pointer select-none">
                     {item.label}
                     <ChevronDown className="w-4 h-4 transition-transform duration-200 group-hover:rotate-180" />
                   </button>
@@ -100,7 +100,7 @@ export default function Navbar() {
                     <div className="border-t border-slate-100 mt-1.5 pt-2">
                       <a
                         href={getHref(item.href)}
-                        className="text-[10px] font-bold text-[var(--accent)] hover:underline px-3 flex items-center gap-1 cursor-pointer"
+                        className="text-[10px] font-bold text-(--accent) hover:underline px-3 flex items-center gap-1 cursor-pointer"
                       >
                         View All Features <ArrowRight className="w-3 h-3" />
                       </a>
@@ -114,7 +114,7 @@ export default function Navbar() {
               <a
                 key={item.label}
                 href={getHref(item.href)}
-                className="text-sm font-medium text-[var(--text-muted)] hover:text-[var(--text-primary)] transition cursor-pointer"
+                className="text-sm font-medium text-(--text-muted) hover:text-(--text-primary) transition cursor-pointer"
               >
                 {item.label}
               </a>
@@ -136,9 +136,9 @@ export default function Navbar() {
           aria-label="Toggle menu"
         >
           {mobileOpen ? (
-            <X className="w-5 h-5 text-[var(--text-primary)]" />
+            <X className="w-5 h-5 text-(--text-primary)" />
           ) : (
-            <Menu className="w-5 h-5 text-[var(--text-primary)]" />
+            <Menu className="w-5 h-5 text-(--text-primary)" />
           )}
         </button>
       </div>
@@ -157,12 +157,12 @@ export default function Navbar() {
                   <span className="text-xs font-mono font-bold tracking-widest uppercase text-slate-400 px-2 mb-1">
                     {item.label}
                   </span>
-                  <div className="flex flex-col gap-2 pl-3 border-l border-slate-150">
+                  <div className="flex flex-col gap-2 pl-3 border-l border-slate-200">
                     {item.dropdown.map((subItem) => (
                       <a
                         key={subItem.label}
                         href={subItem.href}
-                        className="text-sm font-semibold text-slate-700 hover:text-[var(--accent)] py-1.5 cursor-pointer"
+                        className="text-sm font-semibold text-slate-700 hover:text-(--accent) py-1.5 cursor-pointer"
                         onClick={() => setMobileOpen(false)}
                       >
                         {subItem.label}
@@ -170,7 +170,7 @@ export default function Navbar() {
                     ))}
                     <a
                       href={getHref(item.href)}
-                      className="text-xs font-bold text-[var(--accent)] py-1.5 cursor-pointer"
+                      className="text-xs font-bold text-(--accent) py-1.5 cursor-pointer"
                       onClick={() => setMobileOpen(false)}
                     >
                       View All Features →
@@ -184,7 +184,7 @@ export default function Navbar() {
               <a
                 key={item.label}
                 href={getHref(item.href)}
-                className="text-sm font-medium text-[var(--text-primary)] py-2 cursor-pointer"
+                className="text-sm font-medium text-(--text-primary) py-2 cursor-pointer"
                 onClick={() => setMobileOpen(false)}
               >
                 {item.label}
@@ -204,7 +204,7 @@ export default function Navbar() {
 
       {/* Sticky Scroll Progress Bar */}
       <motion.div
-        className="absolute bottom-0 left-0 right-0 h-[3px] bg-[var(--accent)] origin-left z-50"
+        className="absolute bottom-0 left-0 right-0 h-[3px] bg-(--accent) origin-left z-50"
         style={{ scaleX }}
       />
     </motion.header>

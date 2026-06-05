@@ -982,10 +982,10 @@ export default function CopilotPage() {
   };
 
   return (
-    <div className="w-screen h-screen flex flex-col justify-center items-center bg-[var(--bg-mist)] p-2 relative overflow-hidden select-none">
+    <div className="w-screen h-screen flex flex-col justify-center items-center bg-(--bg-mist) p-2 relative overflow-hidden select-none">
 
       {/* Background Radial Glows */}
-      <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] rounded-full bg-[var(--accent)]/3 blur-[120px] pointer-events-none select-none"></div>
+      <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] rounded-full bg-(--accent)/3 blur-[120px] pointer-events-none select-none"></div>
       <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-indigo-500/3 blur-[120px] pointer-events-none select-none"></div>
 
       {/* Floating overlay hud card (rendered on toggle overlay) */}
@@ -998,7 +998,7 @@ export default function CopilotPage() {
             zIndex: 100
           }}
           className={`absolute top-0 left-0 w-[800px] h-[520px] rounded-[24px] p-5 flex flex-col gap-4 animate-fade-in text-slate-800 transition-all duration-300 shadow-2xl backdrop-blur-md ${isLocked
-              ? "border border-[var(--border-light)] pointer-events-none"
+              ? "border border-(--border-light) pointer-events-none"
               : `border-2 border-dashed ${
                   activeLlmProvider === "openai" ? "border-emerald-500/40" :
                   activeLlmProvider === "anthropic" ? "border-amber-500/40" :
@@ -1020,7 +1020,7 @@ export default function CopilotPage() {
                       activeLlmProvider === "groq" ? "bg-teal-500 shadow-[0_0_10px_rgba(20,184,166,0.3)]" :
                         "bg-slate-400"
                 }`}></span>
-              <span className="text-[10px] font-black tracking-widest uppercase select-none text-[var(--accent)]">
+              <span className="text-[10px] font-black tracking-widest uppercase select-none text-(--accent)">
                 WEB HUD OVERLAY
               </span>
             </div>
@@ -1041,7 +1041,7 @@ export default function CopilotPage() {
               )}
 
               {!isLocked && (
-                <div className="flex items-center gap-1 bg-slate-55 border border-slate-200 px-1.5 py-0.5 rounded-lg text-[10px]">
+                <div className="flex items-center gap-1 bg-slate-50 border border-slate-200 px-1.5 py-0.5 rounded-lg text-[10px]">
                   <button
                     onClick={handleToggleMic}
                     className={`px-1.5 py-0.5 rounded transition cursor-pointer font-bold ${captureMic ? "bg-sky-50 text-sky-700 border border-sky-200" : "text-slate-400 font-medium"
@@ -1069,7 +1069,7 @@ export default function CopilotPage() {
                     step="0.05"
                     value={opacity}
                     onChange={(e) => setOpacity(parseFloat(e.target.value))}
-                    className="w-14 h-1 bg-slate-200 accent-[var(--accent)] rounded-lg cursor-pointer"
+                    className="w-14 h-1 bg-slate-200 accent-(--accent) rounded-lg cursor-pointer"
                   />
                   <span className="text-slate-600 font-bold w-5 text-right">{Math.round(opacity * 100)}%</span>
                 </div>
@@ -1141,7 +1141,7 @@ export default function CopilotPage() {
               {transcript || interimTranscript ? (
                 <p className="font-medium select-text">
                   {transcript}
-                  <span className="text-[var(--accent)] font-bold italic">{interimTranscript ? ` ${interimTranscript}...` : ""}</span>
+                  <span className="text-(--accent) font-bold italic">{interimTranscript ? ` ${interimTranscript}...` : ""}</span>
                 </p>
               ) : (
                 <span className="text-slate-400 italic text-xs select-none">Waiting for live conversation speech stream...</span>
@@ -1211,10 +1211,10 @@ export default function CopilotPage() {
       {!isOverlayMode && (
         <div
           style={{ background: `rgba(255, 255, 255, ${opacity})` }}
-          className="w-[780px] h-[640px] rounded-3xl p-6 flex flex-col justify-between text-slate-800 border border-[var(--border-light)] relative overflow-hidden shadow-2xl animate-fade-in backdrop-blur-md"
+          className="w-[780px] h-[640px] rounded-3xl p-6 flex flex-col justify-between text-slate-800 border border-(--border-light) relative overflow-hidden shadow-2xl animate-fade-in backdrop-blur-md"
         >
           {/* Subtle glowing orbs */}
-          <div className="absolute top-0 right-0 w-[220px] h-[220px] bg-[var(--accent)]/3 rounded-full blur-[90px] pointer-events-none"></div>
+          <div className="absolute top-0 right-0 w-[220px] h-[220px] bg-(--accent)/3 rounded-full blur-[90px] pointer-events-none"></div>
           <div className="absolute bottom-0 left-0 w-[220px] h-[220px] bg-indigo-500/3 rounded-full blur-[90px] pointer-events-none"></div>
 
           {/* Header */}
@@ -1223,7 +1223,7 @@ export default function CopilotPage() {
               <img src="/logo.svg" className="w-10 h-10 rounded-xl border border-slate-200 shadow-xs" alt="Logo" />
               <div>
                 <h1 className="text-2xl font-black tracking-tight text-gradient-coral flex items-center gap-2">
-                  CrackTheLoop <span className="text-[10px] font-bold bg-[var(--accent-soft)] text-[var(--accent)] border border-[var(--accent)]/15 px-2 py-0.5 rounded-md tracking-widest uppercase">WEB v2.0</span>
+                  CrackTheLoop <span className="text-[10px] font-bold bg-(--accent-soft) text-(--accent) border border-(--accent)/15 px-2 py-0.5 rounded-md tracking-widest uppercase">WEB v2.0</span>
                 </h1>
                 <p className="text-xs text-slate-400 mt-0.5 font-semibold">Anti-Share Stealth Browser Audio Copilot</p>
               </div>
@@ -1293,7 +1293,7 @@ export default function CopilotPage() {
           {/* Credentials Inputs Removed */}
 
           {/* Pre-Interview Context Setup Widget */}
-          <div className="flex flex-col gap-3 bg-white border border-[var(--border-light)] p-4 rounded-2xl relative z-10 shadow-xs">
+          <div className="flex flex-col gap-3 bg-white border border-(--border-light) p-4 rounded-2xl relative z-10 shadow-xs">
             <span className="text-[10px] text-slate-400 font-black uppercase tracking-widest flex items-center gap-1.5 border-b border-slate-100 pb-2">
               💼 Pre-Interview Context Setup
               {!interviewRole.trim() && (
@@ -1320,7 +1320,7 @@ export default function CopilotPage() {
                   onChange={(e) => setInterviewRole(e.target.value)}
                   placeholder="e.g. Senior Frontend Engineer"
                   className={`w-full bg-slate-50 border ${!interviewRole.trim() ? "border-rose-500/30 shadow-[0_0_8px_rgba(244,63,94,0.05)]" : "border-slate-200"
-                    } px-3.5 py-2 rounded-xl text-xs focus:outline-none focus:border-[var(--accent)] focus:bg-white transition placeholder-slate-400 text-slate-800 font-semibold`}
+                    } px-3.5 py-2 rounded-xl text-xs focus:outline-none focus:border-(--accent) focus:bg-white transition placeholder-slate-400 text-slate-800 font-semibold`}
                 />
               </div>
 
@@ -1334,7 +1334,7 @@ export default function CopilotPage() {
                   value={jobDescription}
                   onChange={(e) => setJobDescription(e.target.value)}
                   placeholder="Paste target job details, requirements, or tech stack..."
-                  className="bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs placeholder-slate-400 scrollbar-thin h-[50px] min-h-[50px] max-h-[50px] focus:outline-none focus:border-[var(--accent)] focus:bg-white text-slate-800 font-semibold"
+                  className="bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs placeholder-slate-400 scrollbar-thin h-[50px] min-h-[50px] max-h-[50px] focus:outline-none focus:border-(--accent) focus:bg-white text-slate-800 font-semibold"
                 />
               </div>
 
@@ -1344,7 +1344,7 @@ export default function CopilotPage() {
                   Resume File (Optional)
                 </label>
                 {!resumeFileName ? (
-                  <label className="flex flex-col items-center justify-center border border-dashed border-slate-200 hover:border-[var(--accent)] bg-slate-50 hover:bg-slate-100 rounded-xl p-2 cursor-pointer select-none transition group h-[50px]">
+                  <label className="flex flex-col items-center justify-center border border-dashed border-slate-200 hover:border-(--accent) bg-slate-50 hover:bg-slate-100 rounded-xl p-2 cursor-pointer select-none transition group h-[50px]">
                     <span className="text-xs group-hover:scale-110 transition duration-300">📎</span>
                     <span className="text-[9px] text-slate-500 font-black uppercase tracking-wider mt-0.5 group-hover:text-slate-700 transition">Upload Resume PDF or DOCX</span>
                     <input
@@ -1380,7 +1380,7 @@ export default function CopilotPage() {
           </div>
 
           {/* Waveform Visualizer & Audio Source Panel */}
-          <div className="flex justify-between items-center bg-white border border-[var(--border-light)] px-4 py-2 rounded-2xl relative z-10 text-xs gap-4 shadow-xs">
+          <div className="flex justify-between items-center bg-white border border-(--border-light) px-4 py-2 rounded-2xl relative z-10 text-xs gap-4 shadow-xs">
             <div className="flex items-center gap-2 font-bold uppercase tracking-wider select-none shrink-0 text-slate-500">
               Waveform:
             </div>
@@ -1395,7 +1395,7 @@ export default function CopilotPage() {
               <button
                 onClick={handleToggleMic}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold transition border cursor-pointer ${captureMic
-                    ? "bg-sky-50 text-sky-750 border-sky-200 hover:bg-sky-100"
+                    ? "bg-sky-50 text-sky-700 border-sky-200 hover:bg-sky-100"
                     : "bg-slate-50 text-slate-400 border-slate-200 hover:bg-slate-100"
                   }`}
               >
@@ -1438,7 +1438,7 @@ export default function CopilotPage() {
 
           {/* Shield Status */}
           <div className="flex justify-between items-center text-xs text-slate-400 border-t border-slate-100 pt-3 mt-1 select-none">
-            <span className="flex items-center gap-1.5 text-emerald-650/90 font-bold uppercase tracking-wider">
+            <span className="flex items-center gap-1.5 text-emerald-600/90 font-bold uppercase tracking-wider">
               <Shield className="w-4 h-4 text-emerald-600" />
               Web Audio Sandbox: EXCLUSIVE
             </span>
@@ -1451,7 +1451,7 @@ export default function CopilotPage() {
       {showHistoryDrawer && (
         <div className="fixed top-0 right-0 w-[350px] h-full bg-white/98 border-l border-slate-200 shadow-2xl z-[150] p-5 flex flex-col gap-4 animate-slide-in text-slate-800 backdrop-blur-md">
           <div className="flex justify-between items-center border-b border-slate-100 pb-3">
-            <h3 className="font-black flex items-center gap-2 text-xs text-[var(--accent)] uppercase tracking-widest">
+            <h3 className="font-black flex items-center gap-2 text-xs text-(--accent) uppercase tracking-widest">
               <History className="w-4 h-4" />
               Conversation History
             </h3>
@@ -1514,7 +1514,7 @@ export default function CopilotPage() {
                 <button
                   type="button"
                   onClick={() => setAuthMode("signin")}
-                  className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${authMode === "signin" ? "bg-sky-600 text-white shadow-xs" : "text-slate-550 hover:text-slate-800"
+                  className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${authMode === "signin" ? "bg-sky-600 text-white shadow-xs" : "text-slate-500 hover:text-slate-800"
                     }`}
                 >
                   Sign In
@@ -1522,7 +1522,7 @@ export default function CopilotPage() {
                 <button
                   type="button"
                   onClick={() => setAuthMode("signup")}
-                  className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${authMode === "signup" ? "bg-sky-600 text-white shadow-xs" : "text-slate-550 hover:text-slate-800"
+                  className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${authMode === "signup" ? "bg-sky-600 text-white shadow-xs" : "text-slate-500 hover:text-slate-800"
                     }`}
                 >
                   Sign Up
@@ -1539,7 +1539,7 @@ export default function CopilotPage() {
                     value={signupName}
                     onChange={(e) => setSignupName(e.target.value)}
                     placeholder="John Doe"
-                    className="w-full bg-slate-50 border border-slate-200 px-3.5 py-2.5 rounded-xl text-xs text-slate-800 focus:bg-white focus:outline-none focus:border-[var(--accent)] font-semibold"
+                    className="w-full bg-slate-50 border border-slate-200 px-3.5 py-2.5 rounded-xl text-xs text-slate-800 focus:bg-white focus:outline-none focus:border-(--accent) font-semibold"
                   />
                 </div>
               )}
@@ -1550,7 +1550,7 @@ export default function CopilotPage() {
                   value={loginEmail}
                   onChange={(e) => setLoginEmail(e.target.value)}
                   placeholder="you@example.com"
-                  className="w-full bg-slate-50 border border-slate-200 px-3.5 py-2.5 rounded-xl text-xs text-slate-800 focus:bg-white focus:outline-none focus:border-[var(--accent)] font-semibold"
+                  className="w-full bg-slate-50 border border-slate-200 px-3.5 py-2.5 rounded-xl text-xs text-slate-800 focus:bg-white focus:outline-none focus:border-(--accent) font-semibold"
                 />
               </div>
               <div className="flex flex-col gap-1.5">
@@ -1560,7 +1560,7 @@ export default function CopilotPage() {
                   value={loginPassword}
                   onChange={(e) => setLoginPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full bg-slate-50 border border-slate-200 px-3.5 py-2.5 rounded-xl text-xs text-slate-800 focus:bg-white focus:outline-none focus:border-[var(--accent)] font-semibold"
+                  className="w-full bg-slate-50 border border-slate-200 px-3.5 py-2.5 rounded-xl text-xs text-slate-800 focus:bg-white focus:outline-none focus:border-(--accent) font-semibold"
                 />
               </div>
               <button

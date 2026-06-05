@@ -161,7 +161,7 @@ pub fn apply_stealth_affinity(hwnd: HWND) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center bg-white/2 border border-white/5 p-8 rounded-[12px]" id="audio-deep-dive">
           <div className="bg-[#080a15] border border-white/5 rounded-[12px] p-6 flex flex-col gap-4 shadow-inner order-last md:order-first">
             <span className="text-[10px] text-emerald-400 font-mono uppercase tracking-widest">Web Audio API Graph</span>
-            <div className="flex flex-col gap-3 font-mono text-[11px] bg-slate-950/60 p-4 rounded-xl leading-relaxed text-slate-350 scrollbar-thin">
+            <div className="flex flex-col gap-3 font-mono text-[11px] bg-slate-950/60 p-4 rounded-xl leading-relaxed text-slate-300 scrollbar-thin">
               <div>{"1. [Local Mic Stream] ───┐"}</div>
               <div>{"                         ├─── [ChannelMergerNode]"}</div>
               <div>{"2. [Speaker Loopback] ──┘"}</div>
@@ -228,7 +228,7 @@ pub fn apply_stealth_affinity(hwnd: HWND) {
             </a>
             <a 
               href="/pricing"
-              className="px-6 py-3 bg-slate-800 hover:bg-slate-750 border border-slate-700 rounded-xl font-bold text-xs transition active:scale-95"
+              className="px-6 py-3 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl font-bold text-xs transition active:scale-95"
             >
               View Pricing Tiers
             </a>

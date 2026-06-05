@@ -107,31 +107,31 @@ export default function ResumeJdAlignmentContent() {
   ];
 
   return (
-    <div className="min-h-screen bg-[var(--bg-mist)] text-[var(--text-primary)] flex flex-col pt-20">
+    <div className="min-h-screen bg-(--bg-mist) text-(--text-primary) flex flex-col pt-20">
       <Navbar />
 
       {/* Hero Section */}
       <section className="relative w-full max-w-7xl mx-auto px-6 pt-16 pb-12 text-center flex flex-col items-center gap-6">
-        <div className="inline-flex items-center gap-2 bg-[var(--accent-soft)] border border-[var(--accent)]/20 px-4 py-1.5 rounded-full text-xs font-semibold text-[var(--accent)]">
+        <div className="inline-flex items-center gap-2 bg-(--accent-soft) border border-(--accent)/20 px-4 py-1.5 rounded-full text-xs font-semibold text-(--accent)">
           <Sparkles className="w-3.5 h-3.5" />
           Semantic Relevance Matcher
         </div>
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-[var(--text-primary)] leading-none max-w-3xl" style={{ fontFamily: "var(--font-display)" }}>
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-(--text-primary) leading-none max-w-3xl" style={{ fontFamily: "var(--font-display)" }}>
           Personalized Answer Structuring <br />
           <span className="text-gradient-coral">Aligned to the Job Description</span>
         </h1>
-        <p className="text-[var(--text-muted)] text-base md:text-lg max-w-2xl leading-relaxed">
+        <p className="text-(--text-muted) text-base md:text-lg max-w-2xl leading-relaxed">
           Surfacing the exact metrics and bullet points from your background that match the target role's expectations — instantly.
         </p>
       </section>
 
       {/* Interactive Keyword Matcher Section */}
       <section className="w-full max-w-6xl mx-auto px-6 py-8">
-        <div className="bg-white border border-[var(--border-light)] rounded-[12px] p-6 md:p-8 shadow-sm">
+        <div className="bg-white border border-(--border-light) rounded-[12px] p-6 md:p-8 shadow-sm">
           <div className="flex flex-col lg:flex-row justify-between lg:items-center border-b border-slate-100 pb-5 mb-8 gap-4">
             <div>
               <h2 className="text-xl font-bold flex items-center gap-2 text-slate-800">
-                <Filter className="w-5 h-5 text-[var(--accent)]" /> JD Relevance Sandbox
+                <Filter className="w-5 h-5 text-(--accent)" /> JD Relevance Sandbox
               </h2>
               <p className="text-xs text-slate-500 mt-1">Select a key JD requirement to see the AI dynamically extract matching experience and build STAR responses.</p>
             </div>
@@ -143,7 +143,7 @@ export default function ResumeJdAlignmentContent() {
                   onClick={() => setSelectedKeyword(k.id)}
                   className={`px-4 py-2 rounded-full text-xs font-bold transition cursor-pointer ${
                     selectedKeyword === k.id
-                      ? "bg-[var(--accent)] text-white shadow-sm"
+                      ? "bg-(--accent) text-white shadow-sm"
                       : "bg-slate-50 border border-slate-200 text-slate-600 hover:bg-slate-100"
                   }`}
                 >
@@ -155,7 +155,7 @@ export default function ResumeJdAlignmentContent() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
             {/* Left Card: Extracted Resume Project */}
-            <div className="bg-slate-50/50 border border-slate-250/70 rounded-[8px] p-6 flex flex-col justify-between">
+            <div className="bg-slate-50/50 border border-slate-200/70 rounded-[8px] p-6 flex flex-col justify-between">
               <div>
                 <div className="flex justify-between items-center mb-4">
                   <span className="inline-flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-wide text-slate-400">
@@ -170,7 +170,7 @@ export default function ResumeJdAlignmentContent() {
                 <ul className="space-y-3">
                   {resumeBulletPoints[selectedKeyword].points.map((pt, i) => (
                     <li key={i} className="flex gap-2.5 items-start text-xs text-slate-600 leading-relaxed">
-                      <span className="text-[var(--accent)] font-bold mt-0.5 shrink-0">✦</span>
+                      <span className="text-(--accent) font-bold mt-0.5 shrink-0">✦</span>
                       <span>{pt}</span>
                     </li>
                   ))}
@@ -182,11 +182,11 @@ export default function ResumeJdAlignmentContent() {
             </div>
 
             {/* Right Card: Live STAR Suggestions */}
-            <div className="bg-white border border-[var(--border-light)] rounded-[8px] p-6 flex flex-col justify-between shadow-sm relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--accent)]/3 rounded-full blur-2xl" />
+            <div className="bg-white border border-(--border-light) rounded-[8px] p-6 flex flex-col justify-between shadow-sm relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-(--accent)/3 rounded-full blur-2xl" />
               <div>
-                <span className="inline-flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-wide text-[var(--accent)] mb-4">
-                  <Briefcase className="w-4 h-4 text-[var(--accent)]" />
+                <span className="inline-flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-wide text-(--accent) mb-4">
+                  <Briefcase className="w-4 h-4 text-(--accent)" />
                   Live STAR Answer Outline
                 </span>
                 
@@ -199,7 +199,7 @@ export default function ResumeJdAlignmentContent() {
                   ].map((item) => (
                     <div key={item.label} className="text-xs">
                       <div className="flex items-center gap-1.5 font-bold text-slate-700 mb-1">
-                        <span className="w-4 h-4 bg-[var(--accent-soft)] text-[var(--accent)] rounded-full flex items-center justify-center text-[9px] font-black">{item.label}</span>
+                        <span className="w-4 h-4 bg-(--accent-soft) text-(--accent) rounded-full flex items-center justify-center text-[9px] font-black">{item.label}</span>
                         <span>{item.name}</span>
                       </div>
                       <p className="text-slate-600 leading-normal pl-5">{item.val}</p>
@@ -214,22 +214,22 @@ export default function ResumeJdAlignmentContent() {
 
       {/* Narrative Section */}
       <section className="w-full max-w-6xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-        <div className="bg-white border border-[var(--border-light)] rounded-[12px] p-6 shadow-sm flex flex-col gap-4">
-          <span className="text-[10px] text-[var(--accent)] font-mono font-bold tracking-widest uppercase">Ethics & privacy guarantee</span>
+        <div className="bg-white border border-(--border-light) rounded-[12px] p-6 shadow-sm flex flex-col gap-4">
+          <span className="text-[10px] text-(--accent) font-mono font-bold tracking-widest uppercase">Ethics & privacy guarantee</span>
           <div className="space-y-4 text-xs text-slate-600 leading-relaxed">
             <p>
               Many tools store resumes globally to train their public models. At CrackTheLoop, we run a secure, stateless document parser.
             </p>
             <div className="flex gap-2.5 items-start">
-              <span className="w-2 h-2 rounded-full bg-[var(--accent)] mt-1.5 shrink-0" />
+              <span className="w-2 h-2 rounded-full bg-(--accent) mt-1.5 shrink-0" />
               <span><strong>TLS 1.3 Encryption:</strong> All uploads use secure SSL/TLS protocols to prevent data interception.</span>
             </div>
             <div className="flex gap-2.5 items-start">
-              <span className="w-2 h-2 rounded-full bg-[var(--accent)] mt-1.5 shrink-0" />
+              <span className="w-2 h-2 rounded-full bg-(--accent) mt-1.5 shrink-0" />
               <span><strong>No Model Training:</strong> Your private work metrics are never shared, logged, or saved to public database systems.</span>
             </div>
             <div className="flex gap-2.5 items-start">
-              <span className="w-2 h-2 rounded-full bg-[var(--accent)] mt-1.5 shrink-0" />
+              <span className="w-2 h-2 rounded-full bg-(--accent) mt-1.5 shrink-0" />
               <span><strong>Stateless Processing:</strong> All documents are uploaded directly to ephemeral RAM disk layers, which automatically wipe themselves the moment your session concludes.</span>
             </div>
           </div>
@@ -240,7 +240,7 @@ export default function ResumeJdAlignmentContent() {
             Never Guess What <br />
             <span className="text-gradient-coral">Interviewers Look For</span>
           </h2>
-          <p className="text-[var(--text-muted)] text-sm leading-relaxed mb-6">
+          <p className="text-(--text-muted) text-sm leading-relaxed mb-6">
             Interviewers judge answers based on specific skill keywords and structured framework outlines (like STAR). Our matching engine scans the job description in real-time, extracts these requirements, and highlights them directly within your dashboard suggestions.
           </p>
           <ul className="space-y-3.5 text-xs text-slate-700">

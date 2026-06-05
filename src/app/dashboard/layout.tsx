@@ -41,9 +41,9 @@ export default function DashboardLayout({
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[var(--bg-frost)] flex justify-center items-center">
+      <div className="min-h-screen bg-(--bg-frost) flex justify-center items-center">
         <div className="flex flex-col items-center gap-3">
-          <Loader2 className="w-10 h-10 text-[var(--accent)] animate-spin" />
+          <Loader2 className="w-10 h-10 text-(--accent) animate-spin" />
           <span className="text-xs text-slate-500 font-semibold uppercase tracking-widest animate-pulse">
             Verifying Session...
           </span>
@@ -53,9 +53,9 @@ export default function DashboardLayout({
   }
 
   return (
-    <div className="h-screen w-screen bg-[var(--bg-mist)] text-[var(--text-primary)] flex flex-col md:flex-row relative overflow-hidden">
+    <div className="h-screen w-screen bg-(--bg-mist) text-(--text-primary) flex flex-col md:flex-row relative overflow-hidden">
       {/* Background radial glows */}
-      <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] rounded-full bg-[var(--accent)]/3 blur-[120px] pointer-events-none select-none z-10"></div>
+      <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] rounded-full bg-(--accent)/3 blur-[120px] pointer-events-none select-none z-10"></div>
       <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-indigo-500/3 blur-[120px] pointer-events-none select-none z-10"></div>
 
       {/* Standalone Sidebar Component */}
