@@ -6,7 +6,6 @@ import {
   Shield, 
   Check, 
   Sparkles, 
-  Zap, 
   Loader2, 
   Gift,
   ArrowRight,
@@ -54,14 +53,45 @@ function SelectPlanContent() {
     }
     setLoading(false);
 
-    // Auto-trigger plan checkout if passed from pricing page
+    // Auto-trigger plan checkout or trial selection if passed from pricing page
     const autoPlan = searchParams.get("plan");
-    if (autoPlan && priceIds[autoPlan] && parsedUser) {
-      setTimeout(() => {
-        handleSelectPaidDirect(autoPlan, savedToken, parsedUser);
-      }, 400);
+    if (autoPlan && parsedUser) {
+      if (autoPlan === "Free Trial") {
+        setTimeout(() => {
+          handleSelectTrialDirect(savedToken);
+        }, 400);
+      } else if (priceIds[autoPlan]) {
+        setTimeout(() => {
+          handleSelectPaidDirect(autoPlan, savedToken, parsedUser);
+        }, 400);
+      }
     }
   }, [router, searchParams]);
+
+  async function handleSelectTrialDirect(activeToken: string) {
+    if (!activeToken) return;
+    setActionLoading("trial");
+    setErrorMsg("");
+    try {
+      const res = await fetch("/api/billing/trial", {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${activeToken}`
+        }
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || data.error || "Failed to activate Free Trial");
+
+      // Update local cache & cookies
+      localStorage.setItem("ctl_user", JSON.stringify(data.user));
+      document.cookie = `ctl_user=${encodeURIComponent(JSON.stringify(data.user))}; path=/; max-age=604800; SameSite=Lax`;
+      router.replace("/dashboard");
+    } catch (err: any) {
+      setErrorMsg(err.message);
+      setActionLoading(null);
+    }
+  }
 
   async function handleSelectTrial() {
     if (!token) return;
@@ -144,8 +174,8 @@ function SelectPlanContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0B0D19] flex justify-center items-center">
-        <Loader2 className="w-10 h-10 text-sky-400 animate-spin" />
+      <div className="min-h-screen bg-[var(--bg-mist)] flex justify-center items-center">
+        <Loader2 className="w-10 h-10 text-[var(--accent)] animate-spin" />
       </div>
     );
   }
@@ -153,72 +183,73 @@ function SelectPlanContent() {
   const hasReferral = !!user?.referred_by || !!referralFromUrl;
 
   return (
-    <div className="min-h-screen bg-[#0B0D19] text-slate-100 flex flex-col justify-center items-center relative overflow-hidden py-12 px-6">
+    <div className="min-h-screen bg-[var(--bg-mist)] text-[var(--text-primary)] flex flex-col justify-center items-center relative overflow-hidden py-12 px-6">
+      
       {/* Background Orbs */}
-      <div className="absolute top-[-20%] left-[-15%] w-[60%] h-[60%] rounded-full bg-[#6610F2]/5 bg-blur-glow pointer-events-none select-none"></div>
-      <div className="absolute bottom-[-20%] right-[-15%] w-[60%] h-[60%] rounded-full bg-[#0DCAF0]/5 bg-blur-glow pointer-events-none select-none"></div>
+      <div className="orb orb-peach w-[600px] h-[600px] -top-40 left-1/4 animate-float-orb opacity-40 pointer-events-none" />
+      <div className="orb orb-slate w-[400px] h-[400px] bottom-0 -right-20 animate-float-orb-slow opacity-40 pointer-events-none" />
 
-      <div className="w-full max-w-5xl flex flex-col gap-8 relative z-10">
+      <div className="w-full max-w-6xl flex flex-col gap-8 relative z-10">
         
-        {/* Title */}
+        {/* Title Block */}
         <div className="text-center flex flex-col items-center gap-3">
-          <div className="inline-flex items-center gap-2 bg-[#6610F2]/10 border border-[#6610F2]/30 px-4 py-1.5 rounded-full text-xs font-semibold text-purple-300">
-            <Sparkles className="w-4 h-4 text-[#0DCAF0]" />
+          <div className="inline-flex items-center gap-2 bg-[var(--accent-soft)] border border-[var(--accent)]/20 px-4 py-1.5 rounded-full text-xs font-semibold text-[var(--accent)]">
+            <Sparkles className="w-4 h-4 animate-pulse" />
             Authentication Successful
           </div>
-          <h1 className="text-3xl md:text-4xl font-black tracking-tight text-white mt-1">
-            Choose Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-400">Access Plan</span>
+          <h1 className="text-3xl md:text-4xl font-black tracking-tight text-slate-800 mt-1" style={{ fontFamily: "var(--font-display)" }}>
+            Choose Your <span className="text-gradient-coral">Access Plan</span>
           </h1>
-          <p className="text-slate-400 text-xs md:text-sm max-w-md leading-relaxed">
+          <p className="text-[var(--text-muted)] text-xs md:text-sm max-w-md leading-relaxed">
             Select the Free Trial to test-drive CrackTheLoop, or purchase a premium pass to unlock high-capacity interview fuel.
           </p>
 
           {hasReferral && (
-            <div className="mt-2 inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 px-4 py-1.5 rounded-full text-xs font-bold text-emerald-400">
-              <Gift className="w-4 h-4" />
+            <div className="mt-2 inline-flex items-center gap-2 bg-emerald-50 border border-emerald-250 px-4 py-1.5 rounded-full text-xs font-bold text-emerald-700 shadow-sm">
+              <Gift className="w-4 h-4 text-emerald-600" />
               Referral Applied: You will receive +20% more credits on activation!
             </div>
           )}
         </div>
 
         {errorMsg && (
-          <div className="w-full max-w-md mx-auto p-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-bold text-center">
+          <div className="w-full max-w-md mx-auto p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-600 text-xs font-bold text-center">
             {errorMsg}
           </div>
         )}
 
         {/* Pricing Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-stretch mt-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch mt-4">
           
           {/* Free Trial Card */}
-          <div className="glow-card rounded-2xl p-6 flex flex-col justify-between border border-white/5 bg-[#0c1125] min-h-[380px] transition hover:border-white/10 relative">
+          <div className="bg-white border border-[var(--border-light)] rounded-[12px] p-6 flex flex-col justify-between min-h-[380px] shadow-sm hover:shadow-md transition">
             <div>
               <div className="flex justify-between items-start">
-                <h3 className="text-lg font-bold text-white">Free Trial</h3>
-                <span className="bg-sky-500/15 text-sky-400 px-2 py-0.5 rounded font-black text-[9px] uppercase tracking-wider">Free</span>
+                <h3 className="text-lg font-bold text-slate-800">Free Trial</h3>
+                <span className="bg-sky-500/15 text-sky-600 px-2 py-0.5 rounded font-black text-[9px] uppercase tracking-wider">Free</span>
               </div>
-              <p className="text-[11px] text-slate-500 mt-1 font-medium">Evaluate the platform first</p>
+              <p className="text-[11px] text-[var(--text-muted)] mt-1 font-medium">Evaluate the platform first</p>
               
-              <div className="flex items-baseline gap-1 mt-6 border-b border-white/5 pb-4">
-                <span className="text-3xl font-black text-white">{hasReferral ? "18" : "15"}</span>
-                <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Credits</span>
+              <div className="flex items-baseline gap-1 mt-6 border-b border-slate-100 pb-4">
+                <span className="text-3xl font-black text-slate-800">{hasReferral ? "18" : "15"}</span>
+                <span className="text-[10px] text-[var(--text-muted)] font-bold uppercase tracking-wider">Credits</span>
               </div>
 
-              <ul className="text-[11px] text-slate-300 flex flex-col gap-3 mt-4 font-semibold">
+              <ul className="text-[11px] text-slate-600 flex flex-col gap-3 mt-4 font-semibold">
                 <li className="flex items-center gap-2">
-                  <Check className="w-3.5 h-3.5 text-sky-400 shrink-0" />
+                  <Check className="w-3.5 h-3.5 text-[var(--accent)] shrink-0" />
                   {hasReferral ? "18" : "15"} Fuel Credits
                 </li>
                 <li className="flex items-center gap-2">
-                  <Check className="w-3.5 h-3.5 text-sky-400 shrink-0" />
+                  <Check className="w-3.5 h-3.5 text-[var(--accent)] shrink-0" />
                   Max 1 Interview Session
                 </li>
                 <li className="flex items-center gap-2">
-                  <Check className="w-3.5 h-3.5 text-sky-400 shrink-0" />
+                  <Check className="w-3.5 h-3.5 text-[var(--accent)] shrink-0" />
                   Max 1 AI Report Analysis
                 </li>
-                <li className="flex items-center gap-2 text-slate-500">
-                  <Check className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+                <li className="flex items-center gap-2 text-slate-400">
+                  <Check className="w-3.5 h-3.5 text-slate-350 shrink-0" />
                   7-Day Trial Expiration
                 </li>
               </ul>
@@ -227,35 +258,35 @@ function SelectPlanContent() {
             <button
               onClick={handleSelectTrial}
               disabled={!!actionLoading}
-              className="w-full mt-6 py-3 bg-white/5 border border-white/10 hover:bg-white/10 text-white rounded-xl font-bold text-xs transition active:scale-95 cursor-pointer uppercase tracking-wider flex justify-center items-center gap-1.5"
+              className="w-full mt-6 py-3 bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-800 rounded-xl font-bold text-xs transition active:scale-95 cursor-pointer uppercase tracking-wider flex justify-center items-center gap-1.5"
             >
               {actionLoading === "trial" ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : "Start Trial"}
-              {actionLoading !== "trial" && <ArrowRight className="w-3.5 h-3.5" />}
+              {actionLoading !== "trial" && <ArrowRight className="w-3.5 h-3.5 text-slate-600" />}
             </button>
           </div>
 
           {/* Starter Plan */}
-          <div className="glow-card rounded-2xl p-6 flex flex-col justify-between border border-white/5 bg-[#0c1125] min-h-[380px] transition hover:border-white/10">
+          <div className="bg-white border border-[var(--border-light)] rounded-[12px] p-6 flex flex-col justify-between min-h-[380px] shadow-sm hover:shadow-md transition">
             <div>
-              <h3 className="text-lg font-bold text-white">Starter Pass</h3>
-              <p className="text-[11px] text-slate-500 mt-1 font-medium">Ideal for standard interviews</p>
+              <h3 className="text-lg font-bold text-slate-800">Starter Pass</h3>
+              <p className="text-[11px] text-[var(--text-muted)] mt-1 font-medium">Ideal for standard interviews</p>
               
-              <div className="flex items-baseline gap-1 mt-6 border-b border-white/5 pb-4">
-                <span className="text-3xl font-black text-white">{hasReferral ? "120" : "100"}</span>
-                <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Credits</span>
+              <div className="flex items-baseline gap-1 mt-6 border-b border-slate-100 pb-4">
+                <span className="text-3xl font-black text-slate-800">{hasReferral ? "120" : "100"}</span>
+                <span className="text-[10px] text-[var(--text-muted)] font-bold uppercase tracking-wider">Credits</span>
               </div>
 
-              <ul className="text-[11px] text-slate-300 flex flex-col gap-3 mt-4 font-semibold">
+              <ul className="text-[11px] text-slate-600 flex flex-col gap-3 mt-4 font-semibold">
                 <li className="flex items-center gap-2">
-                  <Check className="w-3.5 h-3.5 text-sky-400 shrink-0" />
+                  <Check className="w-3.5 h-3.5 text-[var(--accent)] shrink-0" />
                   {hasReferral ? "120" : "100"} Fuel Credits
                 </li>
                 <li className="flex items-center gap-2">
-                  <Check className="w-3.5 h-3.5 text-sky-400 shrink-0" />
+                  <Check className="w-3.5 h-3.5 text-[var(--accent)] shrink-0" />
                   Streaming STT Capturing
                 </li>
                 <li className="flex items-center gap-2">
-                  <Check className="w-3.5 h-3.5 text-sky-400 shrink-0" />
+                  <Check className="w-3.5 h-3.5 text-[var(--accent)] shrink-0" />
                   Llama-3.1 Model Support
                 </li>
               </ul>
@@ -264,37 +295,37 @@ function SelectPlanContent() {
             <button
               onClick={() => handleSelectPaid("Starter Pass")}
               disabled={!!actionLoading}
-              className="w-full mt-6 py-3 bg-slate-800 border border-slate-700 hover:bg-slate-750 text-white rounded-xl font-bold text-xs transition active:scale-95 cursor-pointer uppercase tracking-wider flex justify-center items-center gap-1.5"
+              className="w-full mt-6 py-3 bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-800 rounded-xl font-bold text-xs transition active:scale-95 cursor-pointer uppercase tracking-wider flex justify-center items-center gap-1.5"
             >
               {actionLoading === "Starter Pass" ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : "Purchase $19"}
             </button>
           </div>
 
           {/* Pro Pass */}
-          <div className="glow-card rounded-2xl p-6 flex flex-col justify-between border border-indigo-500/20 bg-[#0c1125] min-h-[380px] transition hover:border-white/10 relative shadow-md shadow-indigo-500/5">
-            <div className="absolute top-4 right-4 bg-sky-500/20 text-sky-300 px-2 py-0.5 rounded text-[8px] font-bold tracking-wide uppercase">
+          <div className="bg-white border border-[var(--accent)]/30 rounded-[12px] p-6 flex flex-col justify-between min-h-[380px] shadow-sm hover:shadow-md transition relative">
+            <div className="absolute top-4 right-4 bg-[var(--accent-soft)] border border-[var(--accent)]/20 text-[var(--accent)] px-2 py-0.5 rounded text-[8px] font-bold tracking-wide uppercase">
               Popular
             </div>
             <div>
-              <h3 className="text-lg font-bold text-white">Pro Pass</h3>
-              <p className="text-[11px] text-slate-500 mt-1 font-medium">For active interview stages</p>
+              <h3 className="text-lg font-bold text-slate-800">Pro Pass</h3>
+              <p className="text-[11px] text-[var(--text-muted)] mt-1 font-medium">For active interview stages</p>
               
-              <div className="flex items-baseline gap-1 mt-6 border-b border-white/5 pb-4">
-                <span className="text-3xl font-black text-white">{hasReferral ? "360" : "300"}</span>
-                <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Credits</span>
+              <div className="flex items-baseline gap-1 mt-6 border-b border-slate-100 pb-4">
+                <span className="text-3xl font-black text-slate-800">{hasReferral ? "360" : "300"}</span>
+                <span className="text-[10px] text-[var(--text-muted)] font-bold uppercase tracking-wider">Credits</span>
               </div>
 
-              <ul className="text-[11px] text-slate-300 flex flex-col gap-3 mt-4 font-semibold">
+              <ul className="text-[11px] text-slate-600 flex flex-col gap-3 mt-4 font-semibold">
                 <li className="flex items-center gap-2">
-                  <Check className="w-3.5 h-3.5 text-sky-400 shrink-0" />
+                  <Check className="w-3.5 h-3.5 text-[var(--accent)] shrink-0" />
                   {hasReferral ? "360" : "300"} Fuel Credits
                 </li>
                 <li className="flex items-center gap-2">
-                  <Check className="w-3.5 h-3.5 text-sky-400 shrink-0" />
+                  <Check className="w-3.5 h-3.5 text-[var(--accent)] shrink-0" />
                   Screen Share Evasion (Zoom/Meet)
                 </li>
                 <li className="flex items-center gap-2">
-                  <Check className="w-3.5 h-3.5 text-sky-400 shrink-0" />
+                  <Check className="w-3.5 h-3.5 text-[var(--accent)] shrink-0" />
                   Unlimited Concurrent Runs
                 </li>
               </ul>
@@ -303,34 +334,34 @@ function SelectPlanContent() {
             <button
               onClick={() => handleSelectPaid("Pro Pass")}
               disabled={!!actionLoading}
-              className="w-full mt-6 py-3 bg-gradient-to-r from-sky-400 to-indigo-500 text-white rounded-xl font-bold text-xs transition hover:brightness-110 active:scale-95 cursor-pointer uppercase tracking-wider flex justify-center items-center gap-1.5"
+              className="w-full mt-6 py-3 bg-[#E8503A] hover:bg-[#F06B57] text-white rounded-xl font-bold text-xs transition active:scale-95 cursor-pointer uppercase tracking-wider flex justify-center items-center gap-1.5 shadow-sm shadow-[#E8503A]/10"
             >
               {actionLoading === "Pro Pass" ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : "Purchase $39"}
             </button>
           </div>
 
           {/* Elite Pass */}
-          <div className="glow-card rounded-2xl p-6 flex flex-col justify-between border border-white/5 bg-[#0d1326] min-h-[380px] transition hover:border-white/10">
+          <div className="bg-white border border-[var(--border-light)] rounded-[12px] p-6 flex flex-col justify-between min-h-[380px] shadow-sm hover:shadow-md transition">
             <div>
-              <h3 className="text-lg font-bold text-white">Elite Pass</h3>
-              <p className="text-[11px] text-slate-500 mt-1 font-medium">Advanced custom contexts</p>
+              <h3 className="text-lg font-bold text-slate-800">Elite Pass</h3>
+              <p className="text-[11px] text-[var(--text-muted)] mt-1 font-medium">Advanced custom contexts</p>
               
-              <div className="flex items-baseline gap-1 mt-6 border-b border-white/5 pb-4">
-                <span className="text-3xl font-black text-white">{hasReferral ? "1200" : "1000"}</span>
-                <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Credits</span>
+              <div className="flex items-baseline gap-1 mt-6 border-b border-slate-100 pb-4">
+                <span className="text-3xl font-black text-slate-800">{hasReferral ? "1200" : "1000"}</span>
+                <span className="text-[10px] text-[var(--text-muted)] font-bold uppercase tracking-wider">Credits</span>
               </div>
 
-              <ul className="text-[11px] text-slate-300 flex flex-col gap-3 mt-4 font-semibold">
+              <ul className="text-[11px] text-slate-600 flex flex-col gap-3 mt-4 font-semibold">
                 <li className="flex items-center gap-2">
-                  <Check className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+                  <Check className="w-3.5 h-3.5 text-purple-600 shrink-0" />
                   {hasReferral ? "1200" : "1000"} Fuel Credits
                 </li>
                 <li className="flex items-center gap-2">
-                  <Check className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+                  <Check className="w-3.5 h-3.5 text-purple-650 shrink-0" />
                   GPT-4o-mini & Claude Models
                 </li>
                 <li className="flex items-center gap-2">
-                  <Check className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+                  <Check className="w-3.5 h-3.5 text-purple-650 shrink-0" />
                   PDF Resume context parsing
                 </li>
               </ul>
@@ -339,7 +370,7 @@ function SelectPlanContent() {
             <button
               onClick={() => handleSelectPaid("Elite Pass")}
               disabled={!!actionLoading}
-              className="w-full mt-6 py-3 bg-slate-800 border border-slate-700 hover:bg-slate-750 text-white rounded-xl font-bold text-xs transition active:scale-95 cursor-pointer uppercase tracking-wider flex justify-center items-center gap-1.5"
+              className="w-full mt-6 py-3 bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-800 rounded-xl font-bold text-xs transition active:scale-95 cursor-pointer uppercase tracking-wider flex justify-center items-center gap-1.5"
             >
               {actionLoading === "Elite Pass" ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : "Purchase $79"}
             </button>
@@ -348,10 +379,10 @@ function SelectPlanContent() {
         </div>
 
         {/* Dynamic Credit Info */}
-        <div className="w-full bg-white/2 border border-white/5 p-4 rounded-xl flex items-start gap-3 mt-2 font-medium">
-          <Info className="w-5 h-5 text-sky-400 shrink-0 mt-0.5" />
-          <div className="text-[11px] text-slate-400 leading-relaxed">
-            <strong className="text-slate-300">Credit Consumption Info:</strong> Real-time interview Copilot usage consumes **1 credit per minute** with a **minimum charge of 10 credits** per interview. AI evaluation report generation consumes **5 credits per analysis**.
+        <div className="w-full bg-white border border-[var(--border-light)] p-4 rounded-[12px] flex items-start gap-3 mt-2 shadow-xs">
+          <Info className="w-5 h-5 text-indigo-500 shrink-0 mt-0.5" />
+          <div className="text-[11px] text-slate-500 leading-relaxed">
+            <strong className="text-slate-800">Credit Consumption Info:</strong> Real-time interview Copilot usage consumes **1 credit per minute** with a **minimum charge of 10 credits** per interview. AI evaluation report generation consumes **5 credits per analysis**.
           </div>
         </div>
 
@@ -363,8 +394,8 @@ function SelectPlanContent() {
 export default function SelectPlanPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-[#0B0D19] flex justify-center items-center">
-        <Loader2 className="w-10 h-10 text-sky-400 animate-spin" />
+      <div className="min-h-screen bg-[var(--bg-mist)] flex justify-center items-center">
+        <Loader2 className="w-10 h-10 text-[var(--accent)] animate-spin" />
       </div>
     }>
       <SelectPlanContent />

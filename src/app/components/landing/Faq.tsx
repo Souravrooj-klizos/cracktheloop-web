@@ -48,8 +48,13 @@ const faqs = [
   },
 ];
 
-export default function Faq() {
+interface FaqProps {
+  faqList?: { q: string; a: string }[];
+}
+
+export default function Faq({ faqList }: FaqProps = {}) {
   const [open, setOpen] = useState<number | null>(null);
+  const activeFaqs = faqList || faqs;
 
   return (
     <section id="faq" className="section-mist relative py-20 md:py-24 overflow-hidden">
@@ -71,7 +76,7 @@ export default function Faq() {
         </ScrollReveal>
 
         <div className="divide-y divide-[var(--border-light)] border-t border-b border-[var(--border-light)] mt-8">
-          {faqs.map((faq, i) => {
+          {activeFaqs.map((faq, i) => {
             const isOpen = open === i;
             return (
               <ScrollReveal key={i} delay={i * 0.03} className="w-full">

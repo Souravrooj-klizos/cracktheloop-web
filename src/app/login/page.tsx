@@ -99,36 +99,36 @@ function LoginContent() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0B0D19] text-slate-100 flex flex-col justify-center items-center relative overflow-hidden px-6">
+    <div className="min-h-screen bg-[var(--bg-mist)] text-[var(--text-primary)] flex flex-col justify-center items-center relative overflow-hidden px-6">
       {/* Background Orbs */}
-      <div className="absolute top-[-20%] left-[-15%] w-[60%] h-[60%] rounded-full bg-[#6610F2]/10 bg-blur-glow pointer-events-none select-none"></div>
-      <div className="absolute bottom-[-20%] right-[-15%] w-[60%] h-[60%] rounded-full bg-[#0DCAF0]/10 bg-blur-glow pointer-events-none select-none"></div>
+      <div className="absolute top-[-20%] left-[-15%] w-[60%] h-[60%] rounded-full bg-[var(--accent)]/5 blur-[120px] pointer-events-none select-none"></div>
+      <div className="absolute bottom-[-20%] right-[-15%] w-[60%] h-[60%] rounded-full bg-indigo-500/5 blur-[120px] pointer-events-none select-none"></div>
 
       {/* Navigation link back home */}
       <a 
         href="/" 
-        className="absolute top-6 left-6 flex items-center gap-2 hover:opacity-85 font-bold transition text-xs text-slate-400 select-none"
+        className="absolute top-6 left-6 flex items-center gap-2 hover:opacity-85 font-bold transition text-xs text-slate-450 select-none"
       >
         <Home className="w-4 h-4" /> Home
       </a>
 
       {/* Main glass panel wrapper */}
-      <div className="w-full max-w-[420px] bg-[#0c1125]/90 border border-white/10 p-8 rounded-3xl flex flex-col gap-6 shadow-2xl relative z-10 animate-fade-in">
+      <div className="w-full max-w-[420px] bg-white border border-[var(--border-light)] p-8 rounded-[12px] flex flex-col gap-6 shadow-sm relative z-10 animate-fade-in">
         <div className="flex flex-col items-center gap-2 text-center select-none">
-          <div className="inline-flex items-center gap-2 bg-[#6610F2]/10 border border-[#6610F2]/30 px-3.5 py-1 rounded-full text-[10px] font-black text-purple-300 uppercase tracking-wider">
-            <Sparkles className="w-3.5 h-3.5 text-[#0DCAF0]" />
+          <div className="inline-flex items-center gap-2 bg-[var(--accent-soft)] border border-[var(--accent)]/20 px-3.5 py-1 rounded-full text-[10px] font-black text-[var(--accent)] uppercase tracking-wider">
+            <Sparkles className="w-3.5 h-3.5 text-[var(--accent)] animate-pulse" />
             Secure SaaS Portal Access
           </div>
-          <h2 className="text-2xl font-black tracking-tight text-white mt-2">
+          <h2 className="text-2xl font-black tracking-tight text-slate-800 mt-2" style={{ fontFamily: "var(--font-display)" }}>
             Welcome to CrackTheLoop
           </h2>
-          <p className="text-slate-400 text-xs mt-0.5 leading-relaxed">
+          <p className="text-slate-500 text-xs mt-0.5 leading-relaxed">
             Verify credentials to access your stealth copilot and interviews.
           </p>
         </div>
 
         {/* Tab Toggle buttons */}
-        <div className="flex bg-[#050811] border border-white/5 p-1 rounded-xl select-none">
+        <div className="flex bg-slate-105 border border-slate-200/60 p-1 rounded-xl select-none">
           <button
             onClick={() => {
               setMode("signin");
@@ -136,8 +136,8 @@ function LoginContent() {
             }}
             className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
               mode === "signin" 
-                ? "bg-white/5 text-white shadow-sm" 
-                : "text-slate-500 hover:text-slate-350"
+                ? "bg-white border border-slate-200 text-slate-800 shadow-xs" 
+                : "text-slate-500 hover:text-slate-700"
             }`}
           >
             <LogIn className="w-3.5 h-3.5" />
@@ -150,8 +150,8 @@ function LoginContent() {
             }}
             className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
               mode === "signup" 
-                ? "bg-white/5 text-white shadow-sm" 
-                : "text-slate-500 hover:text-slate-350"
+                ? "bg-white border border-slate-200 text-slate-800 shadow-xs" 
+                : "text-slate-500 hover:text-slate-700"
             }`}
           >
             <UserPlus className="w-3.5 h-3.5" />
@@ -162,8 +162,8 @@ function LoginContent() {
         {message && (
           <div className={`p-3.5 rounded-xl border text-center text-xs font-semibold ${
             message.toLowerCase().includes("sent") || message.toLowerCase().includes("successful") || message.toLowerCase().includes("choose") || message.toLowerCase().includes("loading")
-              ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20 animate-pulse"
-              : "bg-rose-500/10 text-rose-400 border-rose-500/20"
+              ? "bg-emerald-50 text-emerald-700 border-emerald-200 animate-pulse"
+              : "bg-rose-50 text-rose-650 border-rose-200"
           }`}>
             {message}
           </div>
@@ -175,7 +175,7 @@ function LoginContent() {
             {/* Full Name (Sign Up only) */}
             {mode === "signup" && (
               <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] text-white/55 font-bold uppercase tracking-widest pl-1">
+                <label className="text-[10px] text-slate-500 font-bold uppercase tracking-widest pl-1">
                   Full Name
                 </label>
                 <input
@@ -184,14 +184,14 @@ function LoginContent() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="John Doe"
-                  className="w-full bg-[#050811] border border-white/10 px-4 py-2.5 rounded-xl text-xs text-white placeholder-slate-600 focus:outline-none focus:border-sky-405 transition"
+                  className="w-full bg-white border border-slate-200 px-4 py-2.5 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[var(--accent)] transition"
                 />
               </div>
             )}
 
             {/* Email Address */}
             <div className="flex flex-col gap-1.5">
-              <label className="text-[10px] text-white/55 font-bold uppercase tracking-widest pl-1">
+              <label className="text-[10px] text-slate-500 font-bold uppercase tracking-widest pl-1">
                 Email Address
               </label>
               <input
@@ -200,13 +200,13 @@ function LoginContent() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="developer@example.com"
-                className="w-full bg-[#050811] border border-white/10 px-4 py-2.5 rounded-xl text-xs text-white placeholder-slate-600 focus:outline-none focus:border-sky-405 transition"
+                className="w-full bg-white border border-slate-200 px-4 py-2.5 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[var(--accent)] transition"
               />
             </div>
 
             {/* Password */}
             <div className="flex flex-col gap-1.5">
-              <label className="text-[10px] text-white/55 font-bold uppercase tracking-widest pl-1">
+              <label className="text-[10px] text-slate-500 font-bold uppercase tracking-widest pl-1">
                 Password
               </label>
               <input
@@ -216,15 +216,15 @@ function LoginContent() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full bg-[#050811] border border-white/10 px-4 py-2.5 rounded-xl text-xs text-white placeholder-slate-600 focus:outline-none focus:border-sky-405 transition"
+                className="w-full bg-white border border-slate-200 px-4 py-2.5 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[var(--accent)] transition"
               />
             </div>
 
             {/* Referral Code (Sign Up only, optional) */}
             {mode === "signup" && (
               <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] text-white/55 font-bold uppercase tracking-widest pl-1 flex items-center gap-1">
-                  Referral Code <span className="text-[8.5px] text-slate-500 font-medium">(Optional)</span>
+                <label className="text-[10px] text-slate-500 font-bold uppercase tracking-widest pl-1 flex items-center gap-1">
+                  Referral Code <span className="text-[8.5px] text-slate-450 font-medium">(Optional)</span>
                 </label>
                 <div className="relative">
                   <input
@@ -232,9 +232,9 @@ function LoginContent() {
                     value={referralCode}
                     onChange={(e) => setReferralCode(e.target.value)}
                     placeholder="REF-XXXXXX"
-                    className="w-full bg-[#050811] border border-white/10 px-4 py-2.5 rounded-xl text-xs text-purple-300 placeholder-slate-700 focus:outline-none focus:border-sky-405 transition pl-9 font-mono"
+                    className="w-full bg-white border border-slate-200 px-4 py-2.5 rounded-xl text-xs text-[var(--accent)] placeholder-slate-400 focus:outline-none focus:border-[var(--accent)] transition pl-9 font-mono font-semibold"
                   />
-                  <Gift className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
+                  <Gift className="w-4 h-4 text-slate-400 absolute left-3 top-3.5" />
                 </div>
               </div>
             )}
@@ -242,7 +242,7 @@ function LoginContent() {
             <button
               type="submit"
               disabled={loading || !email.includes("@") || password.length < 6 || (mode === "signup" && !name.trim())}
-              className="w-full mt-3 py-3.5 bg-gradient-to-r from-sky-400 to-indigo-500 rounded-xl font-bold text-xs text-white uppercase tracking-wider shadow-lg shadow-indigo-500/10 hover:brightness-110 active:scale-98 transition flex justify-center items-center gap-1.5 cursor-pointer disabled:opacity-50"
+              className="w-full mt-3 py-3.5 bg-[#E8503A] hover:bg-[#F06B57] rounded-xl font-bold text-xs text-white uppercase tracking-wider shadow-md shadow-[#E8503A]/10 hover:brightness-110 active:scale-98 transition flex justify-center items-center gap-1.5 cursor-pointer disabled:opacity-50"
             >
               {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : mode === "signup" ? "Register & Enter" : "Access Portal"}
               {!loading && <ArrowRight className="w-4 h-4" />}
@@ -251,8 +251,8 @@ function LoginContent() {
         </form>
       </div>
 
-      <footer className="absolute bottom-6 text-[10px] text-slate-600 select-none">
-        <Shield className="w-3.5 h-3.5 inline mr-1 text-slate-650" /> Secure Multi-channel Web Affinity Shield Enabled
+      <footer className="absolute bottom-6 text-[10px] text-slate-450 select-none">
+        <Shield className="w-3.5 h-3.5 inline mr-1 text-slate-400" /> Secure Multi-channel Web Affinity Shield Enabled
       </footer>
     </div>
   );

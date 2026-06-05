@@ -1,25 +1,12 @@
-# CrackTheLoop Landing Page UI/UX Improvements
+# Pricing & Select Plan Updates Checklist
 
-## Tier 1: High-Impact Visual Fixes
-- [x] globals.css — Add dark section tokens, gradient mesh utilities, animated gradient border
-- [x] Hero.tsx — Gradient mesh bg, social proof stats, perspective tilt on mockup
-- [x] CtaFooter.tsx — Dark theme CTA, gradient glow, animated border, social proof
-
-## Tier 2: Section Rhythm & Background Variation
-- [x] Comparison.tsx — Dark background, comparison table redesign, honest comparison, merged trust callouts
-- [x] Testimonials.tsx — Warm tinted background, multi-card grid layout
-
-## Tier 3: Information Architecture
-- [x] page.tsx — Reorder sections (Testimonials moved up), TrustEthics merged into Comparison
-
-## Tier 4: Polish & Micro-Interactions
-- [x] PainPoints.tsx — Normalized full-width container
-- [x] ProductDemo.tsx — Normalized full-width container
-- [x] BentoFeatures.tsx — Fixed tagColor/accentColor bug
-- [x] UseCases.tsx — Normalized full-width container
-- [x] TrustEthics.tsx — Merged into Comparison, file normalized for consistency
-- [x] Faq.tsx — Normalized full-width container
-
-## Tier 5: Accessibility
-- [x] Added aria-hidden to decorative mockups in PainPoints
-- [/] Awaiting build verification
+- [x] Update Pricing Page (`/pricing`)
+  - [x] Update grid layout to 4 columns on desktop
+  - [x] Add the Free Trial ($0) card to the pricing choices list
+- [x] Update Select Plan Page (`/select-plan`)
+  - [x] Switch main container styles to light mist theme (`bg-[var(--bg-mist)]`)
+  - [x] Redesign selection cards to match the pricing page white layout style
+  - [x] Integrate auto-trigger logic: automatically execute `handleSelectTrial()` if `plan === "Free Trial"` is requested
+- [ ] Verify build and functionality
+  - [/] Test paths in browser
+  - [/] Run `npm run build`

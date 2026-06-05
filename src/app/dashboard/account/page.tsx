@@ -147,22 +147,22 @@ function AccountDetailsContent() {
 
   if (loading && !user) {
     return (
-      <div className="flex-1 flex justify-center items-center py-20 bg-[#0B0D19]">
-        <Loader2 className="w-8 h-8 text-sky-400 animate-spin" />
+      <div className="flex-1 flex justify-center items-center py-20 bg-[var(--bg-mist)]">
+        <Loader2 className="w-8 h-8 text-[var(--accent)] animate-spin" />
       </div>
     );
   }
 
   return (
-    <main className="flex-1 w-full max-w-5xl mx-auto px-6 py-12 flex flex-col gap-8 relative">
+    <main className="flex-1 w-full max-w-[1600px] mx-auto px-6 md:px-10 py-8 md:py-10 flex flex-col gap-8 relative">
       {/* Top Welcome Title */}
-      <section className="flex flex-col gap-2">
-        <span className="text-[10px] text-sky-400 font-black uppercase tracking-widest">
+      <section className="flex flex-col gap-2 select-none">
+        <span className="text-[10px] text-[var(--accent)] font-black uppercase tracking-widest">
           User Dashboard
         </span>
-        <h1 className="text-3xl font-black tracking-tight text-white flex items-center gap-2">
+        <h1 className="text-3xl font-black tracking-tight text-slate-800 flex items-center gap-2" style={{ fontFamily: "var(--font-display)" }}>
           Welcome back,{" "}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-400">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#E8503A] to-indigo-600">
             {user?.email?.split("@")[0]}
           </span>
         </h1>
@@ -174,49 +174,49 @@ function AccountDetailsContent() {
       {/* Account Info Cards */}
       <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Profile Details */}
-        <div className="glow-card rounded-2xl p-6 bg-[#0c1125]/90 border border-white/5 flex flex-col justify-between min-h-[170px] transition hover:border-white/10">
+        <div className="bg-white border border-[var(--border-light)] rounded-[12px] p-6 flex flex-col justify-between min-h-[170px] shadow-sm transition hover:shadow-md">
           <div className="flex flex-col gap-1.5">
-            <span className="text-[10px] text-slate-500 uppercase tracking-widest font-black">
+            <span className="text-[10px] text-slate-400 uppercase tracking-widest font-black">
               Account Security
             </span>
-            <h3 className="text-base font-bold text-white flex items-center gap-2 mt-2">
-              <UserIcon className="w-5 h-5 text-sky-400" />
+            <h3 className="text-base font-bold text-slate-800 flex items-center gap-2 mt-2">
+              <UserIcon className="w-5 h-5 text-[var(--accent)]" />
               {user?.email}
             </h3>
           </div>
-          <div className="border-t border-white/5 pt-4 text-[10px] text-slate-500 font-bold uppercase tracking-wider flex items-center gap-1.5">
+          <div className="border-t border-slate-100 pt-4 text-[10px] text-slate-500 font-bold uppercase tracking-wider flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
             OTP Verification Authenticated
           </div>
         </div>
 
         {/* Subscription Tier */}
-        <div className="glow-card rounded-2xl p-6 bg-[#0c1125]/90 border border-white/5 flex flex-col justify-between min-h-[170px] transition hover:border-white/10">
+        <div className="bg-white border border-[var(--border-light)] rounded-[12px] p-6 flex flex-col justify-between min-h-[170px] shadow-sm transition hover:shadow-md">
           <div className="flex flex-col gap-1.5">
-            <span className="text-[10px] text-slate-500 uppercase tracking-widest font-black">
+            <span className="text-[10px] text-slate-400 uppercase tracking-widest font-black">
               Subscription Status
             </span>
             <div className="flex items-center gap-2 mt-2">
               <Award
                 className={`w-5 h-5 ${
-                  user?.is_subscribed ? "text-emerald-400" : "text-slate-500"
+                  user?.is_subscribed ? "text-emerald-600" : "text-slate-400"
                 }`}
               />
               <span
                 className={`text-sm font-black uppercase tracking-wider ${
-                  user?.is_subscribed ? "text-emerald-400" : "text-slate-400"
+                  user?.is_subscribed ? "text-emerald-600" : "text-slate-400"
                 }`}
               >
                 {user?.is_subscribed ? "Active Subscriber" : "No Active Plan"}
               </span>
             </div>
-            <span className="text-[10px] font-bold text-slate-400 bg-white/5 w-fit px-2 py-0.5 rounded border border-white/5 mt-1.5 uppercase">
+            <span className="text-[10px] font-bold text-slate-600 bg-slate-100 w-fit px-2.5 py-0.5 rounded border border-slate-200 mt-1.5 uppercase">
               Tier: {normalizeTier(user?.subscription_tier)}
             </span>
           </div>
           <a
             href="/pricing"
-            className="text-[10px] text-sky-400 hover:text-sky-300 font-bold uppercase tracking-wider flex items-center gap-1 hover:gap-1.5 transition-all mt-4 w-fit"
+            className="text-[10px] text-[var(--accent)] hover:text-[var(--accent-bright)] font-bold uppercase tracking-wider flex items-center gap-1 hover:gap-1.5 transition-all mt-4 w-fit"
           >
             {user?.is_subscribed ? "Upgrade / Change Plan" : "Purchase Plan"}{" "}
             <ArrowRight className="w-3.5 h-3.5" />
@@ -224,13 +224,13 @@ function AccountDetailsContent() {
         </div>
 
         {/* Copilot Fuel (Credits) */}
-        <div className="glow-card rounded-2xl p-6 bg-[#0c1125]/90 border border-white/5 flex flex-col justify-between min-h-[170px] transition hover:border-white/10">
+        <div className="bg-white border border-[var(--border-light)] rounded-[12px] p-6 flex flex-col justify-between min-h-[170px] shadow-sm transition hover:shadow-md">
           <div className="flex flex-col gap-1.5">
-            <span className="text-[10px] text-slate-500 uppercase tracking-widest font-black">
+            <span className="text-[10px] text-slate-400 uppercase tracking-widest font-black">
               AI Copilot Fuel
             </span>
             <div className="flex items-baseline gap-1 mt-2">
-              <span className="text-3xl font-black text-white">
+              <span className="text-3xl font-black text-slate-800">
                 {user?.credits ?? 0}
               </span>
               <span className="text-[9px] text-slate-500 uppercase font-black tracking-widest">
@@ -238,7 +238,7 @@ function AccountDetailsContent() {
               </span>
             </div>
           </div>
-          <div className="border-t border-white/5 pt-4 text-[10px] text-slate-400 leading-relaxed font-medium">
+          <div className="border-t border-slate-100 pt-4 text-[10px] text-slate-500 leading-relaxed font-medium">
             1 credit = 1 real-time AI reply.{" "}
             {user?.credits === 0 && "Purchase a plan to fill fuel."}
           </div>
@@ -247,18 +247,18 @@ function AccountDetailsContent() {
 
       {/* ——— REFERRAL HUB ——— */}
       <section className="flex flex-col gap-5">
-        <div className="flex items-center gap-2.5">
-          <Gift className="w-5 h-5 text-purple-400" />
-          <h2 className="text-base font-black text-white uppercase tracking-widest">
+        <div className="flex items-center gap-2.5 select-none">
+          <Gift className="w-5 h-5 text-purple-500" />
+          <h2 className="text-base font-black text-slate-800 uppercase tracking-widest" style={{ fontFamily: "var(--font-display)" }}>
             Referral Hub
           </h2>
-          <span className="text-[9px] text-purple-300 bg-purple-500/10 border border-purple-500/20 px-2 py-0.5 rounded-full font-black uppercase tracking-wider">
+          <span className="text-[9px] text-purple-600 bg-purple-50 border border-purple-200/50 px-2 py-0.5 rounded-full font-black uppercase tracking-wider">
             Earn up to 500 bonus credits / friend
           </span>
         </div>
 
         {referralLoading ? (
-          <div className="flex items-center gap-2 text-slate-500 text-xs">
+          <div className="flex items-center gap-2 text-slate-400 text-xs">
             <Loader2 className="w-4 h-4 animate-spin" /> Loading referral
             data...
           </div>
@@ -267,14 +267,14 @@ function AccountDetailsContent() {
             {/* Referral Stats Row */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* Stat: Total Referrals */}
-              <div className="glow-card rounded-2xl p-5 bg-[#0c1125]/90 border border-white/5 flex flex-col gap-2 hover:border-purple-500/20 transition">
+              <div className="bg-white border border-[var(--border-light)] rounded-[12px] p-5 flex flex-col gap-2 hover:border-purple-500/20 transition hover:shadow-xs">
                 <div className="flex items-center gap-2">
-                  <Users className="w-4 h-4 text-purple-400" />
-                  <span className="text-[10px] text-slate-500 font-black uppercase tracking-widest">
+                  <Users className="w-4 h-4 text-purple-500" />
+                  <span className="text-[10px] text-slate-450 font-black uppercase tracking-widest">
                     Total Signups
                   </span>
                 </div>
-                <span className="text-3xl font-black text-white">
+                <span className="text-3xl font-black text-slate-800">
                   {referralData?.total_referrals ?? 0}
                 </span>
                 <span className="text-[10px] text-slate-500 font-medium">
@@ -283,14 +283,14 @@ function AccountDetailsContent() {
               </div>
 
               {/* Stat: Subscribed Referrals */}
-              <div className="glow-card rounded-2xl p-5 bg-[#0c1125]/90 border border-white/5 flex flex-col gap-2 hover:border-emerald-500/20 transition">
+              <div className="bg-white border border-[var(--border-light)] rounded-[12px] p-5 flex flex-col gap-2 hover:border-emerald-500/20 transition hover:shadow-xs">
                 <div className="flex items-center gap-2">
-                  <TrendingUp className="w-4 h-4 text-emerald-400" />
-                  <span className="text-[10px] text-slate-500 font-black uppercase tracking-widest">
+                  <TrendingUp className="w-4 h-4 text-emerald-600" />
+                  <span className="text-[10px] text-slate-400 font-black uppercase tracking-widest">
                     Converted
                   </span>
                 </div>
-                <span className="text-3xl font-black text-white">
+                <span className="text-3xl font-black text-emerald-600">
                   {referralData?.subscribed_referrals ?? 0}
                 </span>
                 <span className="text-[10px] text-slate-500 font-medium">
@@ -299,14 +299,14 @@ function AccountDetailsContent() {
               </div>
 
               {/* Stat: Bonus Credits Earned */}
-              <div className="glow-card rounded-2xl p-5 bg-[#0c1125]/90 border border-white/5 flex flex-col gap-2 hover:border-sky-500/20 transition">
+              <div className="bg-white border border-[var(--border-light)] rounded-[12px] p-5 flex flex-col gap-2 hover:border-sky-500/20 transition hover:shadow-xs">
                 <div className="flex items-center gap-2">
-                  <Star className="w-4 h-4 text-yellow-400" />
-                  <span className="text-[10px] text-slate-500 font-black uppercase tracking-widest">
+                  <Star className="w-4 h-4 text-amber-500" />
+                  <span className="text-[10px] text-slate-400 font-black uppercase tracking-widest">
                     Bonus Credits
                   </span>
                 </div>
-                <span className="text-3xl font-black text-yellow-400">
+                <span className="text-3xl font-black text-amber-500">
                   +{referralData?.bonus_credits_earned ?? 0}
                 </span>
                 <span className="text-[10px] text-slate-500 font-medium">
@@ -316,16 +316,16 @@ function AccountDetailsContent() {
             </div>
 
             {/* Referral Code + Share Link */}
-            <div className="glow-card rounded-2xl p-6 bg-[#0c1125]/90 border border-white/5 flex flex-col gap-5">
+            <div className="bg-white border border-[var(--border-light)] rounded-[12px] p-6 flex flex-col gap-5 shadow-sm">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Referral Code Box */}
                 <div className="flex flex-col gap-2">
                   <label className="text-[10px] text-slate-500 font-black uppercase tracking-widest flex items-center gap-1.5">
-                    <Gift className="w-3.5 h-3.5 text-purple-400" /> Your
+                    <Gift className="w-3.5 h-3.5 text-purple-500" /> Your
                     Referral Code
                   </label>
-                  <div className="flex items-center gap-2 bg-[#050811] border border-white/5 rounded-xl px-4 py-3">
-                    <span className="flex-1 font-mono text-sm font-bold text-purple-300 tracking-widest">
+                  <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3">
+                    <span className="flex-1 font-mono text-sm font-bold text-purple-700 tracking-widest">
                       {referralData?.referral_code || user?.referral_code || "—"}
                     </span>
                     <button
@@ -338,10 +338,10 @@ function AccountDetailsContent() {
                         )
                       }
                       title="Copy code"
-                      className="text-slate-500 hover:text-purple-300 transition cursor-pointer"
+                      className="text-slate-400 hover:text-purple-600 transition cursor-pointer"
                     >
                       {copiedCode ? (
-                        <Check className="w-4 h-4 text-emerald-400" />
+                        <Check className="w-4 h-4 text-emerald-600" />
                       ) : (
                         <Copy className="w-4 h-4" />
                       )}
@@ -352,11 +352,11 @@ function AccountDetailsContent() {
                 {/* Referral Link Box */}
                 <div className="flex flex-col gap-2">
                   <label className="text-[10px] text-slate-500 font-black uppercase tracking-widest flex items-center gap-1.5">
-                    <Link2 className="w-3.5 h-3.5 text-sky-400" /> Shareable
+                    <Link2 className="w-3.5 h-3.5 text-sky-500" /> Shareable
                     Invite Link
                   </label>
-                  <div className="flex items-center gap-2 bg-[#050811] border border-white/5 rounded-xl px-4 py-3">
-                    <span className="flex-1 text-xs text-slate-400 truncate font-mono">
+                  <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3">
+                    <span className="flex-1 text-xs text-slate-700 truncate font-mono font-semibold">
                       {referralData?.referral_link
                         ? referralData.referral_link.replace(/^https?:\/\//, "")
                         : "—"}
@@ -369,10 +369,10 @@ function AccountDetailsContent() {
                         )
                       }
                       title="Copy link"
-                      className="text-slate-500 hover:text-sky-300 transition cursor-pointer flex-shrink-0"
+                      className="text-slate-400 hover:text-sky-600 transition cursor-pointer flex-shrink-0"
                     >
                       {copiedLink ? (
-                        <Check className="w-4 h-4 text-emerald-400" />
+                        <Check className="w-4 h-4 text-emerald-600" />
                       ) : (
                         <Copy className="w-4 h-4" />
                       )}
@@ -382,35 +382,35 @@ function AccountDetailsContent() {
               </div>
 
               {/* How it works */}
-              <div className="bg-[#050811] border border-white/5 rounded-xl p-4 text-xs text-slate-400 leading-relaxed">
-                <p className="font-black text-white text-[10px] uppercase tracking-widest mb-2 flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5 text-yellow-400" /> How
+              <div className="bg-slate-50 border border-slate-200/60 rounded-xl p-4 text-xs text-slate-500 leading-relaxed">
+                <p className="font-black text-slate-800 text-[10px] uppercase tracking-widest mb-2 flex items-center gap-1.5 select-none">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-500 animate-pulse" /> How
                   Referrals Work
                 </p>
-                Share your unique invite link with friends. When they sign up using your link, they receive a <span className="text-sky-400 font-bold">+20% credit bonus</span>.
-                Once they activate their trial, you instantly get <span className="text-purple-400 font-bold">+8 bonus credits</span>. When they subscribe to a paid plan, you automatically earn <span className="text-yellow-400 font-bold">+50% of their plan's base credits</span> (+50 for Starter, +150 for Pro, +500 for Elite).
+                Share your unique invite link with friends. When they sign up using your link, they receive a <span className="text-sky-600 font-bold">+20% credit bonus</span>.
+                Once they activate their trial, you instantly get <span className="text-purple-600 font-bold">+8 bonus credits</span>. When they subscribe to a paid plan, you automatically earn <span className="text-amber-600 font-bold">+50% of their plan's base credits</span> (+50 for Starter, +150 for Pro, +500 for Elite).
               </div>
             </div>
 
             {/* Referred Users List */}
             {referralData && referralData.referred_users.length > 0 && (
-              <div className="glow-card rounded-2xl p-6 bg-[#0c1125]/90 border border-white/5 flex flex-col gap-4">
-                <h3 className="text-[10px] text-slate-500 font-black uppercase tracking-widest flex items-center gap-1.5">
-                  <Users className="w-3.5 h-3.5 text-purple-400" /> People You
+              <div className="bg-white border border-[var(--border-light)] rounded-[12px] p-6 flex flex-col gap-4 shadow-sm">
+                <h3 className="text-[10px] text-slate-400 font-black uppercase tracking-widest flex items-center gap-1.5 select-none">
+                  <Users className="w-3.5 h-3.5 text-purple-500" /> People You
                   Referred ({referralData.total_referrals})
                 </h3>
-                <div className="flex flex-col divide-y divide-white/5">
+                <div className="flex flex-col divide-y divide-slate-100">
                   {referralData.referred_users.map((ru, i) => (
                     <div
                       key={i}
                       className="flex items-center justify-between py-3 gap-4"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-[10px] font-black text-purple-300">
+                        <div className="w-8 h-8 rounded-full bg-purple-50 border border-purple-200 flex items-center justify-center text-[10px] font-black text-purple-700">
                           {(ru.name || ru.email).charAt(0).toUpperCase()}
                         </div>
                         <div className="flex flex-col">
-                          <span className="text-xs font-bold text-white">
+                          <span className="text-xs font-bold text-slate-800">
                             {ru.name || ru.email.split("@")[0]}
                           </span>
                           <span className="text-[10px] text-slate-500">
@@ -422,8 +422,8 @@ function AccountDetailsContent() {
                         <span
                           className={`text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded border ${
                             ru.is_subscribed
-                              ? "text-emerald-400 bg-emerald-500/10 border-emerald-500/20"
-                              : "text-slate-500 bg-white/5 border-white/5"
+                              ? "text-emerald-600 bg-emerald-50 border-emerald-200"
+                              : "text-slate-500 bg-slate-50 border-slate-200"
                           }`}
                         >
                           {ru.is_subscribed
@@ -431,9 +431,9 @@ function AccountDetailsContent() {
                             : "Free"}
                         </span>
                         {ru.bonus_earned !== undefined && ru.bonus_earned > 0 && (
-                          <span className="text-[9px] text-yellow-400 font-bold flex items-center gap-0.5">
+                          <span className="text-[9px] text-amber-600 font-bold flex items-center gap-0.5">
                             +{ru.bonus_earned}
-                            <Star className="w-2.5 h-2.5 fill-yellow-400" />
+                            <Star className="w-2.5 h-2.5 fill-amber-500 text-amber-500" />
                           </span>
                         )}
                       </div>
@@ -445,14 +445,14 @@ function AccountDetailsContent() {
 
             {/* Empty state when no referrals */}
             {referralData && referralData.total_referrals === 0 && (
-              <div className="glow-card rounded-2xl p-8 bg-[#0c1125]/90 border border-white/5 flex flex-col items-center gap-3 text-center">
-                <div className="w-12 h-12 rounded-full bg-purple-500/10 border border-purple-500/20 flex items-center justify-center">
-                  <Users className="w-6 h-6 text-purple-400" />
+              <div className="bg-white border border-[var(--border-light)] rounded-[12px] p-8 flex flex-col items-center gap-3 text-center shadow-sm">
+                <div className="w-12 h-12 rounded-full bg-purple-50 border border-purple-200 flex items-center justify-center">
+                  <Users className="w-6 h-6 text-purple-500" />
                 </div>
-                <p className="text-sm font-black text-white">
+                <p className="text-sm font-black text-slate-800">
                   No referrals yet
                 </p>
-                <p className="text-xs text-slate-500 max-w-xs leading-relaxed">
+                <p className="text-xs text-slate-500 max-w-xs leading-relaxed font-medium">
                   Share your invite link above with developers and earn up to 500 bonus credits for every friend who subscribes.
                 </p>
               </div>
@@ -462,18 +462,18 @@ function AccountDetailsContent() {
       </section>
 
       {/* Download Stealth Desktop Client Section */}
-      <section className="glow-card rounded-2xl p-6 md:p-8 bg-[#0c1125]/90 border border-white/5 flex flex-col gap-6">
-        <h2 className="text-base font-black text-white uppercase tracking-widest border-b border-white/5 pb-4 flex items-center gap-2">
-          <Laptop className="w-5 h-5 text-indigo-400" />
+      <section className="bg-white border border-[var(--border-light)] rounded-[12px] p-6 md:p-8 flex flex-col gap-6 shadow-sm">
+        <h2 className="text-base font-black text-slate-800 uppercase tracking-widest border-b border-slate-100 pb-4 flex items-center gap-2 select-none" style={{ fontFamily: "var(--font-display)" }}>
+          <Laptop className="w-5 h-5 text-indigo-500" />
           Download Stealth Desktop Client
         </h2>
 
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div className="flex flex-col gap-1.5">
-            <h4 className="text-sm font-bold text-white">
+            <h4 className="text-sm font-bold text-slate-800">
               Native Client with Win32 Display Affinity
             </h4>
-            <p className="text-xs text-slate-400 max-w-xl leading-relaxed">
+            <p className="text-xs text-slate-500 max-w-xl leading-relaxed font-medium">
               Run the AI Copilot inside a transparent overlay that is completely invisible to Zoom, Teams, Meet, and other screen-sharing tools.
             </p>
           </div>
@@ -483,7 +483,7 @@ function AccountDetailsContent() {
               href="https://github.com/Souravrooj-klizos/cracktheloop-desktop/releases"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-5 py-3 bg-gradient-to-r from-sky-500/10 to-indigo-500/10 hover:from-sky-500/20 hover:to-indigo-500/20 border border-indigo-500/25 rounded-xl font-bold text-xs uppercase tracking-wider text-sky-300 shadow-md transition active:scale-95 flex items-center gap-2 cursor-pointer justify-center flex-1 md:flex-none text-center"
+              className="px-5 py-3 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-xl font-bold text-xs uppercase tracking-wider text-slate-800 shadow-xs transition active:scale-95 flex items-center gap-2 cursor-pointer justify-center flex-1 md:flex-none text-center"
             >
               Download for Windows (.msi / .exe)
             </a>
@@ -491,7 +491,7 @@ function AccountDetailsContent() {
               href="https://github.com/Souravrooj-klizos/cracktheloop-desktop/releases"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-5 py-3 bg-gradient-to-r from-sky-500/10 to-indigo-500/10 hover:from-sky-500/20 hover:to-indigo-500/20 border border-indigo-500/25 rounded-xl font-bold text-xs uppercase tracking-wider text-sky-300 shadow-md transition active:scale-95 flex items-center gap-2 cursor-pointer justify-center flex-1 md:flex-none text-center"
+              className="px-5 py-3 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-xl font-bold text-xs uppercase tracking-wider text-slate-800 shadow-xs transition active:scale-95 flex items-center gap-2 cursor-pointer justify-center flex-1 md:flex-none text-center"
             >
               Download for macOS (.dmg)
             </a>
@@ -500,18 +500,18 @@ function AccountDetailsContent() {
       </section>
 
       {/* Main Billing Actions Box */}
-      <section className="glow-card rounded-2xl p-6 md:p-8 bg-[#0c1125]/90 border border-white/5 flex flex-col gap-6">
-        <h2 className="text-base font-black text-white uppercase tracking-widest border-b border-white/5 pb-4 flex items-center gap-2">
-          <CreditCard className="w-5 h-5 text-sky-400" />
+      <section className="bg-white border border-[var(--border-light)] rounded-[12px] p-6 md:p-8 flex flex-col gap-6 shadow-sm">
+        <h2 className="text-base font-black text-slate-800 uppercase tracking-widest border-b border-slate-100 pb-4 flex items-center gap-2 select-none" style={{ fontFamily: "var(--font-display)" }}>
+          <CreditCard className="w-5 h-5 text-sky-500" />
           Billing Operations Console
         </h2>
 
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div className="flex flex-col gap-1.5">
-            <h4 className="text-sm font-bold text-white">
+            <h4 className="text-sm font-bold text-slate-800">
               Stripe Customer Billing Portal
             </h4>
-            <p className="text-xs text-slate-400 max-w-xl leading-relaxed">
+            <p className="text-xs text-slate-500 max-w-xl leading-relaxed font-medium">
               We leverage Stripe for all payment transactions. Access the secure
               portal to download official invoices, update credit cards, or
               pause renewals.
@@ -520,7 +520,7 @@ function AccountDetailsContent() {
 
           <a
             href="/pricing"
-            className="px-5 py-3 bg-gradient-to-r from-sky-400 to-indigo-500 rounded-xl font-bold text-xs uppercase tracking-wider text-white shadow-md hover:shadow-lg transition active:scale-95 flex items-center gap-2 cursor-pointer w-full md:w-auto text-center justify-center"
+            className="px-5 py-3 bg-[#E8503A] hover:bg-[#F06B57] text-white rounded-xl font-bold text-xs uppercase tracking-wider shadow-md shadow-[#E8503A]/10 hover:shadow-lg transition active:scale-95 flex items-center gap-2 cursor-pointer w-full md:w-auto text-center justify-center"
           >
             Upgrade Hub <ExternalLink className="w-4 h-4" />
           </a>
@@ -529,45 +529,45 @@ function AccountDetailsContent() {
 
       {/* Celebratory Success Modal Dialog */}
       {showCelebration && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex justify-center items-center z-[100] p-6 animate-fade-in">
-          <div className="glow-card w-full max-w-[420px] bg-[#0c1125]/95 border border-white/10 rounded-2xl p-8 flex flex-col items-center text-center shadow-2xl relative">
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md flex justify-center items-center z-[100] p-6 animate-fade-in">
+          <div className="w-full max-w-[420px] bg-white border border-[var(--border-light)] rounded-[12px] p-8 flex flex-col items-center text-center shadow-xl relative">
             <button
               onClick={handleDismissCelebration}
-              className="text-slate-500 hover:text-white transition cursor-pointer font-bold absolute top-4 right-4 text-sm"
+              className="text-slate-400 hover:text-slate-700 transition cursor-pointer font-bold absolute top-4 right-4 text-sm"
             >
               ✕
             </button>
 
-            <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex justify-center items-center mb-6 relative">
-              <CheckCircle className="w-8 h-8 text-emerald-400" />
+            <div className="w-16 h-16 rounded-full bg-emerald-50 border border-emerald-200 flex justify-center items-center mb-6 relative">
+              <CheckCircle className="w-8 h-8 text-emerald-600" />
               <div className="absolute top-0 right-0 w-3 h-3 bg-indigo-500 rounded-full animate-ping"></div>
             </div>
 
-            <h3 className="text-xl font-black text-white tracking-tight flex items-center gap-1.5">
-              <Sparkles className="w-5 h-5 text-yellow-400 animate-pulse" />
+            <h3 className="text-xl font-black text-slate-800 tracking-tight flex items-center gap-1.5">
+              <Sparkles className="w-5 h-5 text-amber-500 animate-pulse" />
               Purchase Successful!
             </h3>
-            <p className="text-xs text-slate-400 leading-relaxed font-semibold mt-3">
+            <p className="text-xs text-slate-500 leading-relaxed font-semibold mt-3">
               Congratulations! Your payment has been confirmed by Stripe. Your
               account credits have been loaded and your subscription tier is now
               active.
             </p>
 
-            <div className="bg-[#050711] border border-white/5 rounded-xl p-4 w-full flex justify-around my-6">
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 w-full flex justify-around my-6">
               <div className="flex flex-col">
-                <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">
+                <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">
                   Tier Status
                 </span>
-                <span className="text-xs font-black text-emerald-400 mt-1 uppercase">
+                <span className="text-xs font-black text-emerald-600 mt-1 uppercase">
                   Active
                 </span>
               </div>
-              <div className="w-[1px] bg-white/5"></div>
+              <div className="w-[1px] bg-slate-200"></div>
               <div className="flex flex-col">
-                <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">
+                <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">
                   Credits Loaded
                 </span>
-                <span className="text-xs font-black text-white mt-1">
+                <span className="text-xs font-black text-slate-800 mt-1">
                   {user?.credits ?? "Updated"}
                 </span>
               </div>
@@ -575,7 +575,7 @@ function AccountDetailsContent() {
 
             <button
               onClick={handleDismissCelebration}
-              className="w-full py-3 bg-gradient-to-r from-sky-400 to-indigo-500 rounded-xl font-bold text-xs text-white uppercase tracking-wider transition active:scale-95 shadow-md flex justify-center items-center gap-1.5 cursor-pointer"
+              className="w-full py-3 bg-[#E8503A] hover:bg-[#F06B57] rounded-xl font-bold text-xs text-white uppercase tracking-wider transition active:scale-95 shadow-md flex justify-center items-center gap-1.5 cursor-pointer shadow-[#E8503A]/10"
             >
               <Zap className="w-4 h-4 text-white fill-white/20 animate-bounce" />
               Awesome, Let's Go!
@@ -591,8 +591,8 @@ export default function AccountDetailsPage() {
   return (
     <Suspense
       fallback={
-        <div className="flex-1 flex justify-center items-center py-20 bg-[#0B0D19]">
-          <Loader2 className="w-8 h-8 text-sky-400 animate-spin" />
+        <div className="flex-1 flex justify-center items-center py-20 bg-[var(--bg-mist)]">
+          <Loader2 className="w-8 h-8 text-[var(--accent)] animate-spin" />
         </div>
       }
     >
