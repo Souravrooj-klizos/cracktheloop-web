@@ -161,13 +161,13 @@ export default function ProductDemo() {
         <ScrollReveal>
           <div className="text-center mb-16">
             <h2
-              className="text-3xl md:text-4xl font-extrabold tracking-tight text-[var(--text-primary)]"
+              className="text-3xl md:text-4xl font-extrabold tracking-tight text-(--text-primary)"
               style={{ fontFamily: "var(--font-display)" }}
             >
               See How Your AI Buddy Helps in{" "}
               <span className="text-gradient-coral">Real Time</span>
             </h2>
-            <p className="text-[var(--text-muted)] text-base mt-3 max-w-xl mx-auto">
+            <p className="text-(--text-muted) text-base mt-3 max-w-xl mx-auto">
               Observe how the AI captures the question, maps it to context, and suggests structured answer guidelines automatically as you scroll.
             </p>
           </div>
@@ -175,7 +175,7 @@ export default function ProductDemo() {
 
         <ScrollReveal className="w-full">
           {/* Main App Window */}
-          <div className="w-full bg-white border border-[var(--border-light)] rounded-[6px] shadow-lg overflow-hidden flex flex-col">
+          <div className="w-full bg-white border border-(--border-light) rounded-[6px] shadow-lg overflow-hidden flex flex-col">
             {/* macOS-style Window Header */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 bg-slate-50/50 shrink-0 select-none">
               <div className="flex gap-2">
@@ -199,11 +199,11 @@ export default function ProductDemo() {
                 {/* Column Header */}
                 <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                   <div className="flex items-center gap-2 text-xs font-bold text-slate-700">
-                    <MessageSquare className="w-4 h-4 text-[var(--accent)]" />
+                    <MessageSquare className="w-4 h-4 text-(--accent)" />
                     Live Audio Aligner
                   </div>
                   <div className="flex items-center gap-1.5">
-                    <span className={`w-2 h-2 rounded-full ${isPlaying && !isQuestionDone ? "bg-red-500 animate-pulse" : "bg-[var(--accent)]"}`} />
+                    <span className={`w-2 h-2 rounded-full ${isPlaying && !isQuestionDone ? "bg-red-500 animate-pulse" : "bg-(--accent)"}`} />
                     <span className="text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">
                       {isPlaying && !isQuestionDone ? "Streaming" : "Standby"}
                     </span>
@@ -218,7 +218,7 @@ export default function ProductDemo() {
                       [4, 12, 22, 14, 8, 26, 38, 30, 16, 34, 44, 24, 12, 18, 6].map((h, i) => (
                         <span
                           key={i}
-                          className="w-[2.5px] bg-[var(--accent)] rounded-full animate-bounce-audio shrink-0"
+                          className="w-[2.5px] bg-(--accent) rounded-full animate-bounce-audio shrink-0"
                           style={{
                             height: `${h}px`,
                             animationDelay: `${i * 0.05}s`,
@@ -226,26 +226,26 @@ export default function ProductDemo() {
                         />
                       ))
                     ) : (
-                      <span className="text-[9px] font-mono text-slate-450 italic">No voice activity...</span>
+                      <span className="text-[9px] font-mono text-slate-400 italic">No voice activity...</span>
                     )}
                   </div>
 
                   {/* Transcribed Text Feed (No nested box!) */}
                   <div className="flex-1 flex flex-col justify-start">
-                    <span className="text-[9px] font-mono font-bold text-slate-450 uppercase tracking-wider block mb-2">
+                    <span className="text-[9px] font-mono font-bold text-slate-400 uppercase tracking-wider block mb-2">
                       Transcribed Feed
                     </span>
-                    <p className="text-[12px] font-mono text-slate-750 leading-relaxed text-left">
+                    <p className="text-[12px] font-mono text-slate-700 leading-relaxed text-left">
                       {questionText || (isPlaying ? "..." : currentData.question)}
                       {isPlaying && !isQuestionDone && (
-                        <span className="w-1.5 h-3.5 bg-[var(--accent)] animate-pulse inline-block ml-0.5 align-middle" />
+                        <span className="w-1.5 h-3.5 bg-(--accent) animate-pulse inline-block ml-0.5 align-middle" />
                       )}
                     </p>
                   </div>
                 </div>
 
                 {/* Footer inside Column 1 */}
-                <div className="text-[9px] font-mono text-slate-450 pt-3 border-t border-slate-100 flex items-center justify-between">
+                <div className="text-[9px] font-mono text-slate-400 pt-3 border-t border-slate-100 flex items-center justify-between">
                   <span>Input: Default mic (44.1 kHz)</span>
                   <span>Buffer: Active</span>
                 </div>
@@ -256,7 +256,7 @@ export default function ProductDemo() {
                 {/* Column Header */}
                 <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                   <div className="flex items-center gap-2 text-xs font-bold text-slate-700">
-                    <Briefcase className="w-4 h-4 text-[var(--accent)]" />
+                    <Briefcase className="w-4 h-4 text-(--accent)" />
                     Context Mapping
                   </div>
                   <span className="text-[9px] font-mono font-bold text-slate-400 uppercase">Static</span>
@@ -264,7 +264,7 @@ export default function ProductDemo() {
                 
                 <div className="flex-1 flex flex-col gap-3 py-4">
                   <div className="bg-white rounded-[6px] p-3.5 flex items-start gap-2.5 shadow-xs border-0">
-                    <FileText className="w-4 h-4 text-[var(--accent)] shrink-0 mt-0.5" />
+                    <FileText className="w-4 h-4 text-(--accent) shrink-0 mt-0.5" />
                     <div>
                       <span className="text-[10px] font-extrabold text-slate-700 block mb-0.5">Resume Context</span>
                       <span className="text-[10px] text-slate-500 leading-normal block">
@@ -274,12 +274,12 @@ export default function ProductDemo() {
                   </div>
 
                   <div className="bg-white rounded-[6px] p-3.5 flex items-start gap-2.5 shadow-xs border-0">
-                    <CheckCircle2 className="w-4 h-4 text-[var(--accent)] shrink-0 mt-0.5" />
+                    <CheckCircle2 className="w-4 h-4 text-(--accent) shrink-0 mt-0.5" />
                     <div>
                       <span className="text-[10px] font-extrabold text-slate-700 block mb-1.5">JD Keyword Match</span>
                       {isPlaying && !isQuestionDone ? (
-                        <span className="text-[9px] font-mono font-bold text-[var(--accent)] animate-pulse flex items-center gap-1.5">
-                          <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] animate-ping" />
+                        <span className="text-[9px] font-mono font-bold text-(--accent) animate-pulse flex items-center gap-1.5">
+                          <span className="w-1.5 h-1.5 rounded-full bg-(--accent) animate-ping" />
                           Extracting requirements...
                         </span>
                       ) : (
@@ -287,7 +287,7 @@ export default function ProductDemo() {
                           {currentData.skills.map((skill) => (
                             <span
                               key={skill}
-                              className="px-1.5 py-0.5 text-[8px] font-mono font-bold bg-[var(--accent-soft)] text-[var(--accent)] border border-[var(--accent)]/20 rounded"
+                              className="px-1.5 py-0.5 text-[8px] font-mono font-bold bg-(--accent-soft) text-(--accent) border border-(--accent)/20 rounded"
                             >
                               {skill}
                             </span>
@@ -310,7 +310,7 @@ export default function ProductDemo() {
                 {/* Column Header */}
                 <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                   <div className="flex items-center gap-2 text-xs font-bold text-slate-700">
-                    <Sparkles className="w-4 h-4 text-[var(--accent)]" />
+                    <Sparkles className="w-4 h-4 text-(--accent)" />
                     Suggested Answer Guideline
                   </div>
                   <span className="text-[9px] font-mono font-bold text-slate-400 uppercase">STAR Feed</span>
@@ -319,7 +319,7 @@ export default function ProductDemo() {
                 <div className="flex flex-col gap-3 min-h-[220px] py-4">
                   {isLoading && (
                     <div className="flex flex-col items-center justify-center h-full my-auto gap-2">
-                      <div className="w-6 h-6 border-2 border-[var(--accent)] border-t-transparent rounded-full animate-spin" />
+                      <div className="w-6 h-6 border-2 border-(--accent) border-t-transparent rounded-full animate-spin" />
                       <span className="text-[10px] font-mono text-slate-400">AI mapping response...</span>
                     </div>
                   )}
@@ -332,20 +332,20 @@ export default function ProductDemo() {
                         key={idx}
                         className={`transition-all duration-500 flex flex-col gap-0.5 border-l-2 pl-3 py-0.5 ${
                           isVisible
-                            ? "border-[var(--accent)] opacity-100 translate-x-0"
+                            ? "border-(--accent) opacity-100 translate-x-0"
                             : isProcessing
-                              ? "border-[var(--accent-bright)] border-dashed opacity-80 translate-x-1"
+                              ? "border-(--accent-bright) border-dashed opacity-80 translate-x-1"
                               : "border-slate-100 opacity-40 translate-x-0 pointer-events-none"
                         }`}
                       >
                         <div className="flex items-center justify-between gap-2">
                           <span className="text-[10px] font-extrabold text-slate-800">{step.label}</span>
                           {isVisible ? (
-                            <span className="text-[8px] font-mono font-bold text-[var(--accent)] bg-[var(--accent-soft)] px-1 py-0.2 rounded shrink-0">
+                            <span className="text-[8px] font-mono font-bold text-(--accent) bg-(--accent-soft) px-1 py-0.2 rounded shrink-0">
                               ✓ SUGGESTED
                             </span>
                           ) : isProcessing ? (
-                            <span className="text-[8px] font-mono font-bold text-[var(--accent)] bg-[var(--accent-soft)] px-1 py-0.2 rounded animate-pulse shrink-0">
+                            <span className="text-[8px] font-mono font-bold text-(--accent) bg-(--accent-soft) px-1 py-0.2 rounded animate-pulse shrink-0">
                               ● PARSING...
                             </span>
                           ) : (
@@ -360,7 +360,7 @@ export default function ProductDemo() {
                   })}
                 </div>
 
-                <div className="text-[9px] font-mono text-slate-450 pt-3 border-t border-slate-100 flex items-center justify-between font-bold">
+                <div className="text-[9px] font-mono text-slate-400 pt-3 border-t border-slate-100 flex items-center justify-between font-bold">
                   <span>Framework: {currentData.framework}</span>
                   <span>Steps: {answersVisible}/{currentData.steps.length}</span>
                 </div>

@@ -80,13 +80,13 @@ export default function HowItWorks() {
         <ScrollReveal>
           <div className="text-center mb-16">
             <h2
-              className="text-3xl md:text-4xl font-extrabold tracking-tight text-[var(--text-primary)]"
+              className="text-3xl md:text-4xl font-extrabold tracking-tight text-(--text-primary)"
               style={{ fontFamily: "var(--font-display)" }}
             >
               From Resume to Confident Answers in{" "}
               <span className="text-gradient-coral">4 Steps</span>
             </h2>
-            <p className="text-[var(--text-muted)] text-base mt-3 max-w-2xl mx-auto">
+            <p className="text-(--text-muted) text-base mt-3 max-w-2xl mx-auto">
               Set up your profile, load the target job, and let your AI buddy assist you when it matters.
             </p>
           </div>
@@ -108,9 +108,9 @@ export default function HowItWorks() {
                     }}
                     className={`text-[11px] font-mono font-bold tracking-wider uppercase transition-all duration-350 px-3 py-1 rounded-full cursor-pointer select-none ${
                       isCurrent
-                        ? "text-[var(--accent)] bg-[var(--accent-soft)]"
+                        ? "text-(--accent) bg-(--accent-soft)"
                         : isActive
-                          ? "text-[var(--text-secondary)] bg-slate-100"
+                          ? "text-(--text-secondary) bg-slate-100"
                           : "text-slate-400 bg-transparent"
                     }`}
                   >
@@ -126,7 +126,7 @@ export default function HowItWorks() {
             {/* Connector Line */}
             <div className="absolute left-[12.5%] right-[12.5%] h-[2px] bg-slate-100 z-0">
               <motion.div
-                className="h-full bg-[var(--accent)]"
+                className="h-full bg-(--accent)"
                 animate={{ width: `${(activeStep / (steps.length - 1)) * 100}%` }}
                 transition={{ duration: 0.5, ease: "easeInOut" }}
               />
@@ -146,9 +146,9 @@ export default function HowItWorks() {
                       }}
                       className={`w-3.5 h-3.5 rounded-full border-2 transition-all duration-500 bg-white cursor-pointer ${
                         isCurrent
-                          ? "border-[var(--accent)] bg-[var(--accent)] scale-125 shadow-xs"
+                          ? "border-(--accent) bg-(--accent) scale-125 shadow-xs"
                           : isActive
-                            ? "border-[var(--accent)] bg-[var(--accent)]"
+                            ? "border-(--accent) bg-(--accent)"
                             : "border-slate-200"
                       }`}
                     />
@@ -176,15 +176,15 @@ export default function HowItWorks() {
                 }}
                 className={`border rounded-[6px] p-6 transition-all duration-500 flex flex-col cursor-pointer justify-between ${
                   isCurrent
-                    ? "bg-white border-[var(--accent)] shadow-md scale-[1.03] -translate-y-2 z-10"
-                    : "bg-white/40 border-[var(--border-light)] opacity-70 hover:opacity-95 hover:bg-white/60 hover:-translate-y-1"
+                    ? "bg-white border-(--accent) shadow-md scale-[1.03] -translate-y-2 z-10"
+                    : "bg-white/40 border-(--border-light) opacity-70 hover:opacity-95 hover:bg-white/60 hover:-translate-y-1"
                 }`}
               >
                 <div className="flex flex-col gap-4">
                   {/* Icon Header */}
                   <div className={`w-10 h-10 rounded-[6px] flex items-center justify-center border transition-all duration-500 ${
                     isCurrent
-                      ? "bg-[var(--accent)] text-white border-[var(--accent-bright)] shadow-sm"
+                      ? "bg-(--accent) text-white border-(--accent-bright) shadow-sm"
                       : "bg-slate-50 text-slate-400 border-slate-100"
                   }`}>
                     {step.icon}
@@ -193,12 +193,12 @@ export default function HowItWorks() {
                   {/* Title & Subtitle */}
                   <div>
                     <span className={`text-[10px] font-mono font-bold tracking-wider uppercase transition-colors duration-500 ${
-                      isCurrent ? "text-[var(--accent)]" : "text-slate-400"
+                      isCurrent ? "text-(--accent)" : "text-slate-400"
                     }`}>
                       {step.subtitle}
                     </span>
                     <h3 className={`text-lg font-extrabold mt-1 transition-colors duration-500 ${
-                      isCurrent ? "text-[var(--text-primary)]" : "text-slate-700"
+                      isCurrent ? "text-(--text-primary)" : "text-slate-700"
                     }`}>
                       {step.title}
                     </h3>
@@ -206,23 +206,23 @@ export default function HowItWorks() {
 
                   {/* Description Paragraph */}
                   <p className={`text-xs leading-relaxed transition-colors duration-500 ${
-                    isCurrent ? "text-[var(--text-secondary)]" : "text-[var(--text-muted)]"
+                    isCurrent ? "text-(--text-secondary)" : "text-(--text-muted)"
                   }`}>
                     {step.desc}
                   </p>
                 </div>
 
                 {/* Bullet Points */}
-                <ul className="flex flex-col gap-3 mt-6 pt-5 border-t border-slate-100 text-xs text-[var(--text-secondary)] font-medium">
+                <ul className="flex flex-col gap-3 mt-6 pt-5 border-t border-slate-100 text-xs text-(--text-secondary) font-medium">
                   {step.points.map((pt, j) => (
                     <li key={j} className="flex items-start gap-2">
                       <span className={`transition-colors duration-500 shrink-0 ${
-                        isCurrent ? "text-[var(--accent)] font-bold" : "text-slate-350"
+                        isCurrent ? "text-(--accent) font-bold" : "text-slate-300"
                       }`}>
                         ✓
                       </span>
                       <span className={`leading-snug transition-colors duration-500 ${
-                        isCurrent ? "text-[var(--text-secondary)]" : "text-[var(--text-muted)]"
+                        isCurrent ? "text-(--text-secondary)" : "text-(--text-muted)"
                       }`}>
                         {pt}
                       </span>
@@ -239,7 +239,7 @@ export default function HowItWorks() {
           {/* Vertical line */}
           <div className="absolute top-2 bottom-2 left-[7px] w-[2px] bg-slate-100">
             <motion.div
-              className="w-full bg-[var(--accent)] origin-top h-full"
+              className="w-full bg-(--accent) origin-top h-full"
               animate={{ height: `${(activeStep / (steps.length - 1)) * 100}%` }}
               transition={{ duration: 0.5, ease: "easeInOut" }}
             />
@@ -258,9 +258,9 @@ export default function HowItWorks() {
                   }}
                   className={`absolute -left-[23px] top-1.5 w-3.5 h-3.5 rounded-full border-2 bg-white transition-all duration-300 cursor-pointer ${
                     isCurrent
-                      ? "border-[var(--accent)] bg-[var(--accent)] scale-110 shadow-xs"
+                      ? "border-(--accent) bg-(--accent) scale-110 shadow-xs"
                       : isActive
-                        ? "border-[var(--accent)] bg-[var(--accent)]"
+                        ? "border-(--accent) bg-(--accent)"
                         : "border-slate-200"
                   }`}
                 />
@@ -269,13 +269,13 @@ export default function HowItWorks() {
                 <div className="flex items-center gap-3">
                   <span className={`text-[9px] font-mono font-bold tracking-wider uppercase px-2 py-0.5 rounded-full ${
                     isCurrent
-                      ? "text-[var(--accent)] bg-[var(--accent-soft)]"
+                      ? "text-(--accent) bg-(--accent-soft)"
                       : "text-slate-400 bg-slate-50"
                   }`}>
                     Step 0{i + 1}
                   </span>
                   <h3 className={`text-sm font-bold transition-colors ${
-                    isCurrent ? "text-[var(--accent)]" : "text-[var(--text-primary)]"
+                    isCurrent ? "text-(--accent)" : "text-(--text-primary)"
                   }`}>
                     {step.title}
                   </h3>
@@ -289,18 +289,18 @@ export default function HowItWorks() {
                   }}
                   className={`border rounded-[8px] p-5 transition-all duration-500 flex flex-col gap-3 cursor-pointer ${
                     isCurrent
-                      ? "bg-white border-[var(--accent)] shadow-md"
-                      : "bg-white/40 border-[var(--border-light)] opacity-70"
+                      ? "bg-white border-(--accent) shadow-md"
+                      : "bg-white/40 border-(--border-light) opacity-70"
                   }`}
                 >
-                  <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
+                  <p className="text-xs text-(--text-secondary) leading-relaxed">
                     {step.desc}
                   </p>
-                  <ul className="flex flex-col gap-2 mt-2 pt-3 border-t border-slate-100 text-xs text-[var(--text-secondary)] font-medium">
+                  <ul className="flex flex-col gap-2 mt-2 pt-3 border-t border-slate-100 text-xs text-(--text-secondary) font-medium">
                     {step.points.map((pt, j) => (
                       <li key={j} className="flex items-start gap-2">
                         <span className={`transition-colors duration-500 shrink-0 ${
-                          isCurrent ? "text-[var(--accent)]" : "text-slate-400"
+                          isCurrent ? "text-(--accent)" : "text-slate-400"
                         }`}>
                           ✓
                         </span>

@@ -99,24 +99,24 @@ function LoginContent() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--bg-mist)] text-[var(--text-primary)] flex flex-col justify-center items-center relative overflow-hidden px-6">
+    <div className="min-h-screen bg-(--bg-mist) text-(--text-primary) flex flex-col justify-center items-center relative overflow-hidden px-6">
       {/* Background Orbs */}
-      <div className="absolute top-[-20%] left-[-15%] w-[60%] h-[60%] rounded-full bg-[var(--accent)]/5 blur-[120px] pointer-events-none select-none"></div>
+      <div className="absolute top-[-20%] left-[-15%] w-[60%] h-[60%] rounded-full bg-(--accent)/5 blur-[120px] pointer-events-none select-none"></div>
       <div className="absolute bottom-[-20%] right-[-15%] w-[60%] h-[60%] rounded-full bg-indigo-500/5 blur-[120px] pointer-events-none select-none"></div>
 
       {/* Navigation link back home */}
       <a 
         href="/" 
-        className="absolute top-6 left-6 flex items-center gap-2 hover:opacity-85 font-bold transition text-xs text-slate-450 select-none"
+        className="absolute top-6 left-6 flex items-center gap-2 hover:opacity-85 font-bold transition text-xs text-slate-400 select-none"
       >
         <Home className="w-4 h-4" /> Home
       </a>
 
       {/* Main glass panel wrapper */}
-      <div className="w-full max-w-[420px] bg-white border border-[var(--border-light)] p-8 rounded-[12px] flex flex-col gap-6 shadow-sm relative z-10 animate-fade-in">
+      <div className="w-full max-w-[420px] bg-white border border-(--border-light) p-8 rounded-[12px] flex flex-col gap-6 shadow-sm relative z-10 animate-fade-in">
         <div className="flex flex-col items-center gap-2 text-center select-none">
-          <div className="inline-flex items-center gap-2 bg-[var(--accent-soft)] border border-[var(--accent)]/20 px-3.5 py-1 rounded-full text-[10px] font-black text-[var(--accent)] uppercase tracking-wider">
-            <Sparkles className="w-3.5 h-3.5 text-[var(--accent)] animate-pulse" />
+          <div className="inline-flex items-center gap-2 bg-(--accent-soft) border border-(--accent)/20 px-3.5 py-1 rounded-full text-[10px] font-black text-(--accent) uppercase tracking-wider">
+            <Sparkles className="w-3.5 h-3.5 text-(--accent) animate-pulse" />
             Secure SaaS Portal Access
           </div>
           <h2 className="text-2xl font-black tracking-tight text-slate-800 mt-2" style={{ fontFamily: "var(--font-display)" }}>
@@ -128,7 +128,7 @@ function LoginContent() {
         </div>
 
         {/* Tab Toggle buttons */}
-        <div className="flex bg-slate-105 border border-slate-200/60 p-1 rounded-xl select-none">
+        <div className="flex bg-slate-100 border border-slate-200 p-1 rounded-xl select-none">
           <button
             onClick={() => {
               setMode("signin");
@@ -163,7 +163,7 @@ function LoginContent() {
           <div className={`p-3.5 rounded-xl border text-center text-xs font-semibold ${
             message.toLowerCase().includes("sent") || message.toLowerCase().includes("successful") || message.toLowerCase().includes("choose") || message.toLowerCase().includes("loading")
               ? "bg-emerald-50 text-emerald-700 border-emerald-200 animate-pulse"
-              : "bg-rose-50 text-rose-650 border-rose-200"
+              : "bg-rose-50 text-rose-600 border-rose-200"
           }`}>
             {message}
           </div>
@@ -184,7 +184,7 @@ function LoginContent() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="John Doe"
-                  className="w-full bg-white border border-slate-200 px-4 py-2.5 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[var(--accent)] transition"
+                  className="w-full bg-white border border-slate-200 px-4 py-2.5 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-(--accent) transition"
                 />
               </div>
             )}
@@ -200,7 +200,7 @@ function LoginContent() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="developer@example.com"
-                className="w-full bg-white border border-slate-200 px-4 py-2.5 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[var(--accent)] transition"
+                className="w-full bg-white border border-slate-200 px-4 py-2.5 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-(--accent) transition"
               />
             </div>
 
@@ -216,7 +216,7 @@ function LoginContent() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full bg-white border border-slate-200 px-4 py-2.5 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[var(--accent)] transition"
+                className="w-full bg-white border border-slate-200 px-4 py-2.5 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-(--accent) transition"
               />
             </div>
 
@@ -224,7 +224,7 @@ function LoginContent() {
             {mode === "signup" && (
               <div className="flex flex-col gap-1.5">
                 <label className="text-[10px] text-slate-500 font-bold uppercase tracking-widest pl-1 flex items-center gap-1">
-                  Referral Code <span className="text-[8.5px] text-slate-450 font-medium">(Optional)</span>
+                  Referral Code <span className="text-[8.5px] text-slate-400 font-medium">(Optional)</span>
                 </label>
                 <div className="relative">
                   <input
@@ -232,7 +232,7 @@ function LoginContent() {
                     value={referralCode}
                     onChange={(e) => setReferralCode(e.target.value)}
                     placeholder="REF-XXXXXX"
-                    className="w-full bg-white border border-slate-200 px-4 py-2.5 rounded-xl text-xs text-[var(--accent)] placeholder-slate-400 focus:outline-none focus:border-[var(--accent)] transition pl-9 font-mono font-semibold"
+                    className="w-full bg-white border border-slate-200 px-4 py-2.5 rounded-xl text-xs text-(--accent) placeholder-slate-400 focus:outline-none focus:border-(--accent) transition pl-9 font-mono font-semibold"
                   />
                   <Gift className="w-4 h-4 text-slate-400 absolute left-3 top-3.5" />
                 </div>
@@ -251,7 +251,7 @@ function LoginContent() {
         </form>
       </div>
 
-      <footer className="absolute bottom-6 text-[10px] text-slate-450 select-none">
+      <footer className="absolute bottom-6 text-[10px] text-slate-400 select-none">
         <Shield className="w-3.5 h-3.5 inline mr-1 text-slate-400" /> Secure Multi-channel Web Affinity Shield Enabled
       </footer>
     </div>

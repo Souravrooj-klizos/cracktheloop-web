@@ -64,18 +64,18 @@ export default function Faq({ faqList }: FaqProps = {}) {
         <ScrollReveal>
           <div className="text-center mb-12">
             <h2
-              className="text-3xl md:text-4xl font-extrabold tracking-tight text-[var(--text-primary)]"
+              className="text-3xl md:text-4xl font-extrabold tracking-tight text-(--text-primary)"
               style={{ fontFamily: "var(--font-display)" }}
             >
               Common Questions
             </h2>
-            <p className="text-[var(--text-muted)] text-base mt-3 max-w-xl mx-auto">
+            <p className="text-(--text-muted) text-base mt-3 max-w-xl mx-auto">
               Everything you need to know about safety, setup, and features.
             </p>
           </div>
         </ScrollReveal>
 
-        <div className="divide-y divide-[var(--border-light)] border-t border-b border-[var(--border-light)] mt-8">
+        <div className="divide-y divide-(--border-light) border-t border-b border-(--border-light) mt-8">
           {activeFaqs.map((faq, i) => {
             const isOpen = open === i;
             return (
@@ -86,7 +86,7 @@ export default function Faq({ faqList }: FaqProps = {}) {
                     onClick={() => setOpen(isOpen ? null : i)}
                     className="w-full flex items-center justify-between py-4 text-left gap-4 cursor-pointer group"
                   >
-                    <span className="text-sm md:text-base font-semibold text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors">
+                    <span className="text-sm md:text-base font-semibold text-(--text-primary) group-hover:text-(--accent) transition-colors">
                       {faq.q}
                     </span>
                     <motion.div
@@ -95,7 +95,7 @@ export default function Faq({ faqList }: FaqProps = {}) {
                     >
                       <ChevronDown
                         className={`w-4 h-4 shrink-0 transition-colors ${
-                          isOpen ? "text-[var(--accent)]" : "text-[var(--text-muted)]"
+                          isOpen ? "text-(--accent)" : "text-(--text-muted)"
                         }`}
                       />
                     </motion.div>
@@ -109,7 +109,7 @@ export default function Faq({ faqList }: FaqProps = {}) {
                         transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
                         className="overflow-hidden"
                       >
-                        <div className="pb-5 text-[var(--text-muted)] text-sm leading-relaxed pr-8">
+                        <div className="pb-5 text-(--text-muted) text-sm leading-relaxed pr-8">
                           {faq.a}
                         </div>
                       </motion.div>

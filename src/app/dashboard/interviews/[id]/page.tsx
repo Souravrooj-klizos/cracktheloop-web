@@ -86,8 +86,8 @@ export default function InterviewDetailPage({ params }: { params: Promise<{ id: 
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[var(--bg-mist)] flex justify-center items-center">
-        <Loader2 className="w-10 h-10 text-[var(--accent)] animate-spin" />
+      <div className="min-h-screen bg-(--bg-mist) flex justify-center items-center">
+        <Loader2 className="w-10 h-10 text-(--accent) animate-spin" />
       </div>
     );
   }
@@ -95,7 +95,7 @@ export default function InterviewDetailPage({ params }: { params: Promise<{ id: 
   if (!session) return null;
 
   return (
-    <div className="min-h-screen bg-[var(--bg-mist)] text-[var(--text-primary)] flex flex-col relative pb-16 print:bg-white print:text-black">
+    <div className="min-h-screen bg-(--bg-mist) text-(--text-primary) flex flex-col relative pb-16 print:bg-white print:text-black">
       
       {/* Hide elements when printing */}
       <style jsx global>{`
@@ -120,7 +120,7 @@ export default function InterviewDetailPage({ params }: { params: Promise<{ id: 
       `}</style>
 
       {/* Background radial glows */}
-      <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] rounded-full bg-[var(--accent)]/3 blur-[120px] pointer-events-none select-none no-print"></div>
+      <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] rounded-full bg-(--accent)/3 blur-[120px] pointer-events-none select-none no-print"></div>
       <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-indigo-500/3 blur-[120px] pointer-events-none select-none no-print"></div>
 
       {/* Header */}
@@ -152,7 +152,7 @@ export default function InterviewDetailPage({ params }: { params: Promise<{ id: 
             </h1>
             <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-slate-500 print:text-black/80 font-semibold mt-1">
               <span className="flex items-center gap-1.5">
-                <Calendar className="w-4 h-4 text-[var(--accent)] no-print" /> 
+                <Calendar className="w-4 h-4 text-(--accent) no-print" /> 
                 Date: {new Date(session.created_at).toLocaleDateString([], { month: "long", day: "numeric", year: "numeric", hour: "2-digit", minute: "2-digit" })}
               </span>
               <span className="flex items-center gap-1.5">
@@ -172,9 +172,9 @@ export default function InterviewDetailPage({ params }: { params: Promise<{ id: 
           
           {/* Main report grading card */}
           <div className="lg:col-span-1 flex flex-col gap-6">
-            <div className="bg-white border border-[var(--border-light)] rounded-[12px] p-6 shadow-sm print-card">
+            <div className="bg-white border border-(--border-light) rounded-[12px] p-6 shadow-sm print-card">
               <h2 className="text-sm font-black text-slate-800 uppercase tracking-widest flex items-center gap-2 border-b border-slate-100 pb-3 print:text-black print:border-black select-none">
-                <Award className="w-4 h-4 text-[var(--accent)]" />
+                <Award className="w-4 h-4 text-(--accent)" />
                 Grading Performance
               </h2>
 
@@ -229,7 +229,7 @@ export default function InterviewDetailPage({ params }: { params: Promise<{ id: 
                 disabled={generatingReport}
                 className="no-print w-full py-3 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-xl text-xs font-bold flex justify-center items-center gap-1.5 transition active:scale-95 text-slate-800 hover:text-slate-900 cursor-pointer disabled:opacity-50"
               >
-                {generatingReport ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5 text-[var(--accent)]" />}
+                {generatingReport ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5 text-(--accent)" />}
                 Re-generate Report Evaluation
               </button>
             )}
@@ -239,7 +239,7 @@ export default function InterviewDetailPage({ params }: { params: Promise<{ id: 
           <div className="lg:col-span-2 flex flex-col gap-6">
             
             {/* Feedback card */}
-            <div className="bg-white border border-[var(--border-light)] rounded-[12px] p-6 shadow-sm print-card">
+            <div className="bg-white border border-(--border-light) rounded-[12px] p-6 shadow-sm print-card">
               <h2 className="text-sm font-black text-slate-800 uppercase tracking-widest border-b border-slate-100 pb-3 print:text-black print:border-black select-none">
                 📋 Interview Evaluation Feedback
               </h2>
@@ -253,7 +253,7 @@ export default function InterviewDetailPage({ params }: { params: Promise<{ id: 
             </div>
 
             {/* Improvement Guide card */}
-            <div className="bg-white border border-[var(--border-light)] rounded-[12px] p-6 shadow-sm print-card">
+            <div className="bg-white border border-(--border-light) rounded-[12px] p-6 shadow-sm print-card">
               <h2 className="text-sm font-black text-slate-800 uppercase tracking-widest border-b border-slate-100 pb-3 print:text-black print:border-black select-none">
                 🚀 Reconciled Technical Improvement Guide
               </h2>
@@ -271,7 +271,7 @@ export default function InterviewDetailPage({ params }: { params: Promise<{ id: 
         </section>
 
         {/* Complete conversation transcript timeline */}
-        <section className="bg-white border border-[var(--border-light)] rounded-[12px] p-6 md:p-8 shadow-sm print-card">
+        <section className="bg-white border border-(--border-light) rounded-[12px] p-6 md:p-8 shadow-sm print-card">
           <h2 className="text-sm font-black text-slate-800 uppercase tracking-widest border-b border-slate-100 pb-3 print:text-black print:border-black select-none">
             💬 Chronological Conversation Log
           </h2>
@@ -297,7 +297,7 @@ export default function InterviewDetailPage({ params }: { params: Promise<{ id: 
                   <p className={`text-xs px-4 py-3 rounded-[12px] border leading-relaxed font-medium select-text print:text-black print:bg-slate-100 print:border-slate-200 ${
                     turn.sender === "interviewer" ? "bg-sky-50 text-sky-800 border-sky-100/60" :
                     turn.sender === "candidate" ? "bg-purple-50 text-purple-800 border-purple-100/60" :
-                    "bg-[var(--accent-soft)] text-slate-800 border-[var(--accent)]/15"
+                    "bg-(--accent-soft) text-slate-800 border-(--accent)/15"
                   }`}>
                     {turn.text}
                   </p>

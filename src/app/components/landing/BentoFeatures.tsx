@@ -20,33 +20,33 @@ const features = [
         {/* App header */}
         <div className="flex items-center justify-between mb-1">
           <span className="text-[10px] font-mono font-bold text-slate-400 tracking-widest uppercase">Matched Resume Context</span>
-          <span className="text-[9px] bg-[var(--accent-soft)] text-[var(--accent)] font-bold px-2 py-0.5 rounded-full">Live</span>
+          <span className="text-[9px] bg-(--accent-soft) text-(--accent) font-bold px-2 py-0.5 rounded-full">Live</span>
         </div>
         {/* Question bubble */}
         <div className="bg-slate-50 border border-slate-200 rounded-lg p-3.5">
           <div className="flex items-center gap-2 mb-2">
-            <div className="w-2 h-2 rounded-full bg-[var(--accent)] animate-pulse" />
+            <div className="w-2 h-2 rounded-full bg-(--accent) animate-pulse" />
             <span className="text-[9px] font-mono text-slate-400">Detected question</span>
           </div>
           <p className="text-[11px] text-slate-700 italic font-medium leading-snug">"Tell me about a time you improved application performance."</p>
         </div>
         {/* Matched resume */}
-        <div className="bg-white border border-[var(--accent)]/20 rounded-lg p-4 flex flex-col gap-2.5 shadow-sm">
-          <span className="text-[9px] font-mono font-bold text-[var(--accent)] uppercase tracking-widest">↳ Matched from your resume</span>
+        <div className="bg-white border border-(--accent)/20 rounded-lg p-4 flex flex-col gap-2.5 shadow-sm">
+          <span className="text-[9px] font-mono font-bold text-(--accent) uppercase tracking-widest">↳ Matched from your resume</span>
           <div className="flex items-start gap-2">
-            <span className="text-[var(--accent)] mt-0.5 shrink-0">✦</span>
+            <span className="text-(--accent) mt-0.5 shrink-0">✦</span>
             <span className="text-[11px] text-slate-700 leading-snug">E-commerce dashboard redesign — React/Next.js</span>
           </div>
           <div className="flex items-start gap-2">
-            <span className="text-[var(--accent)] mt-0.5 shrink-0">✦</span>
+            <span className="text-(--accent) mt-0.5 shrink-0">✦</span>
             <span className="text-[11px] text-slate-700 leading-snug">Reduced bundle size <strong>40%</strong> via code splitting</span>
           </div>
           <div className="flex items-start gap-2">
-            <span className="text-[var(--accent)] mt-0.5 shrink-0">✦</span>
+            <span className="text-(--accent) mt-0.5 shrink-0">✦</span>
             <span className="text-[11px] text-slate-700 leading-snug">Recovered <strong>62% latency</strong> on key API paths</span>
           </div>
         </div>
-        <div className="text-[9px] font-mono text-[var(--accent)] font-bold">✓ 3 relevant resume points surfaced in 0.9s</div>
+        <div className="text-[9px] font-mono text-(--accent) font-bold">✓ 3 relevant resume points surfaced in 0.9s</div>
       </div>
     ),
   },
@@ -61,30 +61,30 @@ const features = [
       <div className="w-full h-full flex flex-col gap-3">
         <div className="flex items-center justify-between mb-1">
           <span className="text-[10px] font-mono font-bold text-slate-400 tracking-widest uppercase">JD Keyword Alignment</span>
-          <span className="text-[9px] bg-[var(--accent-soft)] text-[var(--accent)] font-bold px-2 py-0.5 rounded-full">100% Match</span>
+          <span className="text-[9px] bg-(--accent-soft) text-(--accent) font-bold px-2 py-0.5 rounded-full">100% Match</span>
         </div>
         {/* JD snippet */}
         <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 text-[11px] text-slate-600 leading-relaxed">
           Required: experience with{" "}
-          <span className="bg-[var(--accent-soft)] text-[var(--accent)] px-1 rounded font-semibold">React</span>,{" "}
-          <span className="bg-[var(--accent-soft)] text-[var(--accent)] px-1 rounded font-semibold">API Integration</span>,{" "}
+          <span className="bg-(--accent-soft) text-(--accent) px-1 rounded font-semibold">React</span>,{" "}
+          <span className="bg-(--accent-soft) text-(--accent) px-1 rounded font-semibold">API Integration</span>,{" "}
           and strong{" "}
-          <span className="bg-[var(--accent-soft)] text-[var(--accent)] px-1 rounded font-semibold">stakeholder management</span>. Familiarity with performance{" "}
-          <span className="bg-[var(--accent-soft)] text-[var(--accent)] px-1 rounded font-semibold">optimization</span>{" "}
+          <span className="bg-(--accent-soft) text-(--accent) px-1 rounded font-semibold">stakeholder management</span>. Familiarity with performance{" "}
+          <span className="bg-(--accent-soft) text-(--accent) px-1 rounded font-semibold">optimization</span>{" "}
           is a plus.
         </div>
         {/* Matched tags */}
-        <div className="bg-white border border-[var(--accent)]/20 rounded-lg p-4 shadow-sm">
-          <span className="text-[9px] font-mono font-bold text-[var(--accent)] uppercase tracking-widest block mb-2.5">↳ Keywords in your answers</span>
+        <div className="bg-white border border-(--accent)/20 rounded-lg p-4 shadow-sm">
+          <span className="text-[9px] font-mono font-bold text-(--accent) uppercase tracking-widest block mb-2.5">↳ Keywords in your answers</span>
           <div className="flex flex-wrap gap-2">
             {["React", "API Integration", "Optimization", "Stakeholders", "System Design"].map((k) => (
-              <span key={k} className="text-[10px] font-semibold px-2.5 py-1 rounded-full bg-[var(--accent-soft)] border border-[var(--accent)]/20 text-[var(--accent)]">
+              <span key={k} className="text-[10px] font-semibold px-2.5 py-1 rounded-full bg-(--accent-soft) border border-(--accent)/20 text-(--accent)">
                 ✓ {k}
               </span>
             ))}
           </div>
         </div>
-        <div className="text-[9px] font-mono text-[var(--accent)] font-bold">✓ All mandatory JD keywords covered</div>
+        <div className="text-[9px] font-mono text-(--accent) font-bold">✓ All mandatory JD keywords covered</div>
       </div>
     ),
   },
@@ -100,8 +100,8 @@ const features = [
         <div className="flex items-center justify-between mb-1">
           <span className="text-[10px] font-mono font-bold text-slate-400 tracking-widest uppercase">Audio Capture</span>
           <div className="flex items-center gap-1.5">
-            <div className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] animate-pulse" />
-            <span className="text-[9px] text-[var(--accent)] font-bold font-mono">LIVE</span>
+            <div className="w-1.5 h-1.5 rounded-full bg-(--accent) animate-pulse" />
+            <span className="text-[9px] text-(--accent) font-bold font-mono">LIVE</span>
           </div>
         </div>
         {/* Waveform */}
@@ -109,21 +109,21 @@ const features = [
           {Array.from({ length: 32 }).map((_, i) => (
             <motion.div
               key={i}
-              className="w-1 rounded-full bg-[var(--accent)]"
+              className="w-1 rounded-full bg-(--accent)"
               animate={{ height: [4, Math.random() * 28 + 6, 4] }}
               transition={{ duration: 0.6 + Math.random() * 0.4, repeat: Infinity, repeatType: "mirror", delay: i * 0.04 }}
             />
           ))}
         </div>
         {/* Transcription */}
-        <div className="bg-white border border-[var(--accent)]/20 rounded-lg p-4 shadow-sm">
-          <span className="text-[9px] font-mono font-bold text-[var(--accent)] uppercase tracking-widest block mb-2">↳ Transcribing...</span>
+        <div className="bg-white border border-(--accent)/20 rounded-lg p-4 shadow-sm">
+          <span className="text-[9px] font-mono font-bold text-(--accent) uppercase tracking-widest block mb-2">↳ Transcribing...</span>
           <p className="text-[11px] text-slate-700 italic leading-snug">
             "How do you manage conflicting stakeholder demands when timelines are tight?"
-            <span className="inline-block w-1.5 h-3.5 bg-[var(--accent)] animate-pulse ml-1 align-middle rounded-sm" />
+            <span className="inline-block w-1.5 h-3.5 bg-(--accent) animate-pulse ml-1 align-middle rounded-sm" />
           </p>
         </div>
-        <div className="text-[9px] font-mono text-[var(--accent)] font-bold">✓ Question intent detected in 0.3s</div>
+        <div className="text-[9px] font-mono text-(--accent) font-bold">✓ Question intent detected in 0.3s</div>
       </div>
     ),
   },
@@ -138,32 +138,32 @@ const features = [
       <div className="w-full h-full flex flex-col gap-3">
         <div className="flex items-center justify-between mb-1">
           <span className="text-[10px] font-mono font-bold text-slate-400 tracking-widest uppercase">Quick Answer Mode</span>
-          <span className="text-[9px] bg-[var(--accent-soft)] text-[var(--accent)] font-bold px-2 py-0.5 rounded-full">1.2s</span>
+          <span className="text-[9px] bg-(--accent-soft) text-(--accent) font-bold px-2 py-0.5 rounded-full">1.2s</span>
         </div>
         <div className="bg-slate-50 border border-slate-200 rounded-lg p-3.5">
           <p className="text-[11px] text-slate-600 italic">"How do you manage conflicting stakeholder demands?"</p>
         </div>
         {/* Quick answer */}
-        <div className="bg-white border border-[var(--accent)]/20 rounded-lg p-4 shadow-sm flex-1">
+        <div className="bg-white border border-(--accent)/20 rounded-lg p-4 shadow-sm flex-1">
           <div className="flex items-center gap-2 mb-3">
-            <span className="w-5 h-5 rounded-full bg-[var(--accent-soft)] flex items-center justify-center text-[var(--accent)] text-[9px] font-black">⚡</span>
-            <span className="text-[9px] font-mono font-bold text-[var(--accent)] uppercase tracking-widest">Quick Answer</span>
+            <span className="w-5 h-5 rounded-full bg-(--accent-soft) flex items-center justify-center text-(--accent) text-[9px] font-black">⚡</span>
+            <span className="text-[9px] font-mono font-bold text-(--accent) uppercase tracking-widest">Quick Answer</span>
           </div>
           <p className="text-[12px] text-slate-700 leading-relaxed">
             "I use structured prioritization frameworks like RICE matrix to align stakeholders objectively — removing emotional bias and anchoring decisions on business impact vs. engineering cost."
           </p>
         </div>
         <div className="flex gap-2">
-          <div className="flex-1 bg-[var(--accent-soft)] border border-[var(--accent)]/20 rounded-lg p-2.5 text-center">
-            <div className="text-base font-black text-[var(--accent)]">27</div>
-            <div className="text-[8px] text-[var(--accent)] font-medium">words</div>
+          <div className="flex-1 bg-(--accent-soft) border border-(--accent)/20 rounded-lg p-2.5 text-center">
+            <div className="text-base font-black text-(--accent)">27</div>
+            <div className="text-[8px] text-(--accent) font-medium">words</div>
           </div>
-          <div className="flex-1 bg-[var(--accent-soft)] border border-[var(--accent)]/20 rounded-lg p-2.5 text-center">
-            <div className="text-base font-black text-[var(--accent)]">~18s</div>
-            <div className="text-[8px] text-[var(--accent)] font-medium">to deliver</div>
+          <div className="flex-1 bg-(--accent-soft) border border-(--accent)/20 rounded-lg p-2.5 text-center">
+            <div className="text-base font-black text-(--accent)">~18s</div>
+            <div className="text-[8px] text-(--accent) font-medium">to deliver</div>
           </div>
         </div>
-        <div className="text-[9px] font-mono text-[var(--accent)] font-bold">✓ Perfect pacing — no over-explaining</div>
+        <div className="text-[9px] font-mono text-(--accent) font-bold">✓ Perfect pacing — no over-explaining</div>
       </div>
     ),
   },
@@ -178,7 +178,7 @@ const features = [
       <div className="w-full h-full flex flex-col gap-3">
         <div className="flex items-center justify-between mb-1">
           <span className="text-[10px] font-mono font-bold text-slate-400 tracking-widest uppercase">STAR Framework Mode</span>
-          <span className="text-[9px] bg-[var(--accent-soft)] text-[var(--accent)] font-bold px-2 py-0.5 rounded-full border border-[var(--accent)]/30">Full Answer</span>
+          <span className="text-[9px] bg-(--accent-soft) text-(--accent) font-bold px-2 py-0.5 rounded-full border border-(--accent)/30">Full Answer</span>
         </div>
         <div className="grid grid-cols-2 gap-2.5">
           {[
@@ -187,16 +187,16 @@ const features = [
             { label: "A", name: "Action", text: "Facilitated a 2-hour RICE matrix workshop — scored 12 features on impact vs. effort objectively." },
             { label: "R", name: "Result", text: "Shipped on time. Stakeholder satisfaction 94%. Feature adoption hit 67% in the first week." },
           ].map((s) => (
-            <div key={s.label} className="bg-white border border-[var(--border-light)] rounded-lg p-3 shadow-sm">
+            <div key={s.label} className="bg-white border border-(--border-light) rounded-lg p-3 shadow-sm">
               <div className="flex items-center gap-1.5 mb-1.5">
-                <span className="w-5 h-5 rounded-full bg-[var(--accent)] text-white text-[9px] font-black flex items-center justify-center">{s.label}</span>
-                <span className="text-[9px] font-mono font-bold text-[var(--accent)] uppercase">{s.name}</span>
+                <span className="w-5 h-5 rounded-full bg-(--accent) text-white text-[9px] font-black flex items-center justify-center">{s.label}</span>
+                <span className="text-[9px] font-mono font-bold text-(--accent) uppercase">{s.name}</span>
               </div>
               <p className="text-[10px] text-slate-600 leading-snug">{s.text}</p>
             </div>
           ))}
         </div>
-        <div className="text-[9px] font-mono text-[var(--accent)] font-bold">✓ Full STAR response built from your resume in 1.5s</div>
+        <div className="text-[9px] font-mono text-(--accent) font-bold">✓ Full STAR response built from your resume in 1.5s</div>
       </div>
     ),
   },
@@ -211,40 +211,40 @@ const features = [
       <div className="w-full h-full flex flex-col gap-3">
         <div className="flex items-center justify-between mb-1">
           <span className="text-[10px] font-mono font-bold text-slate-400 tracking-widest uppercase">Confidence Panel</span>
-          <span className="text-[9px] bg-[var(--accent-soft)] text-[var(--accent)] font-bold px-2 py-0.5 rounded-full">Active</span>
+          <span className="text-[9px] bg-(--accent-soft) text-(--accent) font-bold px-2 py-0.5 rounded-full">Active</span>
         </div>
-        <div className="bg-white border border-[var(--accent)]/20 rounded-lg p-4 shadow-sm flex flex-col gap-3">
+        <div className="bg-white border border-(--accent)/20 rounded-lg p-4 shadow-sm flex flex-col gap-3">
           <div className="flex items-start gap-2.5">
-            <span className="w-5 h-5 rounded-full bg-[var(--accent-soft)] text-[var(--accent)] text-[10px] flex items-center justify-center font-bold shrink-0 mt-0.5">✓</span>
+            <span className="w-5 h-5 rounded-full bg-(--accent-soft) text-(--accent) text-[10px] flex items-center justify-center font-bold shrink-0 mt-0.5">✓</span>
             <div>
               <div className="text-[10px] font-bold text-slate-700">STAR Method is active</div>
               <div className="text-[9px] text-slate-500 mt-0.5">Stick to Situation → Task → Action → Result</div>
             </div>
           </div>
           <div className="flex items-start gap-2.5">
-            <span className="w-5 h-5 rounded-full bg-[var(--accent-soft)] text-[var(--accent)] text-[10px] flex items-center justify-center font-bold shrink-0 mt-0.5">✓</span>
+            <span className="w-5 h-5 rounded-full bg-(--accent-soft) text-(--accent) text-[10px] flex items-center justify-center font-bold shrink-0 mt-0.5">✓</span>
             <div>
               <div className="text-[10px] font-bold text-slate-700">Maintain natural eye contact</div>
               <div className="text-[9px] text-slate-500 mt-0.5">Look at camera, not the screen</div>
             </div>
           </div>
           <div className="flex items-start gap-2.5">
-            <span className="w-5 h-5 rounded-full bg-[var(--accent-soft)] text-[var(--accent)] text-[10px] flex items-center justify-center font-bold shrink-0 mt-0.5">⏱</span>
+            <span className="w-5 h-5 rounded-full bg-(--accent-soft) text-(--accent) text-[10px] flex items-center justify-center font-bold shrink-0 mt-0.5">⏱</span>
             <div>
               <div className="text-[10px] font-bold text-slate-700">Keep answers under 2 minutes</div>
               <div className="text-[9px] text-slate-500 mt-0.5">Concise answers score higher in scoring rubrics</div>
             </div>
           </div>
         </div>
-        <div className="bg-slate-50 border border-[var(--accent)]/20 rounded-lg p-3.5">
-          <span className="text-[9px] font-mono font-bold text-[var(--accent)] uppercase tracking-widest block mb-2">Your key achievements</span>
+        <div className="bg-slate-50 border border-(--accent)/20 rounded-lg p-3.5">
+          <span className="text-[9px] font-mono font-bold text-(--accent) uppercase tracking-widest block mb-2">Your key achievements</span>
           <div className="flex flex-col gap-1.5">
             <span className="text-[10px] text-slate-600">• 40% bundle reduction at Acme Corp</span>
             <span className="text-[10px] text-slate-600">• Led 6-person cross-functional team</span>
             <span className="text-[10px] text-slate-600">• 94% stakeholder satisfaction score</span>
           </div>
         </div>
-        <div className="text-[9px] font-mono text-[var(--accent)] font-bold">✓ You've got this — your experience is your edge</div>
+        <div className="text-[9px] font-mono text-(--accent) font-bold">✓ You've got this — your experience is your edge</div>
       </div>
     ),
   },
@@ -339,13 +339,13 @@ export default function BentoFeatures() {
         <ScrollReveal>
           <div className="text-center mb-14">
             <h2
-              className="text-3xl md:text-4xl font-extrabold tracking-tight text-[var(--text-primary-dark)]"
+              className="text-3xl md:text-4xl font-extrabold tracking-tight text-(--text-primary-dark)"
               style={{ fontFamily: "var(--font-display)" }}
             >
               Six AI Powers, One{" "}
               <span className="text-gradient-coral">Invisible Copilot</span>
             </h2>
-            <p className="text-[var(--text-muted-dark)] text-base mt-3 max-w-xl mx-auto leading-relaxed">
+            <p className="text-(--text-muted-dark) text-base mt-3 max-w-xl mx-auto leading-relaxed">
               Every feature works in real time, completely hidden from your interviewer — giving you an unfair, undetectable advantage.
             </p>
           </div>
@@ -367,14 +367,14 @@ export default function BentoFeatures() {
                   key={i}
                   onClick={() => { goTo(i); setIsPaused(true); }}
                   className={`group relative w-full text-left rounded-[8px] px-4 py-4 transition-all duration-300 border overflow-hidden ${isActive
-                      ? "bg-white border-[var(--accent)]/30 shadow-md"
-                      : "bg-white/40 border-transparent hover:bg-white/70 hover:border-[var(--border-light)]"
+                      ? "bg-white border-(--accent)/30 shadow-md"
+                      : "bg-white/40 border-transparent hover:bg-white/70 hover:border-(--border-light)"
                     }`}
                 >
                   {/* Progress bar at bottom of active tab */}
                   {isActive && !isPaused && (
                     <div
-                      className="absolute bottom-0 left-0 h-[2px] bg-[var(--accent)] transition-none rounded-full"
+                      className="absolute bottom-0 left-0 h-[2px] bg-(--accent) transition-none rounded-full"
                       style={{ width: `${progress}%` }}
                     />
                   )}
@@ -382,7 +382,7 @@ export default function BentoFeatures() {
                   <div className="flex items-center gap-3">
                     {/* Icon */}
                     <div className={`w-9 h-9 rounded-[6px] flex items-center justify-center shrink-0 transition-all duration-300 ${isActive
-                        ? "bg-[var(--accent)] text-white shadow-sm"
+                        ? "bg-(--accent) text-white shadow-sm"
                         : "bg-slate-100 text-slate-400 group-hover:bg-slate-200"
                       }`}>
                       <Icon className="w-4 h-4" />
@@ -390,17 +390,17 @@ export default function BentoFeatures() {
 
                     {/* Label + Title */}
                     <div className="flex-1 min-w-0">
-                      <div className={`text-[9px] font-mono font-bold tracking-widest uppercase transition-colors duration-300 ${isActive ? "text-[var(--accent)]" : "text-slate-400"
+                      <div className={`text-[9px] font-mono font-bold tracking-widest uppercase transition-colors duration-300 ${isActive ? "text-(--accent)" : "text-slate-400"
                         }`}>
                         {String(i + 1).padStart(2, "0")} · {f.label}
                       </div>
-                      <div className={`text-sm font-bold mt-0.5 leading-snug transition-colors duration-300 truncate ${isActive ? "text-[var(--text-primary)]" : "text-slate-500"
+                      <div className={`text-sm font-bold mt-0.5 leading-snug transition-colors duration-300 truncate ${isActive ? "text-(--text-primary)" : "text-slate-500"
                         }`}>
                         {f.title}
                       </div>
                     </div>
 
-                    <ChevronRight className={`w-4 h-4 shrink-0 transition-all duration-300 ${isActive ? "text-[var(--accent)] translate-x-0.5" : "text-slate-300"
+                    <ChevronRight className={`w-4 h-4 shrink-0 transition-all duration-300 ${isActive ? "text-(--accent) translate-x-0.5" : "text-slate-300"
                       }`} />
                   </div>
                 </button>
@@ -409,7 +409,7 @@ export default function BentoFeatures() {
           </div>
 
           {/* Right: Animated Preview Panel */}
-          <div className="bg-white border border-[var(--border-light)] rounded-[6px] shadow-md overflow-hidden">
+          <div className="bg-white border border-(--border-light) rounded-[6px] shadow-md overflow-hidden">
             <AnimatePresence mode="wait">
               <motion.div
                 key={active}
@@ -422,28 +422,28 @@ export default function BentoFeatures() {
                 {/* Panel Header */}
                 <div className="flex items-start justify-between p-6 pb-5 border-b border-slate-100">
                   <div>
-                    <span className="inline-block text-[9px] font-mono font-bold tracking-widest uppercase px-2.5 py-1 rounded-full border mb-2 bg-[var(--accent-soft)] text-[var(--accent)] border-[var(--accent)]/20">
+                    <span className="inline-block text-[9px] font-mono font-bold tracking-widest uppercase px-2.5 py-1 rounded-full border mb-2 bg-(--accent-soft) text-(--accent) border-(--accent)/20">
                       {activeFeature.tag}
                     </span>
-                    <h3 className="text-xl font-extrabold text-[var(--text-primary)] leading-snug max-w-sm">
+                    <h3 className="text-xl font-extrabold text-(--text-primary) leading-snug max-w-sm">
                       {activeFeature.title}
                     </h3>
-                    <p className="text-sm text-[var(--text-muted)] mt-1.5 leading-relaxed max-w-md">
+                    <p className="text-sm text-(--text-muted) mt-1.5 leading-relaxed max-w-md">
                       {activeFeature.desc}
                     </p>
                     {featureLinks[active] && (
                       <div className="mt-3">
                         <a 
                           href={featureLinks[active]} 
-                          className="inline-flex items-center gap-1 text-xs font-bold text-[var(--accent)] hover:text-[#f06b57] transition cursor-pointer"
+                          className="inline-flex items-center gap-1 text-xs font-bold text-(--accent) hover:text-[#f06b57] transition cursor-pointer"
                         >
                           Explore feature details <ArrowRight className="w-3.5 h-3.5" />
                         </a>
                       </div>
                     )}
                   </div>
-                  <div className="w-12 h-12 rounded-[6px] flex items-center justify-center shrink-0 ml-4 bg-[var(--accent-soft)]">
-                    <activeFeature.icon className="w-5 h-5 text-[var(--accent)]" />
+                  <div className="w-12 h-12 rounded-[6px] flex items-center justify-center shrink-0 ml-4 bg-(--accent-soft)">
+                    <activeFeature.icon className="w-5 h-5 text-(--accent)" />
                   </div>
                 </div>
 
@@ -464,7 +464,7 @@ export default function BentoFeatures() {
             <button
               key={i}
               onClick={() => goTo(i)}
-              className={`transition-all duration-300 rounded-full ${i === active ? "w-6 h-2 bg-[var(--accent)]" : "w-2 h-2 bg-slate-200"
+              className={`transition-all duration-300 rounded-full ${i === active ? "w-6 h-2 bg-(--accent)" : "w-2 h-2 bg-slate-200"
                 }`}
             />
           ))}

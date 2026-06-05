@@ -68,29 +68,29 @@ export default function Comparison() {
         <ScrollReveal>
           <div className="text-center mb-16">
             <h2
-              className="text-3xl md:text-4xl font-extrabold tracking-tight text-[var(--text-primary)]"
+              className="text-3xl md:text-4xl font-extrabold tracking-tight text-(--text-primary)"
               style={{ fontFamily: "var(--font-display)" }}
             >
               Generic AI vs <span className="text-gradient-coral">CrackTheLoop</span>
             </h2>
-            <p className="text-[var(--text-muted)] text-base mt-3 max-w-xl mx-auto">
+            <p className="text-(--text-muted) text-base mt-3 max-w-xl mx-auto">
               Why a dedicated interview copilot outperforms general-purpose AI every time.
             </p>
           </div>
         </ScrollReveal>
 
         <ScrollReveal className="w-full">
-          <div className="overflow-hidden rounded-[12px] border border-[var(--border-light)] shadow-xs bg-white/85 backdrop-blur-md w-full">
+          <div className="overflow-hidden rounded-[12px] border border-(--border-light) shadow-xs bg-white/85 backdrop-blur-md w-full">
             <table className="w-full text-sm text-left">
               <thead>
-                <tr className="border-b border-[var(--border-light)]">
-                  <th className="px-6 py-4 text-[var(--text-muted)] font-bold uppercase tracking-wider text-xs w-[50%]">
+                <tr className="border-b border-(--border-light)">
+                  <th className="px-6 py-4 text-(--text-muted) font-bold uppercase tracking-wider text-xs w-[50%]">
                     Comparison Point
                   </th>
-                  <th className="px-6 py-4 text-center text-[var(--text-muted)] font-bold uppercase tracking-wider text-xs">
+                  <th className="px-6 py-4 text-center text-(--text-muted) font-bold uppercase tracking-wider text-xs">
                     Generic AI
                   </th>
-                  <th className="px-6 py-4 text-center text-[var(--accent)] font-bold uppercase tracking-wider text-xs bg-[var(--accent-soft)]">
+                  <th className="px-6 py-4 text-center text-(--accent) font-bold uppercase tracking-wider text-xs bg-(--accent-soft)">
                     <div className="flex items-center justify-center gap-1.5">
                       <Sparkles className="w-3.5 h-3.5" />
                       CrackTheLoop
@@ -98,14 +98,14 @@ export default function Comparison() {
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[var(--border-light)]">
+              <tbody className="divide-y divide-(--border-light)">
                 {comparisonPoints.map((point, i) => (
-                  <tr key={i} className="hover:bg-[var(--bg-mist)] transition-colors">
+                  <tr key={i} className="hover:bg-(--bg-mist) transition-colors">
                     <td className="px-6 py-4">
-                      <span className="font-semibold text-[var(--text-primary)] block text-xs md:text-sm">
+                      <span className="font-semibold text-(--text-primary) block text-xs md:text-sm">
                         {point.feature}
                       </span>
-                      <span className="text-[10px] text-[var(--text-muted)] mt-0.5 block">
+                      <span className="text-[10px] text-(--text-muted) mt-0.5 block">
                         {point.detail}
                       </span>
                     </td>
@@ -118,9 +118,9 @@ export default function Comparison() {
                         <X className="w-4 h-4 text-red-500 mx-auto opacity-60" />
                       )}
                     </td>
-                    <td className="px-6 py-4 text-center bg-[var(--accent-soft)]/20">
+                    <td className="px-6 py-4 text-center bg-(--accent-soft)/20">
                       {point.cracktheloop ? (
-                        <Check className="w-5 h-5 text-[var(--accent)] mx-auto stroke-[3]" />
+                        <Check className="w-5 h-5 text-(--accent) mx-auto stroke-[3]" />
                       ) : (
                         <X className="w-5 h-5 text-red-500 mx-auto opacity-60" />
                       )}
@@ -142,9 +142,9 @@ export default function Comparison() {
               { title: "Responsible Usage", desc: "Users are responsible for adhering to hiring team rules." },
             ].map((tp, i) => (
               <StaggerItem key={i}>
-                <div className="rounded-[8px] border border-[var(--border-light)] bg-white/70 backdrop-blur-md p-5 flex flex-col gap-2 hover:border-[var(--accent)]/20 hover:-translate-y-0.5 transition-all duration-300">
-                  <h3 className="text-sm font-bold text-[var(--text-primary)]">{tp.title}</h3>
-                  <p className="text-xs text-[var(--text-muted)] leading-relaxed">{tp.desc}</p>
+                <div className="rounded-[8px] border border-(--border-light) bg-white/70 backdrop-blur-md p-5 flex flex-col gap-2 hover:border-(--accent)/20 hover:-translate-y-0.5 transition-all duration-300">
+                  <h3 className="text-sm font-bold text-(--text-primary)">{tp.title}</h3>
+                  <p className="text-xs text-(--text-muted) leading-relaxed">{tp.desc}</p>
                 </div>
               </StaggerItem>
             ))}

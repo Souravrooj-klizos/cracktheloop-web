@@ -36,8 +36,8 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
           >
-            <div className="inline-flex w-fit items-center gap-2 glass-light rounded-full px-4 py-1.5 border border-[var(--border-light)] text-xs font-semibold text-[var(--text-secondary)]">
-              <Sparkles className="w-3.5 h-3.5 text-[var(--accent)]" />
+            <div className="inline-flex w-fit items-center gap-2 glass-light rounded-full px-4 py-1.5 border border-(--border-light) text-xs font-semibold text-(--text-secondary)">
+              <Sparkles className="w-3.5 h-3.5 text-(--accent)" />
               <span>AI-Powered Interview Support</span>
             </div>
 
@@ -49,7 +49,7 @@ export default function Hero() {
               <span className="text-gradient-hero">Confident Answers</span>
             </h1>
 
-            <p className="text-base md:text-lg text-[var(--text-muted)] leading-relaxed max-w-xl">
+            <p className="text-base md:text-lg text-(--text-muted) leading-relaxed max-w-xl">
               Upload your resume and job description. During your interview or practice session,
               CrackTheLoop helps you respond with clear, structured, and role-specific answer guidance.
             </p>
@@ -66,36 +66,36 @@ export default function Hero() {
 
             {/* Social Proof Micro-Stats */}
             <motion.div
-              className="flex flex-wrap items-center gap-6 mt-4 pt-6 border-t border-[var(--border-light)]"
+              className="flex flex-wrap items-center gap-6 mt-4 pt-6 border-t border-(--border-light)"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.5 }}
             >
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-[var(--accent-soft)] flex items-center justify-center">
-                  <Users className="w-4 h-4 text-[var(--accent)]" />
+                <div className="w-8 h-8 rounded-full bg-(--accent-soft) flex items-center justify-center">
+                  <Users className="w-4 h-4 text-(--accent)" />
                 </div>
                 <div>
-                  <span className="text-sm font-bold text-[var(--text-primary)]">12,000+</span>
-                  <span className="text-[11px] text-[var(--text-muted)] block leading-tight">interviews supported</span>
+                  <span className="text-sm font-bold text-(--text-primary)">12,000+</span>
+                  <span className="text-[11px] text-(--text-muted) block leading-tight">interviews supported</span>
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-[var(--accent-soft)] flex items-center justify-center">
-                  <Star className="w-4 h-4 text-[var(--accent)]" />
+                <div className="w-8 h-8 rounded-full bg-(--accent-soft) flex items-center justify-center">
+                  <Star className="w-4 h-4 text-(--accent)" />
                 </div>
                 <div>
-                  <span className="text-sm font-bold text-[var(--text-primary)]">94%</span>
-                  <span className="text-[11px] text-[var(--text-muted)] block leading-tight">feel more confident</span>
+                  <span className="text-sm font-bold text-(--text-primary)">94%</span>
+                  <span className="text-[11px] text-(--text-muted) block leading-tight">feel more confident</span>
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-[var(--accent-soft)] flex items-center justify-center">
-                  <Zap className="w-4 h-4 text-[var(--accent)]" />
+                <div className="w-8 h-8 rounded-full bg-(--accent-soft) flex items-center justify-center">
+                  <Zap className="w-4 h-4 text-(--accent)" />
                 </div>
                 <div>
-                  <span className="text-sm font-bold text-[var(--text-primary)]">1.5s</span>
-                  <span className="text-[11px] text-[var(--text-muted)] block leading-tight">avg. answer speed</span>
+                  <span className="text-sm font-bold text-(--text-primary)">1.5s</span>
+                  <span className="text-[11px] text-(--text-muted) block leading-tight">avg. answer speed</span>
                 </div>
               </div>
             </motion.div>
@@ -109,24 +109,24 @@ export default function Hero() {
             className="perspective-[1200px]"
           >
             <div
-              className="glass-light rounded-[20px] p-4 md:p-5 border border-[var(--border-light)] relative bg-white/80 backdrop-blur-md transition-transform duration-700 hover:rotate-y-0"
+              className="glass-light rounded-[20px] p-4 md:p-5 border border-(--border-light) relative bg-white/80 backdrop-blur-md transition-transform duration-700 hover:rotate-y-0"
               style={{
                 transform: 'perspective(1200px) rotateY(-3deg) rotateX(2deg)',
                 boxShadow: '0 25px 50px -12px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.03)',
               }}
             >
               {/* Accent glow behind card */}
-              <div className="absolute -inset-1 bg-gradient-to-br from-[var(--accent)]/5 via-transparent to-slate-200/20 rounded-[22px] -z-10 blur-sm" />
+              <div className="absolute -inset-1 bg-gradient-to-br from-(--accent)/5 via-transparent to-slate-200/20 rounded-[22px] -z-10 blur-sm" />
 
               {/* Header */}
-              <div className="flex items-center justify-between mb-4 border-b border-[var(--border-light)] pb-4">
+              <div className="flex items-center justify-between mb-4 border-b border-(--border-light) pb-4">
                 <div className="flex items-center gap-2">
-                  <div className="w-2.5 h-2.5 rounded-full bg-[var(--accent)] animate-pulse" />
-                  <span className="text-xs font-bold text-[var(--text-primary)] uppercase tracking-wider">
+                  <div className="w-2.5 h-2.5 rounded-full bg-(--accent) animate-pulse" />
+                  <span className="text-xs font-bold text-(--text-primary) uppercase tracking-wider">
                     Interview Assistant Active
                   </span>
                 </div>
-                <div className="text-[10px] font-mono text-[var(--text-muted)] bg-[var(--bg-cloud)] px-2.5 py-1 rounded-[4px] border border-[var(--border-light)]">
+                <div className="text-[10px] font-mono text-(--text-muted) bg-(--bg-cloud) px-2.5 py-1 rounded-[4px] border border-(--border-light)">
                   Practice Mode
                 </div>
               </div>
@@ -134,78 +134,78 @@ export default function Hero() {
               {/* Main Panel Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 {/* Left Panel: Question Detected */}
-                <div className="bg-[var(--bg-mist)] rounded-[6px] p-4 border border-[var(--border-light)] flex flex-col gap-3">
-                  <div className="flex items-center gap-1.5 text-xs font-bold text-[var(--text-secondary)]">
-                    <MessageSquare className="w-3.5 h-3.5 text-[var(--accent)]" />
+                <div className="bg-(--bg-mist) rounded-[6px] p-4 border border-(--border-light) flex flex-col gap-3">
+                  <div className="flex items-center gap-1.5 text-xs font-bold text-(--text-secondary)">
+                    <MessageSquare className="w-3.5 h-3.5 text-(--accent)" />
                     Question Detected
                   </div>
-                  <div className="bg-white p-3 rounded-[4px] border border-[var(--border-light)] shadow-xs">
-                    <p className="text-xs font-medium text-[var(--text-primary)] italic leading-relaxed">
+                  <div className="bg-white p-3 rounded-[4px] border border-(--border-light) shadow-xs">
+                    <p className="text-xs font-medium text-(--text-primary) italic leading-relaxed">
                       &quot;Tell me about a time you handled a difficult stakeholder conflict.&quot;
                     </p>
                   </div>
-                  <div className="flex items-center justify-between text-[10px] text-[var(--text-muted)] mt-auto pt-1">
+                  <div className="flex items-center justify-between text-[10px] text-(--text-muted) mt-auto pt-1">
                     <span>Listening...</span>
                     <span>Confidence: 98%</span>
                   </div>
                 </div>
 
                 {/* Right Panel: AI Suggested Answer Points */}
-                <div className="bg-[var(--bg-mist)] rounded-[6px] p-4 border border-[var(--border-light)] flex flex-col gap-3">
-                  <div className="flex items-center gap-1.5 text-xs font-bold text-[var(--text-secondary)]">
-                    <Sparkles className="w-3.5 h-3.5 text-[var(--accent)]" />
+                <div className="bg-(--bg-mist) rounded-[6px] p-4 border border-(--border-light) flex flex-col gap-3">
+                  <div className="flex items-center gap-1.5 text-xs font-bold text-(--text-secondary)">
+                    <Sparkles className="w-3.5 h-3.5 text-(--accent)" />
                     Suggested Answer Flow (STAR)
                   </div>
                   <div className="flex flex-col gap-2.5 font-mono text-[10px] leading-relaxed">
                     <div>
-                      <span className="text-[var(--accent)] font-bold">Situation:</span>{" "}
-                      <span className="text-[var(--text-secondary)] font-medium">Acme Corp redesign, conflicting roadmap.</span>
+                      <span className="text-(--accent) font-bold">Situation:</span>{" "}
+                      <span className="text-(--text-secondary) font-medium">Acme Corp redesign, conflicting roadmap.</span>
                     </div>
                     <div>
-                      <span className="text-[var(--accent)] font-bold">Task:</span>{" "}
-                      <span className="text-[var(--text-secondary)] font-medium">Align roadmap to avoid 2-week launch delay.</span>
+                      <span className="text-(--accent) font-bold">Task:</span>{" "}
+                      <span className="text-(--text-secondary) font-medium">Align roadmap to avoid 2-week launch delay.</span>
                     </div>
                     <div>
-                      <span className="text-[var(--accent)] font-bold">Action:</span>{" "}
-                      <span className="text-[var(--text-secondary)] font-medium">Led prioritisation workshop to align metrics.</span>
+                      <span className="text-(--accent) font-bold">Action:</span>{" "}
+                      <span className="text-(--text-secondary) font-medium">Led prioritisation workshop to align metrics.</span>
                     </div>
                     <div>
-                      <span className="text-[var(--accent)] font-bold">Result:</span>{" "}
-                      <span className="text-[var(--text-secondary)] font-bold">Approved roadmap; launched on time (+20% conv).</span>
+                      <span className="text-(--accent) font-bold">Result:</span>{" "}
+                      <span className="text-(--text-secondary) font-bold">Approved roadmap; launched on time (+20% conv).</span>
                     </div>
                   </div>
                 </div>
               </div>
 
               {/* Bottom Context Mapping Area */}
-              <div className="bg-[var(--bg-cloud)]/60 rounded-[6px] p-4 border border-[var(--border-light)] flex flex-col gap-3">
-                <span className="text-[9px] font-bold text-[var(--text-muted)] uppercase tracking-wider block">
+              <div className="bg-(--bg-cloud)/60 rounded-[6px] p-4 border border-(--border-light) flex flex-col gap-3">
+                <span className="text-[9px] font-bold text-(--text-muted) uppercase tracking-wider block">
                   Resume & JD Context Connection
                 </span>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
                   <div className="flex items-start gap-2.5">
-                    <FileText className="w-4 h-4 text-[var(--accent)] shrink-0 mt-0.5" />
+                    <FileText className="w-4 h-4 text-(--accent) shrink-0 mt-0.5" />
                     <div>
-                      <span className="font-semibold text-[var(--text-primary)] block text-[11px] mb-0.5">
+                      <span className="font-semibold text-(--text-primary) block text-[11px] mb-0.5">
                         Resume Context Used
                       </span>
-                      <span className="text-[10px] text-[var(--text-muted)] leading-relaxed">
+                      <span className="text-[10px] text-(--text-muted) leading-relaxed">
                         Acme Corp e-commerce redesign project & prioritisation
                       </span>
                     </div>
                   </div>
 
                   <div className="flex items-start gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 text-[var(--accent)] shrink-0 mt-0.5" />
+                    <CheckCircle2 className="w-4 h-4 text-(--accent) shrink-0 mt-0.5" />
                     <div>
-                      <span className="font-semibold text-[var(--text-primary)] block text-[11px] mb-1">
+                      <span className="font-semibold text-(--text-primary) block text-[11px] mb-1">
                         JD Keywords Matched
                       </span>
                       <div className="flex flex-wrap gap-1.5 mt-0.5">
                         {["Stakeholders", "Roadmap", "Prioritisation"].map((kw) => (
                           <span
                             key={kw}
-                            className="bg-white border border-[var(--border-light)] text-[8px] font-bold px-2 py-0.5 rounded-[4px] text-[var(--text-secondary)] shadow-xs"
+                            className="bg-white border border-(--border-light) text-[8px] font-bold px-2 py-0.5 rounded-[4px] text-(--text-secondary) shadow-xs"
                           >
                             {kw}
                           </span>

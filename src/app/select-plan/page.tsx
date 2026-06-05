@@ -174,8 +174,8 @@ function SelectPlanContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[var(--bg-mist)] flex justify-center items-center">
-        <Loader2 className="w-10 h-10 text-[var(--accent)] animate-spin" />
+      <div className="min-h-screen bg-(--bg-mist) flex justify-center items-center">
+        <Loader2 className="w-10 h-10 text-(--accent) animate-spin" />
       </div>
     );
   }
@@ -183,7 +183,7 @@ function SelectPlanContent() {
   const hasReferral = !!user?.referred_by || !!referralFromUrl;
 
   return (
-    <div className="min-h-screen bg-[var(--bg-mist)] text-[var(--text-primary)] flex flex-col justify-center items-center relative overflow-hidden py-12 px-6">
+    <div className="min-h-screen bg-(--bg-mist) text-(--text-primary) flex flex-col justify-center items-center relative overflow-hidden py-12 px-6">
       
       {/* Background Orbs */}
       <div className="orb orb-peach w-[600px] h-[600px] -top-40 left-1/4 animate-float-orb opacity-40 pointer-events-none" />
@@ -193,19 +193,19 @@ function SelectPlanContent() {
         
         {/* Title Block */}
         <div className="text-center flex flex-col items-center gap-3">
-          <div className="inline-flex items-center gap-2 bg-[var(--accent-soft)] border border-[var(--accent)]/20 px-4 py-1.5 rounded-full text-xs font-semibold text-[var(--accent)]">
+          <div className="inline-flex items-center gap-2 bg-(--accent-soft) border border-(--accent)/20 px-4 py-1.5 rounded-full text-xs font-semibold text-(--accent)">
             <Sparkles className="w-4 h-4 animate-pulse" />
             Authentication Successful
           </div>
           <h1 className="text-3xl md:text-4xl font-black tracking-tight text-slate-800 mt-1" style={{ fontFamily: "var(--font-display)" }}>
             Choose Your <span className="text-gradient-coral">Access Plan</span>
           </h1>
-          <p className="text-[var(--text-muted)] text-xs md:text-sm max-w-md leading-relaxed">
+          <p className="text-(--text-muted) text-xs md:text-sm max-w-md leading-relaxed">
             Select the Free Trial to test-drive CrackTheLoop, or purchase a premium pass to unlock high-capacity interview fuel.
           </p>
 
           {hasReferral && (
-            <div className="mt-2 inline-flex items-center gap-2 bg-emerald-50 border border-emerald-250 px-4 py-1.5 rounded-full text-xs font-bold text-emerald-700 shadow-sm">
+            <div className="mt-2 inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 px-4 py-1.5 rounded-full text-xs font-bold text-emerald-700 shadow-sm">
               <Gift className="w-4 h-4 text-emerald-600" />
               Referral Applied: You will receive +20% more credits on activation!
             </div>
@@ -222,34 +222,34 @@ function SelectPlanContent() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch mt-4">
           
           {/* Free Trial Card */}
-          <div className="bg-white border border-[var(--border-light)] rounded-[12px] p-6 flex flex-col justify-between min-h-[380px] shadow-sm hover:shadow-md transition">
+          <div className="bg-white border border-(--border-light) rounded-[12px] p-6 flex flex-col justify-between min-h-[380px] shadow-sm hover:shadow-md transition">
             <div>
               <div className="flex justify-between items-start">
                 <h3 className="text-lg font-bold text-slate-800">Free Trial</h3>
                 <span className="bg-sky-500/15 text-sky-600 px-2 py-0.5 rounded font-black text-[9px] uppercase tracking-wider">Free</span>
               </div>
-              <p className="text-[11px] text-[var(--text-muted)] mt-1 font-medium">Evaluate the platform first</p>
+              <p className="text-[11px] text-(--text-muted) mt-1 font-medium">Evaluate the platform first</p>
               
               <div className="flex items-baseline gap-1 mt-6 border-b border-slate-100 pb-4">
                 <span className="text-3xl font-black text-slate-800">{hasReferral ? "18" : "15"}</span>
-                <span className="text-[10px] text-[var(--text-muted)] font-bold uppercase tracking-wider">Credits</span>
+                <span className="text-[10px] text-(--text-muted) font-bold uppercase tracking-wider">Credits</span>
               </div>
 
               <ul className="text-[11px] text-slate-600 flex flex-col gap-3 mt-4 font-semibold">
                 <li className="flex items-center gap-2">
-                  <Check className="w-3.5 h-3.5 text-[var(--accent)] shrink-0" />
+                  <Check className="w-3.5 h-3.5 text-(--accent) shrink-0" />
                   {hasReferral ? "18" : "15"} Fuel Credits
                 </li>
                 <li className="flex items-center gap-2">
-                  <Check className="w-3.5 h-3.5 text-[var(--accent)] shrink-0" />
+                  <Check className="w-3.5 h-3.5 text-(--accent) shrink-0" />
                   Max 1 Interview Session
                 </li>
                 <li className="flex items-center gap-2">
-                  <Check className="w-3.5 h-3.5 text-[var(--accent)] shrink-0" />
+                  <Check className="w-3.5 h-3.5 text-(--accent) shrink-0" />
                   Max 1 AI Report Analysis
                 </li>
                 <li className="flex items-center gap-2 text-slate-400">
-                  <Check className="w-3.5 h-3.5 text-slate-350 shrink-0" />
+                  <Check className="w-3.5 h-3.5 text-slate-300 shrink-0" />
                   7-Day Trial Expiration
                 </li>
               </ul>
@@ -266,27 +266,27 @@ function SelectPlanContent() {
           </div>
 
           {/* Starter Plan */}
-          <div className="bg-white border border-[var(--border-light)] rounded-[12px] p-6 flex flex-col justify-between min-h-[380px] shadow-sm hover:shadow-md transition">
+          <div className="bg-white border border-(--border-light) rounded-[12px] p-6 flex flex-col justify-between min-h-[380px] shadow-sm hover:shadow-md transition">
             <div>
               <h3 className="text-lg font-bold text-slate-800">Starter Pass</h3>
-              <p className="text-[11px] text-[var(--text-muted)] mt-1 font-medium">Ideal for standard interviews</p>
+              <p className="text-[11px] text-(--text-muted) mt-1 font-medium">Ideal for standard interviews</p>
               
               <div className="flex items-baseline gap-1 mt-6 border-b border-slate-100 pb-4">
                 <span className="text-3xl font-black text-slate-800">{hasReferral ? "120" : "100"}</span>
-                <span className="text-[10px] text-[var(--text-muted)] font-bold uppercase tracking-wider">Credits</span>
+                <span className="text-[10px] text-(--text-muted) font-bold uppercase tracking-wider">Credits</span>
               </div>
 
               <ul className="text-[11px] text-slate-600 flex flex-col gap-3 mt-4 font-semibold">
                 <li className="flex items-center gap-2">
-                  <Check className="w-3.5 h-3.5 text-[var(--accent)] shrink-0" />
+                  <Check className="w-3.5 h-3.5 text-(--accent) shrink-0" />
                   {hasReferral ? "120" : "100"} Fuel Credits
                 </li>
                 <li className="flex items-center gap-2">
-                  <Check className="w-3.5 h-3.5 text-[var(--accent)] shrink-0" />
+                  <Check className="w-3.5 h-3.5 text-(--accent) shrink-0" />
                   Streaming STT Capturing
                 </li>
                 <li className="flex items-center gap-2">
-                  <Check className="w-3.5 h-3.5 text-[var(--accent)] shrink-0" />
+                  <Check className="w-3.5 h-3.5 text-(--accent) shrink-0" />
                   Llama-3.1 Model Support
                 </li>
               </ul>
@@ -302,30 +302,30 @@ function SelectPlanContent() {
           </div>
 
           {/* Pro Pass */}
-          <div className="bg-white border border-[var(--accent)]/30 rounded-[12px] p-6 flex flex-col justify-between min-h-[380px] shadow-sm hover:shadow-md transition relative">
-            <div className="absolute top-4 right-4 bg-[var(--accent-soft)] border border-[var(--accent)]/20 text-[var(--accent)] px-2 py-0.5 rounded text-[8px] font-bold tracking-wide uppercase">
+          <div className="bg-white border border-(--accent)/30 rounded-[12px] p-6 flex flex-col justify-between min-h-[380px] shadow-sm hover:shadow-md transition relative">
+            <div className="absolute top-4 right-4 bg-(--accent-soft) border border-(--accent)/20 text-(--accent) px-2 py-0.5 rounded text-[8px] font-bold tracking-wide uppercase">
               Popular
             </div>
             <div>
               <h3 className="text-lg font-bold text-slate-800">Pro Pass</h3>
-              <p className="text-[11px] text-[var(--text-muted)] mt-1 font-medium">For active interview stages</p>
+              <p className="text-[11px] text-(--text-muted) mt-1 font-medium">For active interview stages</p>
               
               <div className="flex items-baseline gap-1 mt-6 border-b border-slate-100 pb-4">
                 <span className="text-3xl font-black text-slate-800">{hasReferral ? "360" : "300"}</span>
-                <span className="text-[10px] text-[var(--text-muted)] font-bold uppercase tracking-wider">Credits</span>
+                <span className="text-[10px] text-(--text-muted) font-bold uppercase tracking-wider">Credits</span>
               </div>
 
               <ul className="text-[11px] text-slate-600 flex flex-col gap-3 mt-4 font-semibold">
                 <li className="flex items-center gap-2">
-                  <Check className="w-3.5 h-3.5 text-[var(--accent)] shrink-0" />
+                  <Check className="w-3.5 h-3.5 text-(--accent) shrink-0" />
                   {hasReferral ? "360" : "300"} Fuel Credits
                 </li>
                 <li className="flex items-center gap-2">
-                  <Check className="w-3.5 h-3.5 text-[var(--accent)] shrink-0" />
+                  <Check className="w-3.5 h-3.5 text-(--accent) shrink-0" />
                   Screen Share Evasion (Zoom/Meet)
                 </li>
                 <li className="flex items-center gap-2">
-                  <Check className="w-3.5 h-3.5 text-[var(--accent)] shrink-0" />
+                  <Check className="w-3.5 h-3.5 text-(--accent) shrink-0" />
                   Unlimited Concurrent Runs
                 </li>
               </ul>
@@ -341,14 +341,14 @@ function SelectPlanContent() {
           </div>
 
           {/* Elite Pass */}
-          <div className="bg-white border border-[var(--border-light)] rounded-[12px] p-6 flex flex-col justify-between min-h-[380px] shadow-sm hover:shadow-md transition">
+          <div className="bg-white border border-(--border-light) rounded-[12px] p-6 flex flex-col justify-between min-h-[380px] shadow-sm hover:shadow-md transition">
             <div>
               <h3 className="text-lg font-bold text-slate-800">Elite Pass</h3>
-              <p className="text-[11px] text-[var(--text-muted)] mt-1 font-medium">Advanced custom contexts</p>
+              <p className="text-[11px] text-(--text-muted) mt-1 font-medium">Advanced custom contexts</p>
               
               <div className="flex items-baseline gap-1 mt-6 border-b border-slate-100 pb-4">
                 <span className="text-3xl font-black text-slate-800">{hasReferral ? "1200" : "1000"}</span>
-                <span className="text-[10px] text-[var(--text-muted)] font-bold uppercase tracking-wider">Credits</span>
+                <span className="text-[10px] text-(--text-muted) font-bold uppercase tracking-wider">Credits</span>
               </div>
 
               <ul className="text-[11px] text-slate-600 flex flex-col gap-3 mt-4 font-semibold">
@@ -357,11 +357,11 @@ function SelectPlanContent() {
                   {hasReferral ? "1200" : "1000"} Fuel Credits
                 </li>
                 <li className="flex items-center gap-2">
-                  <Check className="w-3.5 h-3.5 text-purple-650 shrink-0" />
+                  <Check className="w-3.5 h-3.5 text-purple-600 shrink-0" />
                   GPT-4o-mini & Claude Models
                 </li>
                 <li className="flex items-center gap-2">
-                  <Check className="w-3.5 h-3.5 text-purple-650 shrink-0" />
+                  <Check className="w-3.5 h-3.5 text-purple-600 shrink-0" />
                   PDF Resume context parsing
                 </li>
               </ul>
@@ -379,7 +379,7 @@ function SelectPlanContent() {
         </div>
 
         {/* Dynamic Credit Info */}
-        <div className="w-full bg-white border border-[var(--border-light)] p-4 rounded-[12px] flex items-start gap-3 mt-2 shadow-xs">
+        <div className="w-full bg-white border border-(--border-light) p-4 rounded-[12px] flex items-start gap-3 mt-2 shadow-xs">
           <Info className="w-5 h-5 text-indigo-500 shrink-0 mt-0.5" />
           <div className="text-[11px] text-slate-500 leading-relaxed">
             <strong className="text-slate-800">Credit Consumption Info:</strong> Real-time interview Copilot usage consumes **1 credit per minute** with a **minimum charge of 10 credits** per interview. AI evaluation report generation consumes **5 credits per analysis**.
@@ -394,8 +394,8 @@ function SelectPlanContent() {
 export default function SelectPlanPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-[var(--bg-mist)] flex justify-center items-center">
-        <Loader2 className="w-10 h-10 text-[var(--accent)] animate-spin" />
+      <div className="min-h-screen bg-(--bg-mist) flex justify-center items-center">
+        <Loader2 className="w-10 h-10 text-(--accent) animate-spin" />
       </div>
     }>
       <SelectPlanContent />

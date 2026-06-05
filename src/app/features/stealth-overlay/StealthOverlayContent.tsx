@@ -34,31 +34,31 @@ export default function StealthOverlayContent() {
   ];
 
   return (
-    <div className="min-h-screen bg-[var(--bg-mist)] text-[var(--text-primary)] flex flex-col pt-20">
+    <div className="min-h-screen bg-(--bg-mist) text-(--text-primary) flex flex-col pt-20">
       <Navbar />
 
       {/* Hero Section */}
       <section className="relative w-full max-w-7xl mx-auto px-6 pt-16 pb-12 text-center flex flex-col items-center gap-6">
-        <div className="inline-flex items-center gap-2 bg-[var(--accent-soft)] border border-[var(--accent)]/20 px-4 py-1.5 rounded-full text-xs font-semibold text-[var(--accent)]">
+        <div className="inline-flex items-center gap-2 bg-(--accent-soft) border border-(--accent)/20 px-4 py-1.5 rounded-full text-xs font-semibold text-(--accent)">
           <Monitor className="w-3.5 h-3.5" />
           Win32 Hardware Exclusion HUD
         </div>
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-[var(--text-primary)] leading-none max-w-3xl" style={{ fontFamily: "var(--font-display)" }}>
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-(--text-primary) leading-none max-w-3xl" style={{ fontFamily: "var(--font-display)" }}>
           Zoom-Invisible <br />
           <span className="text-gradient-coral">Stealth HUD Overlay Window</span>
         </h1>
-        <p className="text-[var(--text-muted)] text-base md:text-lg max-w-2xl leading-relaxed">
+        <p className="text-(--text-muted) text-base md:text-lg max-w-2xl leading-relaxed">
           The desktop client leverages native OS compositor exclusion instructions to ensure your helper notes never appear on screen shares, recordings, or screenshots.
         </p>
       </section>
 
       {/* Side-by-Side Screen Simulation */}
       <section className="w-full max-w-6xl mx-auto px-6 py-8">
-        <div className="bg-white border border-[var(--border-light)] rounded-[12px] p-6 md:p-8 shadow-sm">
+        <div className="bg-white border border-(--border-light) rounded-[12px] p-6 md:p-8 shadow-sm">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-100 pb-5 mb-8 gap-4">
             <div>
               <h2 className="text-xl font-bold flex items-center gap-2 text-slate-800">
-                <AppWindow className="w-5 h-5 text-[var(--accent)]" /> Stealth Comparison Sandbox
+                <AppWindow className="w-5 h-5 text-(--accent)" /> Stealth Comparison Sandbox
               </h2>
               <p className="text-xs text-slate-500 mt-1">See exactly what you see on your physical monitor versus what your interviewer sees during screen sharing.</p>
             </div>
@@ -72,7 +72,7 @@ export default function StealthOverlayContent() {
                 step="0.1"
                 value={hudOpacity}
                 onChange={(e) => setHudOpacity(parseFloat(e.target.value))}
-                className="w-24 accent-[var(--accent)] cursor-pointer"
+                className="w-24 accent-(--accent) cursor-pointer"
               />
               <span className="text-xs font-mono font-bold text-slate-500 w-8">{Math.round(hudOpacity * 100)}%</span>
             </div>
@@ -88,7 +88,7 @@ export default function StealthOverlayContent() {
                   Your Screen (Candidate View)
                 </span>
               </div>
-              <div className="border border-slate-250 bg-slate-900 rounded-[8px] p-4 h-80 relative overflow-hidden flex flex-col justify-between font-mono text-xs select-none">
+              <div className="border border-slate-200 bg-slate-900 rounded-[8px] p-4 h-80 relative overflow-hidden flex flex-col justify-between font-mono text-xs select-none">
                 {/* Fake code editor */}
                 <div className="text-slate-500 space-y-1">
                   <div><span className="text-purple-400">const</span> solveQuestion = (nums) =&gt; &#123;</div>
@@ -102,27 +102,27 @@ export default function StealthOverlayContent() {
 
                 {/* Floating HUD Overlay (Absolute position) */}
                 <div
-                  className="absolute bottom-4 right-4 w-72 bg-slate-950/80 backdrop-blur-md border border-[var(--accent)]/30 rounded-[8px] p-4 shadow-xl z-20 transition-opacity duration-300"
+                  className="absolute bottom-4 right-4 w-72 bg-slate-950/80 backdrop-blur-md border border-(--accent)/30 rounded-[8px] p-4 shadow-xl z-20 transition-opacity duration-300"
                   style={{ opacity: hudOpacity }}
                 >
                   <div className="flex items-center justify-between border-b border-white/10 pb-2 mb-2">
-                    <span className="text-[10px] text-[var(--accent)] font-bold uppercase tracking-wider flex items-center gap-1">
+                    <span className="text-[10px] text-(--accent) font-bold uppercase tracking-wider flex items-center gap-1">
                       <Sparkles className="w-3.5 h-3.5" />
                       Overlay Assistance HUD
                     </span>
-                    <span className="text-[8px] bg-[var(--accent-soft)] text-[var(--accent)] px-1.5 py-0.5 rounded-full font-bold">Active</span>
+                    <span className="text-[8px] bg-(--accent-soft) text-(--accent) px-1.5 py-0.5 rounded-full font-bold">Active</span>
                   </div>
-                  <div className="space-y-2 text-[10px] text-slate-350 leading-relaxed font-sans">
+                  <div className="space-y-2 text-[10px] text-slate-300 leading-relaxed font-sans">
                     <div className="flex gap-2">
-                      <span className="text-[var(--accent)] font-bold">✦</span>
+                      <span className="text-(--accent) font-bold">✦</span>
                       <span>Use a HashMap for O(n) space/time lookup efficiency.</span>
                     </div>
                     <div className="flex gap-2">
-                      <span className="text-[var(--accent)] font-bold">✦</span>
+                      <span className="text-(--accent) font-bold">✦</span>
                       <span>Watch out for array boundaries and null value exceptions.</span>
                     </div>
                     <div className="flex gap-2">
-                      <span className="text-[var(--accent)] font-bold">✓</span>
+                      <span className="text-(--accent) font-bold">✓</span>
                       <span>Remember: Maintain active camera eye contact.</span>
                     </div>
                   </div>
@@ -139,7 +139,7 @@ export default function StealthOverlayContent() {
                   Interviewer View (Zoom/Meet Shared Screen)
                 </span>
               </div>
-              <div className="border border-slate-250 bg-slate-900 rounded-[8px] p-4 h-80 relative overflow-hidden flex flex-col justify-between font-mono text-xs select-none">
+              <div className="border border-slate-200 bg-slate-900 rounded-[8px] p-4 h-80 relative overflow-hidden flex flex-col justify-between font-mono text-xs select-none">
                 {/* Fake code editor (Identical clone) */}
                 <div className="text-slate-500 space-y-1">
                   <div><span className="text-purple-400">const</span> solveQuestion = (nums) =&gt; &#123;</div>
@@ -169,7 +169,7 @@ export default function StealthOverlayContent() {
           <h2 className="text-3xl font-extrabold tracking-tight mb-6" style={{ fontFamily: "var(--font-display)" }}>
             Engineered for <span className="text-gradient-coral">Absolute Stealth</span>
           </h2>
-          <p className="text-[var(--text-muted)] text-sm leading-relaxed mb-6">
+          <p className="text-(--text-muted) text-sm leading-relaxed mb-6">
             Proctoring platforms and standard video portals capture screens by reading the system's global composite buffers. By flagging the overlay handler with OS-specific rendering affinity directives, our window is entirely bypassed from screenshots and screen shares.
           </p>
           <div className="space-y-4">
@@ -203,14 +203,14 @@ export default function StealthOverlayContent() {
           </div>
         </div>
 
-        <div className="bg-white border border-[var(--border-light)] rounded-[12px] p-6 shadow-sm flex flex-col gap-4">
-          <span className="text-xs font-mono font-bold text-[var(--accent)] tracking-wider flex items-center gap-1.5">
-            <ShieldAlert className="w-4 h-4 text-[var(--accent)]" /> Win32 API Display Affinity Binding
+        <div className="bg-white border border-(--border-light) rounded-[12px] p-6 shadow-sm flex flex-col gap-4">
+          <span className="text-xs font-mono font-bold text-(--accent) tracking-wider flex items-center gap-1.5">
+            <ShieldAlert className="w-4 h-4 text-(--accent)" /> Win32 API Display Affinity Binding
           </span>
           <p className="text-xs text-slate-600 leading-relaxed">
             On Windows 10 and 11, the native window is handled using kernel composition bindings. This bypasses common screen-capture techniques entirely.
           </p>
-          <pre className="text-[10px] font-mono bg-slate-950 p-4 rounded-[6px] text-slate-350 leading-relaxed overflow-x-auto scrollbar-thin">
+          <pre className="text-[10px] font-mono bg-slate-950 p-4 rounded-[6px] text-slate-300 leading-relaxed overflow-x-auto scrollbar-thin">
 {`// Rust binding inside Tauri system handler
 use windows::Win32::UI::WindowsAndMessaging::{
     SetWindowDisplayAffinity, WDA_EXCLUDEFROMCAPTURE

@@ -85,13 +85,13 @@ export default function UseCases() {
         <ScrollReveal>
           <div className="text-center mb-14">
             <h2
-              className="text-3xl md:text-4xl font-extrabold tracking-tight text-[var(--text-primary)]"
+              className="text-3xl md:text-4xl font-extrabold tracking-tight text-(--text-primary)"
               style={{ fontFamily: "var(--font-display)" }}
             >
               Made for Every Candidate Who Wants to{" "}
               <span className="text-gradient-coral">Answer Better</span>
             </h2>
-            <p className="text-[var(--text-muted)] text-base mt-3 max-w-xl mx-auto leading-relaxed">
+            <p className="text-(--text-muted) text-base mt-3 max-w-xl mx-auto leading-relaxed">
               CrackTheLoop adapts its assistance to your unique career stage — no generic advice, only context-aware guidance.
             </p>
           </div>
@@ -106,31 +106,31 @@ export default function UseCases() {
               const Icon = uc.icon;
               return (
                 <StaggerItem key={i}>
-                  <div className="group relative bg-white/60 border border-[var(--border-light)] rounded-[6px] p-6 flex flex-col gap-4 overflow-hidden hover:-translate-y-1 transition-all duration-300 cursor-default h-full">
+                  <div className="group relative bg-white/60 border border-(--border-light) rounded-[6px] p-6 flex flex-col gap-4 overflow-hidden hover:-translate-y-1 transition-all duration-300 cursor-default h-full">
                     <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-mono font-bold tracking-wider uppercase px-2.5 py-1 rounded-full border bg-[var(--accent-soft)] text-[var(--accent)] border-[var(--accent)]/20">
+                      <span className="text-[10px] font-mono font-bold tracking-wider uppercase px-2.5 py-1 rounded-full border bg-(--accent-soft) text-(--accent) border-(--accent)/20">
                         {uc.tag}
                       </span>
                       <span className="text-right">
-                        <span className="text-2xl font-black text-[var(--accent)]">{uc.stat.value}</span>
-                        <span className="text-[10px] text-[var(--text-muted)] block">{uc.stat.label}</span>
+                        <span className="text-2xl font-black text-(--accent)">{uc.stat.value}</span>
+                        <span className="text-[10px] text-(--text-muted) block">{uc.stat.label}</span>
                       </span>
                     </div>
 
                     <div className="flex items-center gap-3">
-                      <div className="w-11 h-11 rounded-[6px] bg-[var(--accent-soft)] text-[var(--accent)] flex items-center justify-center shrink-0">
+                      <div className="w-11 h-11 rounded-[6px] bg-(--accent-soft) text-(--accent) flex items-center justify-center shrink-0">
                         <Icon className="w-5 h-5" />
                       </div>
-                      <h3 className="text-lg font-extrabold text-[var(--text-primary)] leading-snug">{uc.title}</h3>
+                      <h3 className="text-lg font-extrabold text-(--text-primary) leading-snug">{uc.title}</h3>
                     </div>
 
-                    <p className="text-sm text-[var(--text-muted)] leading-relaxed">{uc.desc}</p>
+                    <p className="text-sm text-(--text-muted) leading-relaxed">{uc.desc}</p>
 
-                    <ul className="flex flex-col gap-2 pt-4 border-t border-[var(--border-light)]">
+                    <ul className="flex flex-col gap-2 pt-4 border-t border-(--border-light)">
                       {uc.points.map((pt, j) => (
-                        <li key={j} className="flex items-start gap-2 text-xs text-[var(--text-secondary)] font-medium">
-                          <span className="mt-0.5 shrink-0 w-3.5 h-3.5 rounded-full bg-[var(--accent-soft)] flex items-center justify-center">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]" />
+                        <li key={j} className="flex items-start gap-2 text-xs text-(--text-secondary) font-medium">
+                          <span className="mt-0.5 shrink-0 w-3.5 h-3.5 rounded-full bg-(--accent-soft) flex items-center justify-center">
+                            <span className="w-1.5 h-1.5 rounded-full bg-(--accent)" />
                           </span>
                           {pt}
                         </li>
@@ -144,34 +144,34 @@ export default function UseCases() {
 
           {/* Row 2: Featured wide card */}
           <StaggerItem>
-            <div className="group relative bg-[var(--accent-soft)] border border-[var(--accent)]/20 rounded-[6px] p-7 md:p-8 overflow-hidden hover:-translate-y-1 transition-all duration-300 cursor-default">
-              <div className="absolute -right-20 -top-20 w-60 h-60 rounded-full bg-[var(--accent)]/10 blur-3xl pointer-events-none" />
+            <div className="group relative bg-(--accent-soft) border border-(--accent)/20 rounded-[6px] p-7 md:p-8 overflow-hidden hover:-translate-y-1 transition-all duration-300 cursor-default">
+              <div className="absolute -right-20 -top-20 w-60 h-60 rounded-full bg-(--accent)/10 blur-3xl pointer-events-none" />
 
               <div className="relative flex flex-col md:flex-row gap-8 items-start">
                 <div className="flex-1 flex flex-col gap-5">
                   <div className="flex items-center gap-3 flex-wrap">
-                    <span className="text-[10px] font-mono font-bold tracking-wider uppercase px-2.5 py-1 rounded-full border bg-white/80 text-[var(--accent)] border-[var(--accent)]/20">
+                    <span className="text-[10px] font-mono font-bold tracking-wider uppercase px-2.5 py-1 rounded-full border bg-white/80 text-(--accent) border-(--accent)/20">
                       {featured.tag}
                     </span>
-                    <span className="text-[10px] font-mono font-bold tracking-wider uppercase px-2.5 py-1 rounded-full bg-[var(--accent)] text-white">
+                    <span className="text-[10px] font-mono font-bold tracking-wider uppercase px-2.5 py-1 rounded-full bg-(--accent) text-white">
                       ★ Most Popular
                     </span>
                   </div>
 
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-[6px] bg-white/80 text-[var(--accent)] flex items-center justify-center shrink-0">
+                    <div className="w-12 h-12 rounded-[6px] bg-white/80 text-(--accent) flex items-center justify-center shrink-0">
                       <Briefcase className="w-6 h-6" />
                     </div>
-                    <h3 className="text-2xl font-black text-[var(--text-primary)] leading-tight">{featured.title}</h3>
+                    <h3 className="text-2xl font-black text-(--text-primary) leading-tight">{featured.title}</h3>
                   </div>
 
-                  <p className="text-sm text-[var(--text-muted)] leading-relaxed max-w-lg">{featured.desc}</p>
+                  <p className="text-sm text-(--text-muted) leading-relaxed max-w-lg">{featured.desc}</p>
 
                   <ul className="flex flex-col gap-2.5">
                     {featured.points.map((pt, j) => (
-                      <li key={j} className="flex items-start gap-2 text-sm text-[var(--text-secondary)] font-medium">
+                      <li key={j} className="flex items-start gap-2 text-sm text-(--text-secondary) font-medium">
                         <span className="mt-0.5 shrink-0 w-4 h-4 rounded-full bg-white/70 flex items-center justify-center">
-                          <span className="w-2 h-2 rounded-full bg-[var(--accent)]" />
+                          <span className="w-2 h-2 rounded-full bg-(--accent)" />
                         </span>
                         {pt}
                       </li>
@@ -182,16 +182,16 @@ export default function UseCases() {
                 {/* Right: Stats block */}
                 <div className="shrink-0 flex flex-row md:flex-col gap-4 w-full md:w-44">
                   <div className="flex-1 bg-white/70 backdrop-blur-sm rounded-[8px] p-4 border border-white/80 flex flex-col gap-1 shadow-sm">
-                    <span className="text-3xl font-black text-[var(--accent)]">{featured.stat.value}</span>
-                    <span className="text-[11px] text-[var(--text-muted)] font-medium leading-snug">{featured.stat.label}</span>
+                    <span className="text-3xl font-black text-(--accent)">{featured.stat.value}</span>
+                    <span className="text-[11px] text-(--text-muted) font-medium leading-snug">{featured.stat.label}</span>
                   </div>
                   <div className="flex-1 bg-white/70 backdrop-blur-sm rounded-[8px] p-4 border border-white/80 flex flex-col gap-1 shadow-sm">
-                    <span className="text-3xl font-black text-[var(--accent)]">1.5s</span>
-                    <span className="text-[11px] text-[var(--text-muted)] font-medium leading-snug">avg. answer suggestion speed</span>
+                    <span className="text-3xl font-black text-(--accent)">1.5s</span>
+                    <span className="text-[11px] text-(--text-muted) font-medium leading-snug">avg. answer suggestion speed</span>
                   </div>
                   <div className="flex-1 bg-white/70 backdrop-blur-sm rounded-[8px] p-4 border border-white/80 flex flex-col gap-1 shadow-sm">
-                    <span className="text-3xl font-black text-[var(--accent)]">100%</span>
-                    <span className="text-[11px] text-[var(--text-muted)] font-medium leading-snug">JD keyword alignment</span>
+                    <span className="text-3xl font-black text-(--accent)">100%</span>
+                    <span className="text-[11px] text-(--text-muted) font-medium leading-snug">JD keyword alignment</span>
                   </div>
                 </div>
               </div>
@@ -204,31 +204,31 @@ export default function UseCases() {
               const Icon = uc.icon;
               return (
                 <StaggerItem key={i}>
-                  <div className="group relative bg-white/60 border border-[var(--border-light)] rounded-[6px] p-6 flex flex-col gap-4 overflow-hidden hover:-translate-y-1 transition-all duration-300 cursor-default h-full">
+                  <div className="group relative bg-white/60 border border-(--border-light) rounded-[6px] p-6 flex flex-col gap-4 overflow-hidden hover:-translate-y-1 transition-all duration-300 cursor-default h-full">
                     <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-mono font-bold tracking-wider uppercase px-2.5 py-1 rounded-full border bg-[var(--accent-soft)] text-[var(--accent)] border-[var(--accent)]/20">
+                      <span className="text-[10px] font-mono font-bold tracking-wider uppercase px-2.5 py-1 rounded-full border bg-(--accent-soft) text-(--accent) border-(--accent)/20">
                         {uc.tag}
                       </span>
                       <span className="text-right">
-                        <span className="text-2xl font-black text-[var(--accent)]">{uc.stat.value}</span>
-                        <span className="text-[10px] text-[var(--text-muted)] block">{uc.stat.label}</span>
+                        <span className="text-2xl font-black text-(--accent)">{uc.stat.value}</span>
+                        <span className="text-[10px] text-(--text-muted) block">{uc.stat.label}</span>
                       </span>
                     </div>
 
                     <div className="flex items-center gap-3">
-                      <div className="w-11 h-11 rounded-[6px] bg-[var(--accent-soft)] text-[var(--accent)] flex items-center justify-center shrink-0">
+                      <div className="w-11 h-11 rounded-[6px] bg-(--accent-soft) text-(--accent) flex items-center justify-center shrink-0">
                         <Icon className="w-5 h-5" />
                       </div>
-                      <h3 className="text-lg font-extrabold text-[var(--text-primary)] leading-snug">{uc.title}</h3>
+                      <h3 className="text-lg font-extrabold text-(--text-primary) leading-snug">{uc.title}</h3>
                     </div>
 
-                    <p className="text-sm text-[var(--text-muted)] leading-relaxed">{uc.desc}</p>
+                    <p className="text-sm text-(--text-muted) leading-relaxed">{uc.desc}</p>
 
-                    <ul className="flex flex-col gap-2 pt-4 border-t border-[var(--border-light)]">
+                    <ul className="flex flex-col gap-2 pt-4 border-t border-(--border-light)">
                       {uc.points.map((pt, j) => (
-                        <li key={j} className="flex items-start gap-2 text-xs text-[var(--text-secondary)] font-medium">
-                          <span className="mt-0.5 shrink-0 w-3.5 h-3.5 rounded-full bg-[var(--accent-soft)] flex items-center justify-center">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]" />
+                        <li key={j} className="flex items-start gap-2 text-xs text-(--text-secondary) font-medium">
+                          <span className="mt-0.5 shrink-0 w-3.5 h-3.5 rounded-full bg-(--accent-soft) flex items-center justify-center">
+                            <span className="w-1.5 h-1.5 rounded-full bg-(--accent)" />
                           </span>
                           {pt}
                         </li>

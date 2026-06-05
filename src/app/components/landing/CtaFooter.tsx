@@ -55,14 +55,14 @@ export default function CtaFooter() {
           <ScrollReveal>
             <div className="max-w-4xl mx-auto px-6 text-center">
               <h2
-                className="text-3xl md:text-5xl lg:text-[56px] font-extrabold tracking-tight text-[var(--text-primary)] mb-6 leading-[1.12]"
+                className="text-3xl md:text-5xl lg:text-[56px] font-extrabold tracking-tight text-(--text-primary) mb-6 leading-[1.12]"
                 style={{ fontFamily: "var(--font-display)" }}
               >
                 Walk Into Your Next Interview <br className="hidden sm:inline" />
                 With More{" "}
                 <span className="text-gradient-coral">Confidence.</span>
               </h2>
-              <p className="text-[var(--text-muted)] text-base md:text-lg mb-10 max-w-xl mx-auto leading-relaxed">
+              <p className="text-(--text-muted) text-base md:text-lg mb-10 max-w-xl mx-auto leading-relaxed">
                 Upload your resume, add the job description, and let your AI buddy help you prepare stronger, clearer, and more relevant answers.
               </p>
               <div className="flex flex-wrap justify-center gap-4">
@@ -86,7 +86,7 @@ export default function CtaFooter() {
       </div>
 
       {/* Footer — remains light */}
-      <footer className="border-t border-[var(--border-light)] py-16 bg-[var(--bg-mist)]/90 backdrop-blur-md relative z-10">
+      <footer className="border-t border-(--border-light) py-16 bg-(--bg-mist)/90 backdrop-blur-md relative z-10">
         <div className="max-w-7xl mx-auto px-6">
           {/* Main Footer Content Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 pb-12">
@@ -98,14 +98,14 @@ export default function CtaFooter() {
               >
                 <img
                   src="/logo.svg"
-                  className="h-8 w-8 rounded-lg select-none border border-[var(--border-light)]"
+                  className="h-8 w-8 rounded-lg select-none border border-(--border-light)"
                   alt="CrackTheLoop Logo Icon"
                 />
-                <span className="font-extrabold tracking-tight text-lg text-[var(--text-primary)]" style={{ fontFamily: "var(--font-display)" }}>
+                <span className="font-extrabold tracking-tight text-lg text-(--text-primary)" style={{ fontFamily: "var(--font-display)" }}>
                   CrackTheLoop
                 </span>
               </a>
-              <p className="text-xs text-[var(--text-muted)] leading-relaxed max-w-xs">
+              <p className="text-xs text-(--text-muted) leading-relaxed max-w-xs">
                 Sleek, undetectable confidence companion for engineering candidates. Live audio downsampling and Win32 capture exclusion built directly into a transparent HUD overlay.
               </p>
               <div className="flex items-center gap-1.5 text-xs text-emerald-600 font-semibold mt-2">
@@ -125,7 +125,7 @@ export default function CtaFooter() {
                   <a
                     key={link.label}
                     href={getHref(link.href)}
-                    className="text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] transition cursor-pointer font-medium"
+                    className="text-xs text-(--text-muted) hover:text-(--text-primary) transition cursor-pointer font-medium"
                   >
                     {link.label}
                   </a>
@@ -141,7 +141,7 @@ export default function CtaFooter() {
                   <a
                     key={link.label}
                     href={getHref(link.href)}
-                    className="text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] transition cursor-pointer font-medium"
+                    className="text-xs text-(--text-muted) hover:text-(--text-primary) transition cursor-pointer font-medium"
                   >
                     {link.label}
                   </a>
@@ -157,7 +157,7 @@ export default function CtaFooter() {
                   <a
                     key={link.label}
                     href={getHref(link.href)}
-                    className="text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] transition cursor-pointer font-medium"
+                    className="text-xs text-(--text-muted) hover:text-(--text-primary) transition cursor-pointer font-medium"
                   >
                     {link.label}
                   </a>
@@ -167,18 +167,18 @@ export default function CtaFooter() {
           </div>
 
           {/* Bottom Bar */}
-          <div className="border-t border-[var(--border-light)] pt-8 flex flex-col gap-6">
+          <div className="border-t border-(--border-light) pt-8 flex flex-col gap-6">
             <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-              <span className="text-xs text-[var(--text-muted)] font-medium">
+              <span className="text-xs text-(--text-muted) font-medium">
                 © 2026 CrackTheLoop. All rights reserved.
               </span>
-              <span className="flex items-center gap-1 text-[var(--text-muted)] text-[10px] font-mono">
+              <span className="flex items-center gap-1 text-(--text-muted) text-[10px] font-mono">
                 System: Win32 API / Core loopback active
               </span>
             </div>
             
             <div className="bg-slate-50 border border-slate-200/50 rounded-xl p-5 text-center">
-              <p className="text-[10px] text-[var(--text-muted)] max-w-4xl mx-auto leading-relaxed">
+              <p className="text-[10px] text-(--text-muted) max-w-4xl mx-auto leading-relaxed">
                 <strong>Disclaimer & Responsible Use:</strong> CrackTheLoop is designed exclusively for interview prep, mock simulations, coding confidence, and communication practice. All users are expected to verify rules, policies, and honor codes of their target recruiting environments before utilization during live examinations.
               </p>
             </div>

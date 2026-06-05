@@ -178,7 +178,7 @@ function PipelineDiagram() {
                 style={{ minWidth: 90 }}
               >
                 <div
-                  className="w-[72px] h-[72px] rounded-2xl flex items-center justify-center relative transition-all duration-500 bg-white border border-[var(--border-light)] shadow-xs"
+                  className="w-[72px] h-[72px] rounded-2xl flex items-center justify-center relative transition-all duration-500 bg-white border border-(--border-light) shadow-xs"
                   style={{
                     background: isActive
                       ? `radial-gradient(circle at 50% 50%, ${n.glow}, transparent 70%)`
@@ -340,7 +340,7 @@ function LatencyBar() {
           </div>
         ))}
         <div className="flex items-center gap-1.5 text-[10px] sm:ml-auto">
-          <span className="text-slate-455 font-semibold">Total:</span>
+          <span className="text-slate-400 font-semibold">Total:</span>
           <span className="font-black text-slate-800 text-xs">{TOTAL_MS}ms</span>
           <span className="text-emerald-600 font-bold ml-1">✓ sub-second response</span>
         </div>
@@ -426,7 +426,7 @@ export default function DemoPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--bg-mist)] text-[var(--text-primary)] flex flex-col pt-20">
+    <div className="min-h-screen bg-(--bg-mist) text-(--text-primary) flex flex-col pt-20">
 
       {/* Background orbs */}
       <div className="orb orb-peach w-[600px] h-[600px] -top-40 left-1/4 animate-float-orb opacity-40 pointer-events-none" />
@@ -437,28 +437,28 @@ export default function DemoPage() {
 
       {/* Hero Header */}
       <section className="w-full max-w-4xl mx-auto px-6 pt-12 text-center flex flex-col items-center gap-4 relative z-20 select-none">
-        <div className="inline-flex items-center gap-2 bg-[var(--accent-soft)] border border-[var(--accent)]/20 px-4 py-1.5 rounded-full text-xs font-semibold text-[var(--accent)]">
+        <div className="inline-flex items-center gap-2 bg-(--accent-soft) border border-(--accent)/20 px-4 py-1.5 rounded-full text-xs font-semibold text-(--accent)">
           <Sparkles className="w-3.5 h-3.5 animate-pulse" />
           Interactive Live Pipeline Demo
         </div>
         <h1 className="text-4xl md:text-5xl font-black tracking-tight leading-tight text-slate-800" id="demo-main-heading" style={{ fontFamily: "var(--font-display)" }}>
           Watch the <span className="text-gradient-coral">Real-Time Overlay</span> Pipeline
         </h1>
-        <p className="text-[var(--text-muted)] text-sm md:text-base max-w-2xl leading-relaxed">
+        <p className="text-(--text-muted) text-sm md:text-base max-w-2xl leading-relaxed">
           Explore the full WASAPI → Deepgram → LLM → HUD pipeline architecture, then run an interactive simulation below.
         </p>
       </section>
 
       {/* ── Pipeline Diagram Card ── */}
       <section className="w-full max-w-5xl mx-auto px-6 pt-16 relative z-20">
-        <div className="bg-white border border-[var(--border-light)] rounded-[12px] p-6 md:p-8 flex flex-col gap-8 shadow-sm" id="pipeline-diagram-card">
+        <div className="bg-white border border-(--border-light) rounded-[12px] p-6 md:p-8 flex flex-col gap-8 shadow-sm" id="pipeline-diagram-card">
 
           <div className="flex justify-between items-center border-b border-slate-100 pb-4 select-none">
             <div>
               <h2 className="text-lg font-bold text-slate-800">Desktop Client Architecture</h2>
               <p className="text-xs text-slate-500 mt-0.5">Click a node to inspect • Press &ldquo;Run Pipeline Animation&rdquo; to watch the data flow</p>
             </div>
-            <div className="hidden sm:flex items-center gap-1.5 bg-emerald-50 border border-emerald-250 px-3.5 py-1.5 rounded-full text-[10px] font-bold text-emerald-700 uppercase tracking-wider">
+            <div className="hidden sm:flex items-center gap-1.5 bg-emerald-50 border border-emerald-200 px-3.5 py-1.5 rounded-full text-[10px] font-bold text-emerald-700 uppercase tracking-wider">
               <Shield className="w-3 h-3 text-emerald-600" /> Win32 Stealth Active
             </div>
           </div>
@@ -479,7 +479,7 @@ export default function DemoPage() {
 
       {/* ── Live Simulator Sandbox ── */}
       <section className="w-full max-w-5xl mx-auto px-6 pt-14 relative z-20">
-        <div className="bg-white border border-[var(--border-light)] rounded-[12px] p-6 md:p-8 flex flex-col gap-6 shadow-sm" id="demo-simulator-container">
+        <div className="bg-white border border-(--border-light) rounded-[12px] p-6 md:p-8 flex flex-col gap-6 shadow-sm" id="demo-simulator-container">
 
           <div className="flex justify-between items-center border-b border-slate-100 pb-4 select-none">
             <div>
@@ -494,14 +494,14 @@ export default function DemoPage() {
 
           {/* Questions Selection grid */}
           <div className="flex flex-col gap-2.5 select-none">
-            <span className="text-xs text-slate-450 uppercase tracking-wider font-extrabold">Choose a sample question:</span>
+            <span className="text-xs text-slate-400 uppercase tracking-wider font-extrabold">Choose a sample question:</span>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               {sampleQuestions.map((q, idx) => (
                 <button
                   key={idx}
                   onClick={() => startSimulation(q)}
                   disabled={simState === "listening" || simState === "answering"}
-                  className="p-3.5 bg-slate-50 border border-slate-200 hover:border-slate-350 hover:bg-slate-100/70 rounded-xl text-left text-xs transition cursor-pointer disabled:opacity-50 text-slate-700 font-bold"
+                  className="p-3.5 bg-slate-50 border border-slate-200 hover:border-slate-300 hover:bg-slate-100/70 rounded-xl text-left text-xs transition cursor-pointer disabled:opacity-50 text-slate-700 font-bold"
                 >
                   {q}
                 </button>
@@ -539,7 +539,7 @@ export default function DemoPage() {
                   Overlay HUD View
                 </div>
                 {simState === "idle" && <span className="text-slate-600 italic select-none">Awaiting audio capture stream...</span>}
-                {simState === "listening" && <span className="text-slate-550 italic animate-pulse select-none">Routing to LLM...</span>}
+                {simState === "listening" && <span className="text-slate-500 italic animate-pulse select-none">Routing to LLM...</span>}
                 {(simState === "answering" || simState === "done") && (
                   <div className="text-emerald-100 whitespace-pre-line font-mono font-bold leading-relaxed text-[11px] p-1">
                     {simAnswer}
@@ -577,9 +577,9 @@ export default function DemoPage() {
 
       {/* ── Product Integration Download Callout ── */}
       <section className="w-full max-w-5xl mx-auto px-6 pt-16 pb-8 text-center select-none z-20">
-        <div className="bg-white border border-[var(--border-light)] rounded-[12px] p-10 flex flex-col items-center gap-6 shadow-sm">
+        <div className="bg-white border border-(--border-light) rounded-[12px] p-10 flex flex-col items-center gap-6 shadow-sm">
           <h4 className="text-2xl font-bold text-slate-800" style={{ fontFamily: "var(--font-display)" }}>Unlock Full Production Capabilities</h4>
-          <p className="text-[var(--text-muted)] text-sm max-w-md">
+          <p className="text-(--text-muted) text-sm max-w-md">
             Deploy the live copilot straight inside your browser or grab our native Windows desktop client installer.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
