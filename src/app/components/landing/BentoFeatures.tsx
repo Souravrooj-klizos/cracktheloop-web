@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { FileText, CheckCircle2, Mic, Clock, BrainCircuit, ShieldAlert, ChevronRight } from "lucide-react";
+import { FileText, CheckCircle2, Mic, Clock, BrainCircuit, ShieldAlert, ChevronRight, ArrowRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ScrollReveal } from "./ScrollReveal";
 
@@ -256,6 +256,15 @@ export default function BentoFeatures() {
   const [progress, setProgress] = useState(0);
   const [isInView, setIsInView] = useState(false);
   
+  const featureLinks = [
+    "/features/resume-jd-alignment",
+    "/features/resume-jd-alignment",
+    "/features/live-transcription",
+    "/features/live-transcription",
+    "/features/resume-jd-alignment",
+    "/features/stealth-overlay"
+  ];
+  
   const sectionRef = useRef<HTMLElement | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const progressRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -422,6 +431,16 @@ export default function BentoFeatures() {
                     <p className="text-sm text-[var(--text-muted)] mt-1.5 leading-relaxed max-w-md">
                       {activeFeature.desc}
                     </p>
+                    {featureLinks[active] && (
+                      <div className="mt-3">
+                        <a 
+                          href={featureLinks[active]} 
+                          className="inline-flex items-center gap-1 text-xs font-bold text-[var(--accent)] hover:text-[#f06b57] transition cursor-pointer"
+                        >
+                          Explore feature details <ArrowRight className="w-3.5 h-3.5" />
+                        </a>
+                      </div>
+                    )}
                   </div>
                   <div className="w-12 h-12 rounded-[6px] flex items-center justify-center shrink-0 ml-4 bg-[var(--accent-soft)]">
                     <activeFeature.icon className="w-5 h-5 text-[var(--accent)]" />

@@ -1,0 +1,95 @@
+[{
+  "_id": {
+    "$oid": "6a200f8862638e34e603410d"
+  },
+  "price_id": "price_1TeCnyEkHwm1l3fZV45CSLvV",
+  "created_at": {
+    "$date": "2026-06-03T11:27:05.036Z"
+  },
+  "credits": 100,
+  "description": "Ideal for beginners practicing code challenges",
+  "features": [
+    "Streaming STT voice capturing",
+    "Standard low-latency audio capture",
+    "LLaMA-3.1 model support"
+  ],
+  "interval": "month",
+  "is_active": true,
+  "name": "Starter Pass",
+  "price": 19,
+  "updated_at": {
+    "$date": "2026-06-03T12:19:52.606Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6a200f8862638e34e603410e"
+  },
+  "price_id": "price_1TeCpEEkHwm1l3fZej0zzJhb",
+  "created_at": {
+    "$date": "2026-06-03T11:27:05.281Z"
+  },
+  "credits": 300,
+  "description": "Ideal for active interview stages",
+  "features": [
+    "Sub-second latency streaming STT",
+    "Screen sharing evasion (Zoom & Meet)",
+    "Unlimited concurrent LLM runs",
+    "Standard Groq & xAI keys support"
+  ],
+  "interval": "month",
+  "is_active": true,
+  "name": "Pro Pass",
+  "price": 39,
+  "updated_at": {
+    "$date": "2026-06-03T12:19:52.665Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6a200f8962638e34e603410f"
+  },
+  "price_id": "price_1TeCpaEkHwm1l3fZj9f7Gh31",
+  "created_at": {
+    "$date": "2026-06-03T11:27:05.316Z"
+  },
+  "credits": 1000,
+  "description": "Advanced custom context models",
+  "features": [
+    "All Pro features included",
+    "Highest accuracy GPT-4o-mini & Claude",
+    "PDF & DOCX Resume parsing extraction",
+    "Priority routing API proxy pipelines"
+  ],
+  "interval": "month",
+  "is_active": true,
+  "name": "Elite Pass",
+  "price": 79,
+  "updated_at": {
+    "$date": "2026-06-03T12:19:52.726Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6a201be862638e34e60368a8"
+  },
+  "price_id": "free_trial",
+  "created_at": {
+    "$date": "2026-06-03T12:19:52.208Z"
+  },
+  "credits": 15,
+  "description": "Test the platform before committing to a paid plan",
+  "features": [
+    "15 AI fuel credits",
+    "Limit: 1 Interview session",
+    "Limit: 1 AI Report analysis",
+    "7-day trial validity"
+  ],
+  "interval": "one-time",
+  "is_active": true,
+  "name": "Free Trial",
+  "price": 0,
+  "updated_at": {
+    "$date": "2026-06-03T12:19:52.208Z"
+  }
+}]

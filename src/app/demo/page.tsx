@@ -7,7 +7,6 @@ import {
   Volume2,
   Terminal,
   RefreshCw,
-  Home,
   Zap,
   Cpu,
   Globe,
@@ -20,18 +19,20 @@ import {
   Mic,
   Activity,
 } from "lucide-react";
+import Navbar from "../components/landing/Navbar";
+import CtaFooter from "../components/landing/CtaFooter";
 
 /* ─────────────────────────────────────────────
    PIPELINE DIAGRAM
-───────────────────────────────────────────── */
+   ───────────────────────────────────────────── */
 const PIPELINE_NODES = [
   {
     id: "wasapi",
     label: "WASAPI Loopback",
     sublabel: "48kHz stereo PCM",
     icon: MonitorSpeaker,
-    color: "#38bdf8",
-    glow: "rgba(56,189,248,0.35)",
+    color: "#0284c7", // Sky 600
+    glow: "rgba(2,132,199,0.2)",
     detail:
       "The Windows WASAPI driver captures all speaker output and mic input simultaneously at 48kHz stereo — no virtual audio cables or admin rights required.",
   },
@@ -40,8 +41,8 @@ const PIPELINE_NODES = [
     label: "ChannelMerger",
     sublabel: "Stereo → Mono blend",
     icon: Activity,
-    color: "#818cf8",
-    glow: "rgba(129,140,248,0.35)",
+    color: "#4f46e5", // Indigo 600
+    glow: "rgba(79,70,229,0.2)",
     detail:
       "A Web Audio API ChannelMergerNode combines the left (speaker) and right (mic) channels into a single mono stream, preserving relative amplitude balance for accurate STT.",
   },
@@ -50,8 +51,8 @@ const PIPELINE_NODES = [
     label: "ScriptProcessor",
     sublabel: "Downsample → 16kHz PCM",
     icon: Cpu,
-    color: "#a78bfa",
-    glow: "rgba(167,139,250,0.35)",
+    color: "#7c3aed", // Violet 600
+    glow: "rgba(124,58,237,0.2)",
     detail:
       "A ScriptProcessorNode decimates the 48kHz stream to 16kHz mono PCM with a 300ms VAD silence debounce — the exact format Deepgram nova-3 expects over WebSocket.",
   },
@@ -60,8 +61,8 @@ const PIPELINE_NODES = [
     label: "Deepgram nova-3",
     sublabel: "Real-time WebSocket STT",
     icon: BrainCircuit,
-    color: "#34d399",
-    glow: "rgba(52,211,153,0.35)",
+    color: "#059669", // Emerald 600
+    glow: "rgba(5,150,105,0.2)",
     detail:
       "PCM chunks stream to Deepgram nova-3 over a persistent WebSocket connection. Finalized transcript objects with punctuation and speaker diarization are returned in ~80ms RTT.",
   },
@@ -70,8 +71,8 @@ const PIPELINE_NODES = [
     label: "Next.js Proxy",
     sublabel: "/api/completion SSE",
     icon: Wifi,
-    color: "#fb923c",
-    glow: "rgba(251,146,60,0.35)",
+    color: "#ea580c", // Orange 600
+    glow: "rgba(234,88,12,0.2)",
     detail:
       "The transcript routes to a Next.js edge API route that forwards to Groq / Claude / GPT-4o, streaming Server-Sent Events back to the client without exposing your API key.",
   },
@@ -80,8 +81,8 @@ const PIPELINE_NODES = [
     label: "Win32 HUD Overlay",
     sublabel: "WDA_EXCLUDEFROMCAPTURE",
     icon: EyeOff,
-    color: "#f472b6",
-    glow: "rgba(244,114,182,0.35)",
+    color: "#db2777", // Pink 600
+    glow: "rgba(219,39,119,0.2)",
     detail:
       "The Tauri overlay window uses SetWindowDisplayAffinity(WDA_EXCLUDEFROMCAPTURE) making it completely absent from Zoom, Meet, Teams, and OBS screen recordings. Only you see it.",
   },
@@ -92,6 +93,49 @@ function PipelineDiagram() {
   const [animStep, setAnimStep] = useState(0);
   const [running, setRunning] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const steps = [
+    {
+      title: "Audio Capture",
+      desc: "Tap speaker loopback and local mic directly via WASAPI / Browser APIs.",
+      icon: Mic,
+      color: "text-blue-500",
+      bg: "bg-blue-50",
+      border: "border-blue-200",
+    },
+    {
+      title: "Channel Mixer",
+      desc: "Combine stereo speaker audio and mic streams into a single unified track.",
+      icon: Volume2,
+      color: "text-purple-500",
+      bg: "bg-purple-50",
+      border: "border-purple-200",
+    },
+    {
+      title: "Resampler Engine",
+      desc: "Downsample input sampling rate from 48kHz to 16kHz mono PCM stream.",
+      icon: Cpu,
+      color: "text-amber-500",
+      bg: "bg-amber-50",
+      border: "border-amber-200",
+    },
+    {
+      title: "PCM Cast",
+      desc: "Cast 32-bit floating samples into 16-bit signed integer buffers (83% bandwidth save).",
+      icon: Activity,
+      color: "text-emerald-500",
+      bg: "bg-emerald-50",
+      border: "border-emerald-200",
+    },
+    {
+      title: "WebSocket Stream",
+      desc: "Stream chunks directly to Deepgram WebSocket endpoint for real-time transcription.",
+      icon: Terminal,
+      color: "text-rose-500",
+      bg: "bg-rose-50",
+      border: "border-rose-200",
+    },
+  ];
 
   function startAnimation() {
     if (running) return;
@@ -124,32 +168,31 @@ function PipelineDiagram() {
           const Icon = n.icon;
           const isActive = activeNode === i;
           const isPast = activeNode !== null && i < activeNode;
-          const isIdle = !running && activeNode === null;
 
           return (
-            <div key={n.id} className="flex flex-col md:flex-row items-center gap-0 flex-1">
-              {/* Node */}
+            <div key={n.id} className="flex flex-col md:flex-row items-center gap-0 flex-1 w-full md:w-auto">
+              {/* Node Button */}
               <button
                 onClick={() => setActiveNode(activeNode === i ? null : i)}
-                className="flex flex-col items-center gap-2 group cursor-pointer relative"
+                className="flex flex-col items-center gap-2 group cursor-pointer relative w-full md:w-auto"
                 style={{ minWidth: 90 }}
               >
                 <div
-                  className="w-[72px] h-[72px] rounded-2xl flex items-center justify-center relative transition-all duration-500"
+                  className="w-[72px] h-[72px] rounded-2xl flex items-center justify-center relative transition-all duration-500 bg-white border border-[var(--border-light)] shadow-xs"
                   style={{
                     background: isActive
                       ? `radial-gradient(circle at 50% 50%, ${n.glow}, transparent 70%)`
                       : isPast
-                      ? `${n.color}15`
-                      : "#0d1020",
-                    border: `1.5px solid ${isActive ? n.color : isPast ? n.color + "60" : "#ffffff15"}`,
-                    boxShadow: isActive ? `0 0 28px 4px ${n.glow}` : "none",
-                    transform: isActive ? "scale(1.12)" : "scale(1)",
+                      ? `${n.color}10`
+                      : "#ffffff",
+                    borderColor: isActive ? n.color : isPast ? n.color + "60" : "var(--border-light)",
+                    boxShadow: isActive ? `0 0 20px 2px ${n.glow}` : "none",
+                    transform: isActive ? "scale(1.08)" : "scale(1)",
                   }}
                 >
                   <Icon
                     className="w-7 h-7 transition-all duration-300"
-                    style={{ color: isActive || isPast ? n.color : "#475569" }}
+                    style={{ color: isActive || isPast ? n.color : "#94a3b8" }}
                   />
                   {isActive && (
                     <span
@@ -162,17 +205,17 @@ function PipelineDiagram() {
                       className="absolute -top-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center"
                       style={{ background: n.color }}
                     >
-                      <Check className="w-2.5 h-2.5 text-black" />
+                      <Check className="w-2.5 h-2.5 text-white" />
                     </span>
                   )}
                 </div>
                 <span
                   className="text-[10px] font-bold text-center leading-tight transition-colors duration-300"
-                  style={{ color: isActive ? n.color : isPast ? n.color + "aa" : "#64748b", maxWidth: 82 }}
+                  style={{ color: isActive ? n.color : isPast ? n.color + "d5" : "#475569", maxWidth: 82 }}
                 >
                   {n.label}
                 </span>
-                <span className="text-[8.5px] text-slate-600 font-medium text-center leading-tight" style={{ maxWidth: 82 }}>
+                <span className="text-[8.5px] text-slate-400 font-medium text-center leading-tight" style={{ maxWidth: 82 }}>
                   {n.sublabel}
                 </span>
               </button>
@@ -181,12 +224,12 @@ function PipelineDiagram() {
               {i < PIPELINE_NODES.length - 1 && (
                 <div className="hidden md:flex items-center flex-1 mx-1">
                   <div
-                    className="h-px flex-1 transition-all duration-500 relative overflow-hidden"
+                    className="h-px flex-1 transition-all duration-500 relative overflow-hidden bg-slate-200"
                     style={{
                       background:
                         (activeNode !== null && i < activeNode)
                           ? `linear-gradient(90deg, ${PIPELINE_NODES[i].color}80, ${PIPELINE_NODES[i + 1].color}80)`
-                          : "#1e293b",
+                          : "#e2e8f0",
                     }}
                   >
                     {activeNode === i && (
@@ -199,7 +242,7 @@ function PipelineDiagram() {
                   <svg width="8" height="8" viewBox="0 0 8 8" className="shrink-0">
                     <path
                       d="M0 4 L8 4 M5 1 L8 4 L5 7"
-                      stroke={activeNode !== null && i < activeNode ? PIPELINE_NODES[i + 1].color + "90" : "#1e293b"}
+                      stroke={activeNode !== null && i < activeNode ? PIPELINE_NODES[i + 1].color + "90" : "#cbd5e1"}
                       strokeWidth="1.5"
                       fill="none"
                       strokeLinecap="round"
@@ -215,27 +258,27 @@ function PipelineDiagram() {
 
       {/* Detail Panel */}
       <div
-        className="rounded-2xl border p-5 min-h-[80px] transition-all duration-500 flex items-start gap-4"
+        className="rounded-2xl border p-5 min-h-[80px] transition-all duration-500 flex items-start gap-4 shadow-xs"
         style={{
-          borderColor: node ? node.color + "40" : "#ffffff0a",
-          background: node ? `linear-gradient(135deg, ${node.glow.replace("0.35", "0.06")}, #0b0e1b)` : "#0b0e1b",
+          borderColor: node ? node.color + "30" : "var(--border-light)",
+          background: node ? `linear-gradient(135deg, ${node.glow.replace("0.2", "0.04")}, #ffffff)` : "#ffffff",
         }}
       >
         {node ? (
           <>
             <div
-              className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
-              style={{ background: node.color + "20", border: `1px solid ${node.color}40` }}
+              className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 bg-slate-50"
+              style={{ border: `1px solid ${node.color}30` }}
             >
               <node.icon className="w-5 h-5" style={{ color: node.color }} />
             </div>
             <div>
-              <p className="text-sm font-bold text-white mb-1">{node.label}</p>
-              <p className="text-slate-400 text-xs leading-relaxed">{node.detail}</p>
+              <p className="text-sm font-bold text-slate-800 mb-0.5">{node.label}</p>
+              <p className="text-slate-500 text-xs leading-relaxed">{node.detail}</p>
             </div>
           </>
         ) : (
-          <p className="text-slate-600 text-xs italic">Click any pipeline node to inspect its role, or press &ldquo;Run Pipeline&rdquo; to animate the full flow.</p>
+          <p className="text-slate-400 text-xs italic">Click any pipeline node to inspect its role, or press &ldquo;Run Pipeline Animation&rdquo; to watch the flow.</p>
         )}
       </div>
 
@@ -245,12 +288,11 @@ function PipelineDiagram() {
           onClick={startAnimation}
           disabled={running}
           id="run-pipeline-btn"
-          className="flex items-center gap-2 px-7 py-3 rounded-xl font-bold text-sm transition active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed"
+          className="flex items-center gap-2 px-7 py-3 rounded-xl font-bold text-sm transition active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer shadow-md shadow-indigo-600/10 text-white"
           style={{
             background: running
-              ? "#1e293b"
-              : "linear-gradient(135deg, #6610F2, #0D6EFD)",
-            boxShadow: running ? "none" : "0 0 24px rgba(13,110,253,0.4)",
+              ? "#64748b"
+              : "linear-gradient(135deg, #E8503A, #F06B57)",
           }}
         >
           {running ? (
@@ -266,24 +308,24 @@ function PipelineDiagram() {
 
 /* ─────────────────────────────────────────────
    LATENCY BREAKDOWN BAR
-───────────────────────────────────────────── */
+   ───────────────────────────────────────────── */
 const LATENCY_SEGMENTS = [
-  { label: "WASAPI buffer", ms: 150, color: "#38bdf8" },
-  { label: "Downsample + VAD", ms: 200, color: "#a78bfa" },
-  { label: "Deepgram RTT", ms: 80, color: "#34d399" },
-  { label: "LLM TTFT (Groq)", ms: 300, color: "#fb923c" },
-  { label: "HUD render", ms: 20, color: "#f472b6" },
+  { label: "WASAPI buffer", ms: 150, color: "#0284c7" },
+  { label: "Downsample + VAD", ms: 200, color: "#7c3aed" },
+  { label: "Deepgram RTT", ms: 80, color: "#059669" },
+  { label: "LLM TTFT (Groq)", ms: 300, color: "#ea580c" },
+  { label: "HUD render", ms: 20, color: "#db2777" },
 ];
 const TOTAL_MS = LATENCY_SEGMENTS.reduce((s, x) => s + x.ms, 0);
 
 function LatencyBar() {
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex h-6 rounded-xl overflow-hidden w-full border border-white/5">
+      <div className="flex h-5 rounded-lg overflow-hidden w-full border border-slate-200">
         {LATENCY_SEGMENTS.map((seg, i) => (
           <div
             key={i}
-            className="h-full flex items-center justify-center text-[8px] font-bold text-black/70 transition-all"
+            className="h-full flex items-center justify-center text-[8px] font-bold text-white transition-all"
             style={{ width: `${(seg.ms / TOTAL_MS) * 100}%`, background: seg.color }}
             title={`${seg.label}: ${seg.ms}ms`}
           />
@@ -293,14 +335,14 @@ function LatencyBar() {
         {LATENCY_SEGMENTS.map((seg, i) => (
           <div key={i} className="flex items-center gap-1.5 text-[10px]">
             <span className="w-2.5 h-2.5 rounded-sm shrink-0" style={{ background: seg.color }} />
-            <span className="text-slate-400">{seg.label}</span>
+            <span className="text-slate-500">{seg.label}</span>
             <span className="font-bold" style={{ color: seg.color }}>{seg.ms}ms</span>
           </div>
         ))}
-        <div className="flex items-center gap-1.5 text-[10px] ml-auto">
-          <span className="text-slate-500">Total:</span>
-          <span className="font-black text-white text-xs">{TOTAL_MS}ms</span>
-          <span className="text-emerald-400 font-bold">✓ sub-second</span>
+        <div className="flex items-center gap-1.5 text-[10px] sm:ml-auto">
+          <span className="text-slate-455 font-semibold">Total:</span>
+          <span className="font-black text-slate-800 text-xs">{TOTAL_MS}ms</span>
+          <span className="text-emerald-600 font-bold ml-1">✓ sub-second response</span>
         </div>
       </div>
     </div>
@@ -308,8 +350,8 @@ function LatencyBar() {
 }
 
 /* ─────────────────────────────────────────────
-   SIMULATOR (original, preserved)
-───────────────────────────────────────────── */
+   SIMULATOR CORE DATA
+   ───────────────────────────────────────────── */
 const sampleQuestions = [
   "How does virtual DOM reconciliation work in React?",
   "Explain the difference between TCP and UDP.",
@@ -326,8 +368,8 @@ const sampleAnswers: Record<string, string> = {
 };
 
 /* ─────────────────────────────────────────────
-   PAGE
-───────────────────────────────────────────── */
+   PAGE COMPONENT
+   ───────────────────────────────────────────── */
 export default function DemoPage() {
   const [simState, setSimState] = useState<"idle" | "listening" | "answering" | "done">("idle");
   const [simQuestion, setSimQuestion] = useState("");
@@ -384,70 +426,50 @@ export default function DemoPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0B0D19] text-slate-100 flex flex-col relative overflow-hidden pb-16">
+    <div className="min-h-screen bg-[var(--bg-mist)] text-[var(--text-primary)] flex flex-col pt-20">
 
-      {/* Background Glows */}
-      <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] rounded-full bg-[#6610F2]/10 bg-blur-glow pointer-events-none" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-[#0DCAF0]/10 bg-blur-glow pointer-events-none" />
+      {/* Background orbs */}
+      <div className="orb orb-peach w-[600px] h-[600px] -top-40 left-1/4 animate-float-orb opacity-40 pointer-events-none" />
+      <div className="orb orb-slate w-[400px] h-[400px] bottom-0 -right-20 animate-float-orb-slow opacity-40 pointer-events-none" />
 
-      {/* Header */}
-      <header className="w-full max-w-7xl mx-auto px-6 py-6 flex justify-between items-center relative z-20 select-none">
-        <a href="/copilot" className="flex items-center gap-2.5 hover:opacity-90 transition">
-          <img src="/logo.svg" className="h-9 w-9 rounded-lg select-none border border-white/10" alt="CrackTheLoop Logo Icon" />
-          <span className="font-extrabold tracking-tight text-xl text-white" style={{ fontFamily: "var(--font-display)" }}>
-            CrackTheLoop
-          </span>
-        </a>
-        <div className="flex items-center gap-6 font-semibold">
-          <a href="/" className="text-sm text-slate-400 hover:text-white transition flex items-center gap-1">
-            <Home className="w-4 h-4" /> Home
-          </a>
-          <a href="/features" className="text-sm text-slate-400 hover:text-white transition">Features</a>
-          <a href="/pricing" className="text-sm text-slate-400 hover:text-white transition">Pricing</a>
-          <a
-            href="/copilot"
-            className="text-xs px-5 py-2.5 bg-gradient-to-r from-[#6610F2] via-[#0D6EFD] to-[#0DCAF0] rounded-full font-bold hover:brightness-110 transition active:scale-95 shadow-md shadow-[#0D6EFD]/25 flex items-center gap-1.5"
-          >
-            <Globe className="w-3.5 h-3.5" /> Launch Copilot
-          </a>
-        </div>
-      </header>
+      {/* Global Navigation Header */}
+      <Navbar />
 
-      {/* Hero */}
+      {/* Hero Header */}
       <section className="w-full max-w-4xl mx-auto px-6 pt-12 text-center flex flex-col items-center gap-4 relative z-20 select-none">
-        <div className="inline-flex items-center gap-2 bg-[#6610F2]/10 border border-[#6610F2]/30 px-4 py-1.5 rounded-full text-xs font-semibold text-purple-300">
-          <Sparkles className="w-3.5 h-3.5 text-[#0DCAF0] animate-pulse" />
+        <div className="inline-flex items-center gap-2 bg-[var(--accent-soft)] border border-[var(--accent)]/20 px-4 py-1.5 rounded-full text-xs font-semibold text-[var(--accent)]">
+          <Sparkles className="w-3.5 h-3.5 animate-pulse" />
           Interactive Live Pipeline Demo
         </div>
-        <h1 className="text-4xl md:text-5xl font-black tracking-tight leading-tight" id="demo-main-heading">
-          Watch the <span className="text-gradient">Real-Time Overlay</span> Pipeline
+        <h1 className="text-4xl md:text-5xl font-black tracking-tight leading-tight text-slate-800" id="demo-main-heading" style={{ fontFamily: "var(--font-display)" }}>
+          Watch the <span className="text-gradient-coral">Real-Time Overlay</span> Pipeline
         </h1>
-        <p className="text-slate-400 text-sm md:text-base max-w-2xl leading-relaxed">
+        <p className="text-[var(--text-muted)] text-sm md:text-base max-w-2xl leading-relaxed">
           Explore the full WASAPI → Deepgram → LLM → HUD pipeline architecture, then run an interactive simulation below.
         </p>
       </section>
 
       {/* ── Pipeline Diagram Card ── */}
       <section className="w-full max-w-5xl mx-auto px-6 pt-16 relative z-20">
-        <div className="glow-card rounded-2xl p-6 md:p-8 flex flex-col gap-8 border-white/10" id="pipeline-diagram-card">
+        <div className="bg-white border border-[var(--border-light)] rounded-[12px] p-6 md:p-8 flex flex-col gap-8 shadow-sm" id="pipeline-diagram-card">
 
-          <div className="flex justify-between items-center border-b border-white/5 pb-4 select-none">
+          <div className="flex justify-between items-center border-b border-slate-100 pb-4 select-none">
             <div>
-              <h2 className="text-lg font-bold text-white">Desktop Client Architecture</h2>
-              <p className="text-xs text-slate-400">Click a node to inspect • Press &ldquo;Run Pipeline&rdquo; to animate the full data flow</p>
+              <h2 className="text-lg font-bold text-slate-800">Desktop Client Architecture</h2>
+              <p className="text-xs text-slate-500 mt-0.5">Click a node to inspect • Press &ldquo;Run Pipeline Animation&rdquo; to watch the data flow</p>
             </div>
-            <div className="hidden sm:flex items-center gap-2 bg-slate-900 border border-white/10 px-3.5 py-1.5 rounded-full text-[10px] font-bold text-emerald-400 uppercase tracking-wider">
-              <Shield className="w-3 h-3" /> Win32 Stealth Active
+            <div className="hidden sm:flex items-center gap-1.5 bg-emerald-50 border border-emerald-250 px-3.5 py-1.5 rounded-full text-[10px] font-bold text-emerald-700 uppercase tracking-wider">
+              <Shield className="w-3 h-3 text-emerald-600" /> Win32 Stealth Active
             </div>
           </div>
 
           <PipelineDiagram />
 
           {/* Latency Breakdown */}
-          <div className="border-t border-white/5 pt-6 flex flex-col gap-3">
+          <div className="border-t border-slate-100 pt-6 flex flex-col gap-3">
             <div className="flex items-center gap-2 select-none mb-1">
-              <Zap className="w-4 h-4 text-amber-400" />
-              <span className="text-xs font-bold text-slate-300 uppercase tracking-wider">End-to-End Latency Breakdown</span>
+              <Zap className="w-4 h-4 text-amber-500" />
+              <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">End-to-End Latency Breakdown</span>
             </div>
             <LatencyBar />
           </div>
@@ -455,31 +477,31 @@ export default function DemoPage() {
         </div>
       </section>
 
-      {/* ── Live Simulator ── */}
+      {/* ── Live Simulator Sandbox ── */}
       <section className="w-full max-w-5xl mx-auto px-6 pt-14 relative z-20">
-        <div className="glow-card rounded-2xl p-6 md:p-8 flex flex-col gap-6 border-white/10" id="demo-simulator-container">
+        <div className="bg-white border border-[var(--border-light)] rounded-[12px] p-6 md:p-8 flex flex-col gap-6 shadow-sm" id="demo-simulator-container">
 
-          <div className="flex justify-between items-center border-b border-white/5 pb-4 select-none">
+          <div className="flex justify-between items-center border-b border-slate-100 pb-4 select-none">
             <div>
-              <h2 className="text-lg font-bold text-white">Live Simulator Dashboard</h2>
-              <p className="text-xs text-slate-400">Click a question below to run the full streaming pipeline simulation</p>
+              <h2 className="text-lg font-bold text-slate-800">Live Simulator Dashboard</h2>
+              <p className="text-xs text-slate-500 mt-0.5">Click a question below to run the streaming pipeline simulation</p>
             </div>
-            <div className="flex items-center gap-2 bg-slate-900 border border-white/10 px-3.5 py-1.5 rounded-full text-xs">
-              <span className={`w-2 h-2 rounded-full ${simState === "listening" || simState === "answering" ? "bg-emerald-400 animate-ping" : "bg-slate-600"}`} />
-              <span className="capitalize text-slate-350 font-bold uppercase tracking-wider">Status: {simState}</span>
+            <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 px-3.5 py-1.5 rounded-full text-xs">
+              <span className={`w-2 h-2 rounded-full ${simState === "listening" || simState === "answering" ? "bg-emerald-500 animate-ping" : "bg-slate-400"}`} />
+              <span className="capitalize text-slate-700 font-bold uppercase tracking-wider">Status: {simState}</span>
             </div>
           </div>
 
-          {/* Questions */}
-          <div className="flex flex-col gap-2 select-none">
-            <span className="text-xs text-slate-500 uppercase tracking-wider font-extrabold">Choose a sample question:</span>
+          {/* Questions Selection grid */}
+          <div className="flex flex-col gap-2.5 select-none">
+            <span className="text-xs text-slate-450 uppercase tracking-wider font-extrabold">Choose a sample question:</span>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               {sampleQuestions.map((q, idx) => (
                 <button
                   key={idx}
                   onClick={() => startSimulation(q)}
                   disabled={simState === "listening" || simState === "answering"}
-                  className="p-3.5 bg-[#0d1326] border border-white/5 rounded-xl text-left text-xs hover:border-sky-400/50 hover:bg-[#111933] transition cursor-pointer disabled:opacity-50 text-slate-300 font-semibold"
+                  className="p-3.5 bg-slate-50 border border-slate-200 hover:border-slate-350 hover:bg-slate-100/70 rounded-xl text-left text-xs transition cursor-pointer disabled:opacity-50 text-slate-700 font-bold"
                 >
                   {q}
                 </button>
@@ -487,37 +509,37 @@ export default function DemoPage() {
             </div>
           </div>
 
-          {/* I/O Grid */}
+          {/* Input & Output block displays */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-2">
-            {/* Left: STT Input */}
+            {/* Left Box: Speech-to-Text Input */}
             <div className="flex flex-col gap-2">
               <span className="text-xs text-slate-500 uppercase tracking-wider font-bold flex items-center gap-1.5 select-none">
-                <Volume2 className="w-4 h-4 text-sky-400" /> WASAPI Loopback (STT Input)
+                <Volume2 className="w-4 h-4 text-sky-600" /> WASAPI Loopback (STT Input)
               </span>
-              <div className="bg-[#0b0e1b]/80 border border-white/5 rounded-xl p-4 min-h-[150px] text-sm leading-relaxed text-slate-300 select-text">
-                {simState === "idle" && <span className="text-slate-600 italic select-none">Select a question to trigger transcription...</span>}
+              <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 min-h-[160px] text-sm leading-relaxed text-slate-700 select-text">
+                {simState === "idle" && <span className="text-slate-400 italic select-none">Select a question to trigger transcription...</span>}
                 {simState === "listening" && (
-                  <span className="text-sky-300 font-bold animate-pulse select-none flex items-center gap-2">
-                    <RefreshCw className="w-4 h-4 animate-spin text-sky-400" /> Capturing: {simQuestion}
+                  <span className="text-sky-600 font-bold animate-pulse select-none flex items-center gap-2">
+                    <RefreshCw className="w-4 h-4 animate-spin text-sky-500" /> Capturing: {simQuestion}
                   </span>
                 )}
                 {(simState === "answering" || simState === "done") && (
-                  <span className="text-emerald-400 font-semibold">{simQuestion}</span>
+                  <span className="text-emerald-700 font-semibold">{simQuestion}</span>
                 )}
               </div>
             </div>
 
-            {/* Right: HUD */}
+            {/* Right Box: Floating Overlay HUD */}
             <div className="flex flex-col gap-2">
               <span className="text-xs text-slate-500 uppercase tracking-wider font-bold flex items-center gap-1.5 select-none">
-                <Terminal className="w-4 h-4 text-emerald-400" /> Zoom-Invisible HUD Overlay
+                <Terminal className="w-4 h-4 text-emerald-600" /> Zoom-Invisible HUD Overlay
               </span>
-              <div className="bg-[#0b0e1b]/80 border border-emerald-500/10 rounded-xl p-4 min-h-[150px] text-xs leading-relaxed relative overflow-hidden shadow-inner select-text">
+              <div className="bg-slate-950 border border-slate-800 rounded-xl p-4 min-h-[160px] text-xs leading-relaxed relative overflow-hidden shadow-inner select-text">
                 <div className="absolute top-0 right-0 px-2 py-0.5 bg-emerald-500/10 text-[9px] text-emerald-400 font-bold uppercase rounded-bl-lg select-none">
-                  Overlay Mock
+                  Overlay HUD View
                 </div>
                 {simState === "idle" && <span className="text-slate-600 italic select-none">Awaiting audio capture stream...</span>}
-                {simState === "listening" && <span className="text-slate-500 italic animate-pulse select-none">Routing to LLM...</span>}
+                {simState === "listening" && <span className="text-slate-550 italic animate-pulse select-none">Routing to LLM...</span>}
                 {(simState === "answering" || simState === "done") && (
                   <div className="text-emerald-100 whitespace-pre-line font-mono font-bold leading-relaxed text-[11px] p-1">
                     {simAnswer}
@@ -528,14 +550,14 @@ export default function DemoPage() {
             </div>
           </div>
 
-          {/* Terminal Logs */}
+          {/* Real-time Logger Terminal */}
           <div className="flex flex-col gap-2 mt-4">
             <span className="text-xs text-slate-500 uppercase tracking-wider font-bold flex items-center gap-1.5 select-none">
-              <Cpu className="w-4 h-4 text-[#0DCAF0]" /> Real-Time Pipeline Logs
+              <Cpu className="w-4 h-4 text-indigo-500" /> Real-Time Pipeline Logs
             </span>
             <div
               ref={logsRef}
-              className="bg-[#050711] border border-white/5 rounded-xl p-4 h-[180px] overflow-y-auto font-mono text-[11px] text-slate-400 flex flex-col gap-1.5 leading-relaxed select-text"
+              className="bg-slate-950 border border-slate-900 rounded-xl p-4 h-[180px] overflow-y-auto font-mono text-[11px] text-slate-400 flex flex-col gap-1.5 leading-relaxed select-text"
             >
               {simLogs.length === 0 ? (
                 <span className="text-slate-600 italic select-none">Awaiting simulator activation to print logs...</span>
@@ -553,17 +575,17 @@ export default function DemoPage() {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="w-full max-w-4xl mx-auto px-6 pt-24 text-center select-none z-20">
-        <div className="bg-gradient-to-r from-[#6610F2]/10 to-[#0DCAF0]/10 border border-white/10 rounded-3xl p-10 flex flex-col items-center gap-6">
-          <h4 className="text-2xl font-bold text-white">Unlock full production capabilities</h4>
-          <p className="text-slate-400 text-xs max-w-md">
-            Deploy the live copilot straight inside your browser or grab the native Win32 desktop client installer.
+      {/* ── Product Integration Download Callout ── */}
+      <section className="w-full max-w-5xl mx-auto px-6 pt-16 pb-8 text-center select-none z-20">
+        <div className="bg-white border border-[var(--border-light)] rounded-[12px] p-10 flex flex-col items-center gap-6 shadow-sm">
+          <h4 className="text-2xl font-bold text-slate-800" style={{ fontFamily: "var(--font-display)" }}>Unlock Full Production Capabilities</h4>
+          <p className="text-[var(--text-muted)] text-sm max-w-md">
+            Deploy the live copilot straight inside your browser or grab our native Windows desktop client installer.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <a
               href="/copilot"
-              className="px-6 py-3 bg-gradient-to-r from-[#6610F2] to-[#0D6EFD] hover:brightness-110 rounded-xl font-bold text-xs transition active:scale-95 flex items-center gap-1.5"
+              className="px-6 py-3.5 bg-gradient-to-r from-sky-500 to-indigo-500 hover:brightness-110 text-white rounded-xl font-bold text-xs transition active:scale-95 flex items-center gap-1.5 shadow-sm"
             >
               Launch Browser Copilot <Globe className="w-4 h-4" />
             </a>
@@ -571,13 +593,13 @@ export default function DemoPage() {
               href="https://github.com/Souravrooj-klizos/cracktheloop-desktop/releases"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-6 py-3 bg-slate-800 hover:bg-slate-700 border border-slate-750 rounded-xl font-bold text-xs transition active:scale-95 flex items-center gap-1.5"
+              className="px-6 py-3.5 bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-800 rounded-xl font-bold text-xs transition active:scale-95 flex items-center gap-1.5 cursor-pointer"
             >
               Download Desktop App
             </a>
             <a
               href="/pricing"
-              className="px-6 py-3 bg-[#0B0D19] hover:bg-slate-900 border border-slate-700 rounded-xl font-bold text-xs transition active:scale-95"
+              className="px-6 py-3.5 bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-800 rounded-xl font-bold text-xs transition active:scale-95 cursor-pointer"
             >
               Get License Key
             </a>
@@ -585,13 +607,8 @@ export default function DemoPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="w-full max-w-7xl mx-auto px-6 pt-24 text-center text-xs text-slate-500 relative z-20 border-t border-white/5 mt-16 flex justify-between items-center select-none">
-        <span>© 2026 CrackTheLoop. All rights reserved.</span>
-        <span className="flex items-center gap-1 text-emerald-500/80 font-semibold uppercase tracking-wider">
-          <Shield className="w-3.5 h-3.5 text-emerald-400" /> Win32 Stealth Affinity Shield Enabled
-        </span>
-      </footer>
+      {/* Global CTA Footer */}
+      <CtaFooter />
 
     </div>
   );

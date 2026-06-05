@@ -72,7 +72,7 @@ export default function FeaturesPage() {
         {/* Core Pillars */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           
-          <div className="glow-card rounded-2xl p-6 flex flex-col gap-4 border-white/10" id="feature-latency-card">
+          <div className="glow-card rounded-[12px] p-6 flex flex-col gap-4 border-white/10" id="feature-latency-card">
             <div className="w-10 h-10 rounded-xl bg-sky-500/10 flex justify-center items-center text-sky-400">
               <Zap className="w-5 h-5" />
             </div>
@@ -82,7 +82,7 @@ export default function FeaturesPage() {
             </p>
           </div>
 
-          <div className="glow-card rounded-2xl p-6 flex flex-col gap-4 border-white/10" id="feature-affinity-card">
+          <div className="glow-card rounded-[12px] p-6 flex flex-col gap-4 border-white/10" id="feature-affinity-card">
             <div className="w-10 h-10 rounded-xl bg-indigo-500/10 flex justify-center items-center text-indigo-400">
               <EyeOff className="w-5 h-5" />
             </div>
@@ -92,7 +92,7 @@ export default function FeaturesPage() {
             </p>
           </div>
 
-          <div className="glow-card rounded-2xl p-6 flex flex-col gap-4 border-white/10" id="feature-mixing-card">
+          <div className="glow-card rounded-[12px] p-6 flex flex-col gap-4 border-white/10" id="feature-mixing-card">
             <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex justify-center items-center text-emerald-400">
               <Volume2 className="w-5 h-5" />
             </div>
@@ -105,7 +105,7 @@ export default function FeaturesPage() {
         </div>
 
         {/* Deep Dive Section 1: Screen Share Bypass */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center bg-white/2 border border-white/5 p-8 rounded-3xl" id="evasion-deep-dive">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center bg-white/2 border border-white/5 p-8 rounded-[12px]" id="evasion-deep-dive">
           <div className="flex flex-col gap-5">
             <div className="inline-flex w-fit items-center gap-1.5 bg-indigo-500/15 border border-indigo-500/25 px-3 py-1 rounded-full text-[10px] font-bold text-indigo-300 uppercase tracking-widest">
               Windows Display Affinity API
@@ -128,8 +128,16 @@ export default function FeaturesPage() {
                 <Check className="w-4 h-4 text-emerald-400" /> Safe against screenshots and software screen-capture hooks.
               </li>
             </ul>
+            <div className="pt-2">
+              <a 
+                href="/features/stealth-overlay" 
+                className="inline-flex items-center gap-1 text-xs font-bold text-indigo-400 hover:text-indigo-300 transition cursor-pointer"
+              >
+                Explore Stealth Overlay HUD <ArrowRight className="w-3.5 h-3.5" />
+              </a>
+            </div>
           </div>
-          <div className="bg-[#080a15] border border-white/5 rounded-2xl p-6 flex flex-col gap-4 shadow-inner">
+          <div className="bg-[#080a15] border border-white/5 rounded-[12px] p-6 flex flex-col gap-4 shadow-inner">
             <span className="text-[10px] text-indigo-400 font-mono uppercase tracking-widest">Win32 API Bindings (Rust)</span>
             <pre className="text-[11px] font-mono text-slate-300 overflow-x-auto bg-slate-950/60 p-4 rounded-xl leading-relaxed scrollbar-thin">
 {`// Tauri Window Setup Configuration
@@ -150,8 +158,8 @@ pub fn apply_stealth_affinity(hwnd: HWND) {
         </div>
 
         {/* Deep Dive Section 2: Audio Engineering & Downsampling */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center bg-white/2 border border-white/5 p-8 rounded-3xl" id="audio-deep-dive">
-          <div className="bg-[#080a15] border border-white/5 rounded-2xl p-6 flex flex-col gap-4 shadow-inner order-last md:order-first">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center bg-white/2 border border-white/5 p-8 rounded-[12px]" id="audio-deep-dive">
+          <div className="bg-[#080a15] border border-white/5 rounded-[12px] p-6 flex flex-col gap-4 shadow-inner order-last md:order-first">
             <span className="text-[10px] text-emerald-400 font-mono uppercase tracking-widest">Web Audio API Graph</span>
             <div className="flex flex-col gap-3 font-mono text-[11px] bg-slate-950/60 p-4 rounded-xl leading-relaxed text-slate-350 scrollbar-thin">
               <div>{"1. [Local Mic Stream] ───┐"}</div>
@@ -188,6 +196,14 @@ pub fn apply_stealth_affinity(hwnd: HWND) {
                 <Check className="w-4 h-4 text-emerald-400" /> Supports dual inputs: interviewer speakers and candidate mic.
               </li>
             </ul>
+            <div className="pt-2">
+              <a 
+                href="/features/live-transcription" 
+                className="inline-flex items-center gap-1 text-xs font-bold text-emerald-400 hover:text-emerald-300 transition cursor-pointer"
+              >
+                Explore Live Audio Transcription <ArrowRight className="w-3.5 h-3.5" />
+              </a>
+            </div>
           </div>
         </div>
 
@@ -198,7 +214,7 @@ pub fn apply_stealth_affinity(hwnd: HWND) {
 
       {/* CTA section */}
       <section className="w-full max-w-4xl mx-auto px-6 pt-24 text-center select-none z-20">
-        <div className="bg-gradient-to-r from-[#6610F2]/10 to-[#0D6EFD]/10 border border-white/10 rounded-3xl p-10 flex flex-col items-center gap-6">
+        <div className="bg-gradient-to-r from-[#6610F2]/10 to-[#0D6EFD]/10 border border-white/10 rounded-[12px] p-10 flex flex-col items-center gap-6">
           <h4 className="text-2xl font-bold text-white">Ready to experience the stealth copilot?</h4>
           <p className="text-slate-400 text-xs max-w-md">
             Test the live audio transcription engine and streaming overlay directly in your browser with our mock demo.
@@ -281,7 +297,7 @@ function DeveloperFaqSection() {
         {faqs.map((faq, i) => (
           <div
             key={i}
-            className="glow-card rounded-2xl border border-white/5 bg-[#0c1125] overflow-hidden transition-all duration-300"
+            className="glow-card rounded-[12px] border border-white/5 bg-[#0c1125] overflow-hidden transition-all duration-300"
           >
             <button
               id={`faq-q-${i}`}

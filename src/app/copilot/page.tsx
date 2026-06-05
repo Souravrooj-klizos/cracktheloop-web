@@ -714,15 +714,15 @@ export default function CopilotPage() {
 
       analyser.getByteTimeDomainData(dataArray);
 
-      ctx.fillStyle = "#0B0D19";
+      ctx.fillStyle = "#F8F9FB";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       ctx.lineWidth = 2.5;
 
       const grad = ctx.createLinearGradient(0, 0, canvas.width, 0);
-      grad.addColorStop(0, "#6610F2"); // Purple
-      grad.addColorStop(0.5, "#0D6EFD"); // Blue
-      grad.addColorStop(1, "#0DCAF0"); // Teal
+      grad.addColorStop(0, "#E8503A"); // Coral
+      grad.addColorStop(0.5, "#6366F1"); // Indigo
+      grad.addColorStop(1, "#3B82F6"); // Blue
       ctx.strokeStyle = grad;
 
       ctx.beginPath();
@@ -982,11 +982,11 @@ export default function CopilotPage() {
   };
 
   return (
-    <div className="w-screen h-screen flex flex-col justify-center items-center bg-transparent p-2 relative overflow-hidden select-none">
+    <div className="w-screen h-screen flex flex-col justify-center items-center bg-[var(--bg-mist)] p-2 relative overflow-hidden select-none">
 
       {/* Background Radial Glows */}
-      <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] rounded-full bg-[#6610F2]/5 bg-blur-glow text-slate-100"></div>
-      <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-[#0D6EFD]/5 bg-blur-glow"></div>
+      <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] rounded-full bg-[var(--accent)]/3 blur-[120px] pointer-events-none select-none"></div>
+      <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-indigo-500/3 blur-[120px] pointer-events-none select-none"></div>
 
       {/* Floating overlay hud card (rendered on toggle overlay) */}
       {isOverlayMode && (
@@ -994,27 +994,33 @@ export default function CopilotPage() {
           ref={hudRef}
           style={{
             transform: `translate(${hudPosition.x}px, ${hudPosition.y}px)`,
-            background: `rgba(11, 13, 25, ${opacity})`,
+            background: `rgba(255, 255, 255, ${opacity})`,
             zIndex: 100
           }}
-          className={`absolute top-0 left-0 w-[800px] h-[520px] glass-panel rounded-3xl p-5 flex flex-col gap-4 animate-fade-in text-white transition-all duration-300 ${isLocked
-              ? "border-transparent pointer-events-none"
-              : `border-2 border-dashed border-${activeLlmProvider} pointer-events-auto shadow-2xl`
+          className={`absolute top-0 left-0 w-[800px] h-[520px] rounded-[24px] p-5 flex flex-col gap-4 animate-fade-in text-slate-800 transition-all duration-300 shadow-2xl backdrop-blur-md ${isLocked
+              ? "border border-[var(--border-light)] pointer-events-none"
+              : `border-2 border-dashed ${
+                  activeLlmProvider === "openai" ? "border-emerald-500/40" :
+                  activeLlmProvider === "anthropic" ? "border-amber-500/40" :
+                  activeLlmProvider === "gemini" ? "border-blue-500/40" :
+                  activeLlmProvider === "groq" ? "border-teal-500/40" :
+                  "border-slate-300"
+                } pointer-events-auto`
             }`}
         >
           {/* HUD Drag Header */}
           <div
             onMouseDown={handleMouseDown}
-            className={`flex justify-between items-center border-b border-white/10 pb-3 select-none z-30 ${isLocked ? "cursor-default" : "cursor-move"}`}
+            className={`flex justify-between items-center border-b border-slate-100 pb-3 select-none z-30 ${isLocked ? "cursor-default" : "cursor-move"}`}
           >
             <div className="flex items-center gap-2">
-              <span className={`w-2.5 h-2.5 rounded-full ${activeLlmProvider === "openai" ? "bg-emerald-400 shadow-[0_0_10px_#10a37f]" :
-                  activeLlmProvider === "anthropic" ? "bg-amber-500 shadow-[0_0_10px_#d97706]" :
-                    activeLlmProvider === "gemini" ? "bg-blue-500 shadow-[0_0_10px_#2563eb]" :
-                      activeLlmProvider === "groq" ? "bg-teal-400 shadow-[0_0_10px_#14b8a6]" :
-                        "bg-slate-300 shadow-[0_0_10px_#f8fafc]"
+              <span className={`w-2.5 h-2.5 rounded-full ${activeLlmProvider === "openai" ? "bg-emerald-500 shadow-[0_0_10px_rgba(16,163,127,0.3)]" :
+                  activeLlmProvider === "anthropic" ? "bg-amber-500 shadow-[0_0_10px_rgba(217,119,6,0.3)]" :
+                    activeLlmProvider === "gemini" ? "bg-blue-500 shadow-[0_0_10px_rgba(37,99,235,0.3)]" :
+                      activeLlmProvider === "groq" ? "bg-teal-500 shadow-[0_0_10px_rgba(20,184,166,0.3)]" :
+                        "bg-slate-400"
                 }`}></span>
-              <span className={`text-[10px] font-black tracking-widest uppercase select-none text-gradient-${activeLlmProvider}`}>
+              <span className="text-[10px] font-black tracking-widest uppercase select-none text-[var(--accent)]">
                 WEB HUD OVERLAY
               </span>
             </div>
@@ -1026,8 +1032,8 @@ export default function CopilotPage() {
                 <button
                   onClick={handleToggleCapture}
                   className={`text-[11px] px-2 py-1 rounded-lg font-black transition active:scale-95 cursor-pointer flex items-center gap-1 border ${isCapturing
-                      ? "bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border-rose-500/35"
-                      : "bg-gradient-to-r from-sky-500/25 to-indigo-500/25 hover:brightness-110 text-sky-300 border-sky-500/35"
+                      ? "bg-rose-50 hover:bg-rose-100 text-rose-600 border-rose-200"
+                      : "bg-sky-50 hover:bg-sky-100 text-sky-700 border-sky-200"
                     }`}
                 >
                   {isCapturing ? "⏹ Stop" : "▶ Start"}
@@ -1035,17 +1041,17 @@ export default function CopilotPage() {
               )}
 
               {!isLocked && (
-                <div className="flex items-center gap-1 bg-white/5 border border-white/10 px-1.5 py-0.5 rounded-lg text-[10px]">
+                <div className="flex items-center gap-1 bg-slate-55 border border-slate-200 px-1.5 py-0.5 rounded-lg text-[10px]">
                   <button
                     onClick={handleToggleMic}
-                    className={`px-1.5 py-0.5 rounded transition cursor-pointer font-bold ${captureMic ? "bg-sky-500/25 text-sky-300" : "text-slate-500"
+                    className={`px-1.5 py-0.5 rounded transition cursor-pointer font-bold ${captureMic ? "bg-sky-50 text-sky-700 border border-sky-200" : "text-slate-400 font-medium"
                       }`}
                   >
                     🎤 {captureMic ? "ON" : "OFF"}
                   </button>
                   <button
                     onClick={handleToggleSystem}
-                    className={`px-1.5 py-0.5 rounded transition cursor-pointer font-bold ${captureSystem ? "bg-emerald-500/25 text-emerald-300" : "text-slate-500"
+                    className={`px-1.5 py-0.5 rounded transition cursor-pointer font-bold ${captureSystem ? "bg-emerald-50 text-emerald-700 border border-emerald-200" : "text-slate-400 font-medium"
                       }`}
                   >
                     🔊 {captureSystem ? "ON" : "OFF"}
@@ -1054,8 +1060,8 @@ export default function CopilotPage() {
               )}
 
               {!isLocked && (
-                <div className="flex items-center gap-1.5 bg-white/5 border border-white/10 px-2 py-0.5 rounded-lg text-[10px]">
-                  <span className="text-slate-400 font-medium">Opacity:</span>
+                <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-200 px-2.5 py-0.5 rounded-lg text-[10px]">
+                  <span className="text-slate-500 font-medium">Opacity:</span>
                   <input
                     type="range"
                     min="0.15"
@@ -1063,28 +1069,26 @@ export default function CopilotPage() {
                     step="0.05"
                     value={opacity}
                     onChange={(e) => setOpacity(parseFloat(e.target.value))}
-                    className="w-14 h-1 bg-white/20 accent-sky-400 rounded-lg cursor-pointer"
+                    className="w-14 h-1 bg-slate-200 accent-[var(--accent)] rounded-lg cursor-pointer"
                   />
-                  <span className="text-slate-350 font-bold w-5 text-right">{Math.round(opacity * 100)}%</span>
+                  <span className="text-slate-600 font-bold w-5 text-right">{Math.round(opacity * 100)}%</span>
                 </div>
               )}
 
               {!isLocked && (
                 <button
                   onClick={() => setShowHistoryDrawer(true)}
-                  className="text-[11px] px-2.5 py-1 bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 font-black border border-sky-500/25 rounded-lg transition active:scale-95 cursor-pointer flex items-center gap-1"
+                  className="text-[11px] px-2.5 py-1 bg-sky-50 hover:bg-sky-100 text-sky-700 font-black border border-sky-200 rounded-lg transition active:scale-95 cursor-pointer flex items-center gap-1"
                 >
                   <History className="w-3.5 h-3.5" />
                   History
                 </button>
               )}
 
-
-
               {!isLocked && (
                 <button
                   onClick={handleClearChat}
-                  className="text-[11px] px-2 py-1 bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 font-black border border-rose-500/25 rounded-lg transition active:scale-95 cursor-pointer"
+                  className="text-[11px] px-2 py-1 bg-rose-50 hover:bg-rose-100 text-rose-600 font-black border border-rose-200 rounded-lg transition active:scale-95 cursor-pointer"
                 >
                   🧹 Clear
                 </button>
@@ -1093,9 +1097,9 @@ export default function CopilotPage() {
               {isLocked ? (
                 <button
                   onClick={() => setIsLocked(false)}
-                  className="text-[10px] text-white/55 bg-white/5 border border-white/10 px-2.5 py-1 rounded-lg font-bold uppercase tracking-wider flex items-center gap-1 cursor-pointer hover:bg-white/10"
+                  className="text-[10px] text-slate-500 bg-slate-50 border border-slate-200 px-2.5 py-1 rounded-lg font-bold uppercase tracking-wider flex items-center gap-1 cursor-pointer hover:bg-slate-100"
                 >
-                  <Lock className="w-3 h-3 text-rose-400 animate-pulse" />
+                  <Lock className="w-3.5 h-3.5 text-rose-500 animate-pulse" />
                   Unlock
                 </button>
               ) : (
@@ -1104,9 +1108,9 @@ export default function CopilotPage() {
                     setIsLocked(true);
                     setStatus("HUD Locked");
                   }}
-                  className="text-[11px] px-2 py-1 bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 font-black border border-sky-500/30 rounded-lg transition active:scale-95 cursor-pointer flex items-center gap-1"
+                  className="text-[11px] px-2 py-1 bg-sky-50 hover:bg-sky-100 text-sky-700 font-black border border-sky-200 rounded-lg transition active:scale-95 cursor-pointer flex items-center gap-1"
                 >
-                  <Unlock className="w-3 h-3" />
+                  <Unlock className="w-3.5 h-3.5" />
                   Lock
                 </button>
               )}
@@ -1119,7 +1123,7 @@ export default function CopilotPage() {
                     setStatus("Dashboard");
                     stopCaptureEngine();
                   }}
-                  className="text-[10px] px-2.5 py-1 bg-white/10 hover:bg-white/15 border border-white/15 rounded-lg font-black transition active:scale-95 cursor-pointer"
+                  className="text-[10px] px-2.5 py-1 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg font-black transition active:scale-95 cursor-pointer text-slate-600"
                 >
                   Exit HUD
                 </button>
@@ -1129,18 +1133,18 @@ export default function CopilotPage() {
 
           {/* Real-time Transcription Stream */}
           <div className="flex flex-col gap-1 z-10">
-            <span className="text-[10px] text-white/50 font-black uppercase tracking-widest flex items-center gap-1.5 px-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse"></span>
+            <span className="text-[10px] text-slate-400 font-black uppercase tracking-widest flex items-center gap-1.5 px-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-sky-500 animate-pulse"></span>
               Live Audio Transcription Feed
             </span>
-            <div className="text-[14px] text-white/90 bg-slate-950/45 p-3.5 rounded-2xl border border-white/5 h-[90px] overflow-y-auto leading-relaxed scrollbar-thin shadow-inner select-text pointer-events-auto">
+            <div className="text-[14px] text-slate-800 bg-slate-50/80 p-3.5 rounded-2xl border border-slate-200 h-[90px] overflow-y-auto leading-relaxed scrollbar-thin shadow-inner select-text pointer-events-auto">
               {transcript || interimTranscript ? (
                 <p className="font-medium select-text">
                   {transcript}
-                  <span className="text-sky-300 font-bold italic">{interimTranscript ? ` ${interimTranscript}...` : ""}</span>
+                  <span className="text-[var(--accent)] font-bold italic">{interimTranscript ? ` ${interimTranscript}...` : ""}</span>
                 </p>
               ) : (
-                <span className="text-white/25 italic text-xs select-none">Waiting for live conversation speech stream...</span>
+                <span className="text-slate-400 italic text-xs select-none">Waiting for live conversation speech stream...</span>
               )}
             </div>
           </div>
@@ -1148,50 +1152,56 @@ export default function CopilotPage() {
           {/* AI Copilot Answer Panel */}
           <div className="flex flex-col gap-1.5 flex-1 min-h-0 z-10">
             <div className="flex justify-between items-center px-1">
-              <span className={`text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 text-gradient-${activeLlmProvider}`}>
-                <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${activeLlmProvider === "openai" ? "bg-emerald-400" :
+              <span className="text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 text-slate-800">
+                <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${activeLlmProvider === "openai" ? "bg-emerald-500" :
                     activeLlmProvider === "anthropic" ? "bg-amber-500" :
                       activeLlmProvider === "gemini" ? "bg-blue-500" :
-                        activeLlmProvider === "groq" ? "bg-teal-400" :
-                          "bg-slate-300"
+                        activeLlmProvider === "groq" ? "bg-teal-500" :
+                          "bg-slate-400"
                   }`}></span>
                 AI Copilot Guidance
               </span>
               {latency && (
-                <span className="text-[10px] text-slate-400 font-bold bg-white/5 border border-white/5 px-2.5 py-0.5 rounded-lg shadow-sm">
+                <span className="text-[10px] text-slate-500 font-bold bg-slate-50 border border-slate-200 px-2.5 py-0.5 rounded-lg shadow-sm">
                   Latency: {latency}s
                 </span>
               )}
             </div>
-            <div className={`flex-1 text-[16px] bg-slate-950/50 p-5 rounded-2xl border border-${activeLlmProvider} overflow-y-auto font-semibold text-emerald-50/95 shadow-[inset_0_2px_12px_rgba(0,0,0,0.4)] leading-relaxed scrollbar-thin select-text pointer-events-auto`}>
+            <div className={`flex-1 text-[16px] p-5 rounded-2xl border overflow-y-auto font-semibold leading-relaxed scrollbar-thin select-text pointer-events-auto ${
+              activeLlmProvider === "openai" ? "bg-emerald-50/15 border-emerald-200 text-emerald-950" :
+              activeLlmProvider === "anthropic" ? "bg-amber-50/15 border-amber-200 text-amber-950" :
+              activeLlmProvider === "gemini" ? "bg-blue-50/15 border-blue-200 text-blue-950" :
+              activeLlmProvider === "groq" ? "bg-teal-50/15 border-teal-200 text-teal-950" :
+              "bg-slate-50 border-slate-200 text-slate-800"
+            }`}>
               {answer ? (
-                <div className="whitespace-pre-wrap leading-relaxed select-text font-bold text-emerald-50/95 text-shadow-sm animate-fade-in pointer-events-auto">
+                <div className="whitespace-pre-wrap leading-relaxed select-text font-bold text-slate-800 animate-fade-in pointer-events-auto">
                   {answer}
                   {status === "Streaming Copilot..." && (
-                    <span className={`inline-block w-2.5 h-4.5 ml-1.5 animate-pulse align-middle ${activeLlmProvider === "openai" ? "bg-emerald-400 shadow-[0_0_8px_#10a37f]" :
-                        activeLlmProvider === "anthropic" ? "bg-amber-500 shadow-[0_0_8px_#d97706]" :
-                          activeLlmProvider === "gemini" ? "bg-blue-500 shadow-[0_0_8px_#2563eb]" :
-                            activeLlmProvider === "groq" ? "bg-teal-400 shadow-[0_0_8px_#14b8a6]" :
-                              "bg-slate-300 shadow-[0_0_8px_#f8fafc]"
+                    <span className={`inline-block w-2.5 h-4.5 ml-1.5 animate-pulse align-middle ${activeLlmProvider === "openai" ? "bg-emerald-500" :
+                        activeLlmProvider === "anthropic" ? "bg-amber-500" :
+                          activeLlmProvider === "gemini" ? "bg-blue-500" :
+                            activeLlmProvider === "groq" ? "bg-teal-500" :
+                              "bg-slate-400"
                       }`}></span>
                   )}
                 </div>
               ) : (
                 <div className="h-full flex justify-center items-center select-none">
-                  <span className="text-white/25 italic text-sm">Awaiting interview questions to generate real-time feedback...</span>
+                  <span className="text-slate-400 italic text-sm">Awaiting interview questions to generate real-time feedback...</span>
                 </div>
               )}
             </div>
           </div>
 
           {/* Evasion / Shield Footer */}
-          <div className="flex justify-between items-center text-[10px] text-white/40 pt-3 border-t border-white/5 select-none z-10">
-            <span className="flex items-center gap-1.5 font-bold uppercase tracking-wider text-emerald-400/80">
-              <Shield className="w-4 h-4 text-emerald-400" />
+          <div className="flex justify-between items-center text-[10px] text-slate-400 pt-3 border-t border-slate-100 select-none z-10">
+            <span className="flex items-center gap-1.5 font-bold uppercase tracking-wider text-emerald-600/90">
+              <Shield className="w-4 h-4 text-emerald-600" />
               Direct Browser Tab Streaming Affinity Protected
             </span>
             {status && (
-              <span className="font-extrabold uppercase tracking-widest text-slate-300 bg-white/5 border border-white/5 px-2.5 py-0.5 rounded">{status}</span>
+              <span className="font-extrabold uppercase tracking-widest text-slate-500 bg-slate-50 border border-slate-200 px-2.5 py-0.5 rounded">{status}</span>
             )}
           </div>
         </div>
@@ -1200,37 +1210,37 @@ export default function CopilotPage() {
       {/* Main dashboard configuration panel */}
       {!isOverlayMode && (
         <div
-          style={{ background: `rgba(11, 13, 25, ${opacity})` }}
-          className="w-[780px] h-[640px] glass-panel rounded-3xl p-6 flex flex-col justify-between text-white border-white/10 relative overflow-hidden shadow-2xl animate-fade-in"
+          style={{ background: `rgba(255, 255, 255, ${opacity})` }}
+          className="w-[780px] h-[640px] rounded-3xl p-6 flex flex-col justify-between text-slate-800 border border-[var(--border-light)] relative overflow-hidden shadow-2xl animate-fade-in backdrop-blur-md"
         >
           {/* Subtle glowing orbs */}
-          <div className="absolute top-0 right-0 w-[220px] h-[220px] bg-[#6610F2]/10 rounded-full blur-[90px] pointer-events-none"></div>
-          <div className="absolute bottom-0 left-0 w-[220px] h-[220px] bg-[#0D6EFD]/10 rounded-full blur-[90px] pointer-events-none"></div>
+          <div className="absolute top-0 right-0 w-[220px] h-[220px] bg-[var(--accent)]/3 rounded-full blur-[90px] pointer-events-none"></div>
+          <div className="absolute bottom-0 left-0 w-[220px] h-[220px] bg-indigo-500/3 rounded-full blur-[90px] pointer-events-none"></div>
 
           {/* Header */}
           <div className="flex justify-between items-center relative z-10 select-none">
             <div className="flex items-center gap-3">
-              <img src="/logo.svg" className="w-10 h-10 rounded-xl border border-white/10 shadow-md" alt="Logo" />
+              <img src="/logo.svg" className="w-10 h-10 rounded-xl border border-slate-200 shadow-xs" alt="Logo" />
               <div>
-                <h1 className="text-2xl font-black tracking-tight text-gradient flex items-center gap-2">
-                  CrackTheLoop <span className="text-[10px] font-bold bg-[#6610F2]/20 text-[#0DCAF0] border border-[#0DCAF0]/30 px-2 py-0.5 rounded-md tracking-widest uppercase">WEB v2.0</span>
+                <h1 className="text-2xl font-black tracking-tight text-gradient-coral flex items-center gap-2">
+                  CrackTheLoop <span className="text-[10px] font-bold bg-[var(--accent-soft)] text-[var(--accent)] border border-[var(--accent)]/15 px-2 py-0.5 rounded-md tracking-widest uppercase">WEB v2.0</span>
                 </h1>
-                <p className="text-xs text-white/40 mt-0.5 font-medium">Anti-Share Stealth Browser Audio Copilot</p>
+                <p className="text-xs text-slate-400 mt-0.5 font-semibold">Anti-Share Stealth Browser Audio Copilot</p>
               </div>
             </div>
 
             {/* Authenticated user status vs Login controls */}
             <div className="flex items-center gap-2 relative z-20">
               {user ? (
-                <div className="flex items-center gap-3 bg-white/5 border border-white/10 pl-3.5 pr-1.5 py-1 rounded-full text-xs font-bold shadow-sm">
-                  <span className="text-slate-300 font-medium truncate max-w-[120px]">{user.email}</span>
-                  <span className="bg-sky-500/20 text-sky-400 px-2 py-0.5 rounded-full text-[10px]">
+                <div className="flex items-center gap-3 bg-slate-50 border border-slate-200 pl-3.5 pr-1.5 py-1 rounded-full text-xs font-bold shadow-xs">
+                  <span className="text-slate-600 font-bold truncate max-w-[120px]">{user.email}</span>
+                  <span className="bg-sky-50 border border-sky-100 text-sky-700 px-2 py-0.5 rounded-full text-[10px]">
                     {user.credits} credits
                   </span>
                   <button
                     onClick={handleLogout}
                     title="Log Out"
-                    className="p-1 bg-white/5 hover:bg-rose-500/20 text-slate-400 hover:text-rose-300 rounded-full transition cursor-pointer border border-white/10"
+                    className="p-1 bg-slate-50 hover:bg-rose-50 text-slate-500 hover:text-rose-600 rounded-full transition cursor-pointer border border-slate-200"
                   >
                     <LogOut className="w-3.5 h-3.5" />
                   </button>
@@ -1244,7 +1254,7 @@ export default function CopilotPage() {
                     setAuthMode("signin");
                     setShowLoginModal(true);
                   }}
-                  className="bg-sky-500 hover:bg-sky-600 border border-sky-400/20 px-4 py-1.5 rounded-full text-xs font-black transition active:scale-95 cursor-pointer uppercase tracking-wider"
+                  className="bg-sky-600 hover:bg-sky-700 text-white border border-sky-500/20 px-4 py-1.5 rounded-full text-xs font-black transition active:scale-95 cursor-pointer uppercase tracking-wider shadow-xs"
                 >
                   <User className="w-3.5 h-3.5 inline mr-1" />
                   Sign In
@@ -1252,21 +1262,21 @@ export default function CopilotPage() {
               )}
 
               {status && (
-                <div className="flex items-center gap-2 bg-white/5 border border-white/10 px-4 py-2 rounded-full text-xs font-bold shadow-sm">
-                  <span className={`w-2.5 h-2.5 rounded-full ${isCapturing ? "bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]" : "bg-white/20"}`}></span>
-                  <span className="text-white/80 font-bold uppercase tracking-wider">{status}</span>
+                <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 px-4 py-2 rounded-full text-xs font-bold shadow-xs">
+                  <span className={`w-2.5 h-2.5 rounded-full ${isCapturing ? "bg-emerald-500 animate-pulse shadow-[0_0_8px_#10a37f]" : "bg-slate-200"}`}></span>
+                  <span className="text-slate-700 font-bold uppercase tracking-wider">{status}</span>
                 </div>
               )}
               <a
                 href="/dashboard"
-                className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 text-slate-350 flex justify-center items-center border border-white/10 font-black transition active:scale-90 cursor-pointer"
+                className="w-8 h-8 rounded-full bg-slate-50 hover:bg-slate-100 text-slate-500 flex justify-center items-center border border-slate-200 font-black transition active:scale-90 cursor-pointer"
                 title="Go to User Dashboard"
               >
                 <Layers className="w-4 h-4" />
               </a>
               <a
                 href="/"
-                className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 text-slate-350 flex justify-center items-center border border-white/10 font-black transition active:scale-90 cursor-pointer"
+                className="w-8 h-8 rounded-full bg-slate-50 hover:bg-slate-100 text-slate-500 flex justify-center items-center border border-slate-200 font-black transition active:scale-90 cursor-pointer"
                 title="Go Back to Home Landing"
               >
                 <Home className="w-4 h-4" />
@@ -1275,7 +1285,7 @@ export default function CopilotPage() {
           </div>
           {/* Credits Warning Banner */}
           {user && (user.credits || 0) < 10 && (
-            <div className="bg-rose-500/10 border border-rose-500/20 px-4 py-3.5 rounded-2xl relative z-10 text-xs text-rose-400 font-bold text-center">
+            <div className="bg-rose-50 border border-rose-200 px-4 py-3.5 rounded-2xl relative z-10 text-xs text-rose-600 font-bold text-center">
               ⚠️ Insufficient Fuel: You need at least 10 credits to run the AI Copilot. Your current balance is {user.credits} credits. Please purchase a plan or refill on the account dashboard.
             </div>
           )}
@@ -1283,16 +1293,16 @@ export default function CopilotPage() {
           {/* Credentials Inputs Removed */}
 
           {/* Pre-Interview Context Setup Widget */}
-          <div className="flex flex-col gap-3 bg-white/5 border border-white/5 p-4 rounded-2xl relative z-10">
-            <span className="text-[10px] text-white/55 font-black uppercase tracking-widest flex items-center gap-1.5 border-b border-white/5 pb-1.5">
+          <div className="flex flex-col gap-3 bg-white border border-[var(--border-light)] p-4 rounded-2xl relative z-10 shadow-xs">
+            <span className="text-[10px] text-slate-400 font-black uppercase tracking-widest flex items-center gap-1.5 border-b border-slate-100 pb-2">
               💼 Pre-Interview Context Setup
               {!interviewRole.trim() && (
-                <span className="text-[9px] px-1.5 py-0.5 bg-rose-500/20 text-rose-300 border border-rose-500/35 rounded animate-pulse font-black uppercase">
+                <span className="text-[9px] px-1.5 py-0.5 bg-rose-50 text-rose-600 border border-rose-200 rounded animate-pulse font-black uppercase">
                   ⚠️ Interview Role Required
                 </span>
               )}
               {interviewRole.trim() && (
-                <span className="text-[9px] px-1.5 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/25 rounded font-black uppercase">
+                <span className="text-[9px] px-1.5 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded font-black uppercase">
                   Ready
                 </span>
               )}
@@ -1301,22 +1311,22 @@ export default function CopilotPage() {
             <div className="flex flex-col gap-3 mt-1">
               {/* Row 1: Mandatory Interview Role */}
               <div className="flex flex-col gap-1">
-                <label className="text-[10px] text-white/50 font-bold uppercase tracking-wider flex items-center gap-1">
-                  Interview Role <span className="text-rose-400">*</span>
+                <label className="text-[10px] text-slate-500 font-bold uppercase tracking-wider flex items-center gap-1">
+                  Interview Role <span className="text-rose-500">*</span>
                 </label>
                 <input
                   type="text"
                   value={interviewRole}
                   onChange={(e) => setInterviewRole(e.target.value)}
                   placeholder="e.g. Senior Frontend Engineer"
-                  className={`w-full bg-[#090e1a]/85 border ${!interviewRole.trim() ? "border-rose-500/30 shadow-[0_0_8px_rgba(244,63,94,0.1)]" : "border-white/10"
-                    } px-3.5 py-2 rounded-xl text-xs focus:outline-none focus:border-sky-400 transition placeholder-white/20 text-white/95 font-medium`}
+                  className={`w-full bg-slate-50 border ${!interviewRole.trim() ? "border-rose-500/30 shadow-[0_0_8px_rgba(244,63,94,0.05)]" : "border-slate-200"
+                    } px-3.5 py-2 rounded-xl text-xs focus:outline-none focus:border-[var(--accent)] focus:bg-white transition placeholder-slate-400 text-slate-800 font-semibold`}
                 />
               </div>
 
               {/* Row 2: Job Description */}
               <div className="flex flex-col gap-1">
-                <label className="text-[10px] text-white/50 font-bold uppercase tracking-wider">
+                <label className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">
                   Job Description (Optional)
                 </label>
                 <textarea
@@ -1324,19 +1334,19 @@ export default function CopilotPage() {
                   value={jobDescription}
                   onChange={(e) => setJobDescription(e.target.value)}
                   placeholder="Paste target job details, requirements, or tech stack..."
-                  className="bg-[#090e1a]/85 border border-white/10 rounded-xl p-3 text-xs placeholder-white/20 scrollbar-thin h-[50px] min-h-[50px] max-h-[50px] focus:outline-none focus:border-sky-400 text-white/95"
+                  className="bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs placeholder-slate-400 scrollbar-thin h-[50px] min-h-[50px] max-h-[50px] focus:outline-none focus:border-[var(--accent)] focus:bg-white text-slate-800 font-semibold"
                 />
               </div>
 
               {/* Row 3: Resume Uploader */}
               <div className="flex flex-col gap-1">
-                <label className="text-[10px] text-white/50 font-bold uppercase tracking-wider">
+                <label className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">
                   Resume File (Optional)
                 </label>
                 {!resumeFileName ? (
-                  <label className="flex flex-col items-center justify-center border border-dashed border-white/15 hover:border-sky-400/40 bg-white/2 rounded-xl p-2 cursor-pointer select-none transition group h-[50px]">
+                  <label className="flex flex-col items-center justify-center border border-dashed border-slate-200 hover:border-[var(--accent)] bg-slate-50 hover:bg-slate-100 rounded-xl p-2 cursor-pointer select-none transition group h-[50px]">
                     <span className="text-xs group-hover:scale-110 transition duration-300">📎</span>
-                    <span className="text-[9px] text-slate-300 font-black uppercase tracking-wider mt-0.5 group-hover:text-white transition">Upload Resume PDF or DOCX</span>
+                    <span className="text-[9px] text-slate-500 font-black uppercase tracking-wider mt-0.5 group-hover:text-slate-700 transition">Upload Resume PDF or DOCX</span>
                     <input
                       type="file"
                       accept=".pdf,.docx"
@@ -1345,12 +1355,12 @@ export default function CopilotPage() {
                     />
                   </label>
                 ) : (
-                  <div className="flex justify-between items-center bg-emerald-500/10 border border-emerald-500/25 px-3.5 py-1.5 rounded-xl text-xs text-emerald-400 font-bold shadow-sm animate-fade-in relative overflow-hidden group h-[50px]">
+                  <div className="flex justify-between items-center bg-emerald-50 border border-emerald-200 px-3.5 py-1.5 rounded-xl text-xs text-emerald-700 font-bold shadow-xs animate-fade-in relative overflow-hidden group h-[50px]">
                     <div className="flex items-center gap-2 relative z-10">
                       <span className="text-base">📄</span>
                       <div className="flex flex-col">
-                        <span className="text-[10px] text-slate-200 font-extrabold truncate w-[220px]">{resumeFileName}</span>
-                        <span className="text-[8px] text-emerald-400 font-bold uppercase tracking-widest mt-0.5">Extraction Active</span>
+                        <span className="text-[10px] text-slate-700 font-extrabold truncate w-[220px]">{resumeFileName}</span>
+                        <span className="text-[8px] text-emerald-700 font-bold uppercase tracking-widest mt-0.5">Extraction Active</span>
                       </div>
                     </div>
                     <button
@@ -1359,7 +1369,7 @@ export default function CopilotPage() {
                         setResumeFileName("");
                         setCandidateResume("");
                       }}
-                      className="px-2 py-1 bg-rose-500/20 hover:bg-rose-500/35 border border-rose-500/35 rounded-lg text-[8.5px] font-black text-rose-300 transition active:scale-90 cursor-pointer relative z-10 uppercase tracking-wider"
+                      className="px-2 py-1 bg-rose-50 hover:bg-rose-100 border border-rose-200 rounded-lg text-[8.5px] font-black text-rose-600 transition active:scale-90 cursor-pointer relative z-10 uppercase tracking-wider"
                     >
                       Clear
                     </button>
@@ -1370,13 +1380,13 @@ export default function CopilotPage() {
           </div>
 
           {/* Waveform Visualizer & Audio Source Panel */}
-          <div className="flex justify-between items-center bg-white/5 border border-white/5 px-4 py-2 rounded-2xl relative z-10 text-xs gap-4">
-            <div className="flex items-center gap-2 font-bold uppercase tracking-wider select-none shrink-0 text-slate-400">
+          <div className="flex justify-between items-center bg-white border border-[var(--border-light)] px-4 py-2 rounded-2xl relative z-10 text-xs gap-4 shadow-xs">
+            <div className="flex items-center gap-2 font-bold uppercase tracking-wider select-none shrink-0 text-slate-500">
               Waveform:
             </div>
 
             {/* Visual Waveform Canvas */}
-            <div className="flex-1 h-9 bg-[#0b0e1b] rounded-xl overflow-hidden border border-white/5 shadow-inner shrink min-w-0">
+            <div className="flex-1 h-9 bg-slate-50 rounded-xl overflow-hidden border border-slate-200 shadow-inner shrink min-w-0">
               <canvas ref={canvasRef} width="320" height="36" className="w-full h-full" />
             </div>
 
@@ -1385,8 +1395,8 @@ export default function CopilotPage() {
               <button
                 onClick={handleToggleMic}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold transition border cursor-pointer ${captureMic
-                    ? "bg-sky-500/10 text-sky-300 border-sky-500/20 hover:bg-sky-500/20"
-                    : "bg-white/5 text-slate-500 border-white/5 hover:bg-white/10"
+                    ? "bg-sky-50 text-sky-750 border-sky-200 hover:bg-sky-100"
+                    : "bg-slate-50 text-slate-400 border-slate-200 hover:bg-slate-100"
                   }`}
               >
                 <Mic className="w-3.5 h-3.5" />
@@ -1397,8 +1407,8 @@ export default function CopilotPage() {
               <button
                 onClick={handleToggleSystem}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold transition border cursor-pointer ${captureSystem
-                    ? "bg-emerald-500/10 text-emerald-300 border-emerald-500/20 hover:bg-emerald-500/20"
-                    : "bg-white/5 text-slate-500 border-white/5 hover:bg-white/10"
+                    ? "bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100"
+                    : "bg-slate-50 text-slate-400 border-slate-200 hover:bg-slate-100"
                   }`}
                 title="Captures shared Chrome/Edge tab audio"
               >
@@ -1413,7 +1423,13 @@ export default function CopilotPage() {
             <button
               onClick={handleToggleOverlay}
               disabled={!interviewRole.trim() || !deepgramKey.trim() || !llmKey.trim() || !token}
-              className={`w-full py-3 bg-gradient-to-r from-${activeLlmProvider === "openai" ? "emerald-400 to-teal-500" : activeLlmProvider === "anthropic" ? "amber-500 to-orange-600" : activeLlmProvider === "gemini" ? "blue-500 to-indigo-600" : activeLlmProvider === "groq" ? "teal-400 to-cyan-500" : "slate-400 to-slate-600"} hover:brightness-110 text-white rounded-xl font-black text-xs transition active:scale-98 flex justify-center items-center gap-2 cursor-pointer shadow-lg tracking-wider uppercase disabled:opacity-50 disabled:cursor-not-allowed`}
+              className={`w-full py-3 bg-gradient-to-r ${
+                activeLlmProvider === "openai" ? "from-emerald-600 to-teal-600 shadow-emerald-600/10" :
+                activeLlmProvider === "anthropic" ? "from-amber-600 to-orange-600 shadow-orange-600/10" :
+                activeLlmProvider === "gemini" ? "from-blue-600 to-indigo-600 shadow-indigo-600/10" :
+                activeLlmProvider === "groq" ? "from-teal-600 to-cyan-600 shadow-teal-600/10" :
+                "from-slate-600 to-slate-700"
+              } hover:brightness-110 text-white rounded-xl font-black text-xs transition active:scale-98 flex justify-center items-center gap-2 cursor-pointer shadow-lg tracking-wider uppercase disabled:opacity-50 disabled:cursor-not-allowed`}
             >
               <Maximize2 className="w-4 h-4" />
               {!token ? "Sign In Required to Launch Overlay" : "Launch Web Stealth Overlay"}
@@ -1421,41 +1437,41 @@ export default function CopilotPage() {
           </div>
 
           {/* Shield Status */}
-          <div className="flex justify-between items-center text-xs text-white/30 border-t border-white/5 pt-3 mt-1 select-none">
-            <span className="flex items-center gap-1.5 text-emerald-400/80 font-bold uppercase tracking-wider">
-              <Shield className="w-4 h-4 text-emerald-400" />
+          <div className="flex justify-between items-center text-xs text-slate-400 border-t border-slate-100 pt-3 mt-1 select-none">
+            <span className="flex items-center gap-1.5 text-emerald-650/90 font-bold uppercase tracking-wider">
+              <Shield className="w-4 h-4 text-emerald-600" />
               Web Audio Sandbox: EXCLUSIVE
             </span>
-            <span className="font-bold tracking-wider">SECURE CLIENT SESSIONS</span>
+            <span className="font-bold tracking-wider text-slate-500">SECURE CLIENT SESSIONS</span>
           </div>
         </div>
       )}
 
       {/* History Slide Drawer Panel */}
       {showHistoryDrawer && (
-        <div className="fixed top-0 right-0 w-[350px] h-full bg-[#0c1125]/98 border-l border-white/10 shadow-2xl z-[150] p-5 flex flex-col gap-4 animate-slide-in text-white">
-          <div className="flex justify-between items-center border-b border-white/10 pb-3">
-            <h3 className="font-black flex items-center gap-2 text-xs text-sky-400 uppercase tracking-widest">
+        <div className="fixed top-0 right-0 w-[350px] h-full bg-white/98 border-l border-slate-200 shadow-2xl z-[150] p-5 flex flex-col gap-4 animate-slide-in text-slate-800 backdrop-blur-md">
+          <div className="flex justify-between items-center border-b border-slate-100 pb-3">
+            <h3 className="font-black flex items-center gap-2 text-xs text-[var(--accent)] uppercase tracking-widest">
               <History className="w-4 h-4" />
               Conversation History
             </h3>
             <button
               onClick={() => setShowHistoryDrawer(false)}
-              className="text-slate-400 hover:text-white transition cursor-pointer font-bold"
+              className="text-slate-400 hover:text-slate-800 transition cursor-pointer font-bold"
             >
               ✕
             </button>
           </div>
           <div className="flex-1 overflow-y-auto flex flex-col gap-3.5 pr-1 scrollbar-thin">
             {history.length === 0 ? (
-              <p className="text-slate-500 italic text-xs text-center mt-10">No conversation history yet.</p>
+              <p className="text-slate-400 italic text-xs text-center mt-10">No conversation history yet.</p>
             ) : (
               history.map((turn, index) => (
                 <div key={index} className="flex flex-col gap-1">
                   <div className="flex justify-between items-center">
-                    <span className={`text-[9px] font-black uppercase tracking-wider ${turn.sender === "interviewer" ? "text-sky-400" :
-                        turn.sender === "candidate" ? "text-purple-400" :
-                          "text-emerald-400"
+                    <span className={`text-[9px] font-black uppercase tracking-wider ${turn.sender === "interviewer" ? "text-sky-600" :
+                        turn.sender === "candidate" ? "text-purple-600" :
+                          "text-emerald-600"
                       }`}>
                       {turn.sender === "interviewer" ? "🗣️ Interviewer" :
                         turn.sender === "candidate" ? "🎙️ You" :
@@ -1465,7 +1481,7 @@ export default function CopilotPage() {
                       {new Date(turn.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
                     </span>
                   </div>
-                  <p className="text-xs text-slate-200 bg-slate-950/45 px-3 py-2 rounded-xl border border-white/5 leading-relaxed font-medium select-text">
+                  <p className="text-xs text-slate-700 bg-slate-50 px-3 py-2 rounded-xl border border-slate-200/50 leading-relaxed font-medium select-text">
                     {turn.text}
                   </p>
                 </div>
@@ -1477,11 +1493,11 @@ export default function CopilotPage() {
 
       {/* Password Authentication Modal */}
       {showLoginModal && (
-        <div className="fixed inset-0 bg-black/75 backdrop-blur-md flex justify-center items-center z-[200] p-6 animate-fade-in">
-          <div className="w-[360px] bg-[#0c1125] border border-white/10 rounded-2xl p-6 flex flex-col gap-6 shadow-2xl relative">
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md flex justify-center items-center z-[200] p-6 animate-fade-in">
+          <div className="w-[360px] bg-white border border-slate-200 rounded-2xl p-6 flex flex-col gap-6 shadow-2xl relative text-slate-800">
             <button
               onClick={() => setShowLoginModal(false)}
-              className="text-slate-400 hover:text-white transition cursor-pointer font-bold absolute top-4 right-4"
+              className="text-slate-400 hover:text-slate-800 transition cursor-pointer font-bold absolute top-4 right-4"
             >
               ✕
             </button>
@@ -1489,16 +1505,16 @@ export default function CopilotPage() {
             {/* Header / Tabs */}
             <div className="flex flex-col gap-3">
               <div className="text-center">
-                <h3 className="text-lg font-black text-white flex items-center justify-center gap-2">
-                  <Shield className="w-5 h-5 text-sky-400" />
+                <h3 className="text-lg font-black text-slate-800 flex items-center justify-center gap-2">
+                  <Shield className="w-5 h-5 text-sky-600" />
                   {authMode === "signup" ? "Create Account" : "Sign In"}
                 </h3>
               </div>
-              <div className="flex bg-white/5 p-1 rounded-xl border border-white/10">
+              <div className="flex bg-slate-100 p-1 rounded-xl border border-slate-200">
                 <button
                   type="button"
                   onClick={() => setAuthMode("signin")}
-                  className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${authMode === "signin" ? "bg-sky-500 text-white" : "text-slate-400 hover:text-white"
+                  className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${authMode === "signin" ? "bg-sky-600 text-white shadow-xs" : "text-slate-550 hover:text-slate-800"
                     }`}
                 >
                   Sign In
@@ -1506,7 +1522,7 @@ export default function CopilotPage() {
                 <button
                   type="button"
                   onClick={() => setAuthMode("signup")}
-                  className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${authMode === "signup" ? "bg-sky-500 text-white" : "text-slate-400 hover:text-white"
+                  className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${authMode === "signup" ? "bg-sky-600 text-white shadow-xs" : "text-slate-550 hover:text-slate-800"
                     }`}
                 >
                   Sign Up
@@ -1517,40 +1533,40 @@ export default function CopilotPage() {
             <div className="flex flex-col gap-4">
               {authMode === "signup" && (
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[10px] text-white/50 font-bold uppercase tracking-wider">Full Name</label>
+                  <label className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Full Name</label>
                   <input
                     type="text"
                     value={signupName}
                     onChange={(e) => setSignupName(e.target.value)}
                     placeholder="John Doe"
-                    className="w-full bg-[#050811] border border-white/10 px-3.5 py-2.5 rounded-xl text-xs text-white focus:outline-none focus:border-sky-400"
+                    className="w-full bg-slate-50 border border-slate-200 px-3.5 py-2.5 rounded-xl text-xs text-slate-800 focus:bg-white focus:outline-none focus:border-[var(--accent)] font-semibold"
                   />
                 </div>
               )}
               <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] text-white/50 font-bold uppercase tracking-wider">Email Address</label>
+                <label className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Email Address</label>
                 <input
                   type="email"
                   value={loginEmail}
                   onChange={(e) => setLoginEmail(e.target.value)}
                   placeholder="you@example.com"
-                  className="w-full bg-[#050811] border border-white/10 px-3.5 py-2.5 rounded-xl text-xs text-white focus:outline-none focus:border-sky-400"
+                  className="w-full bg-slate-50 border border-slate-200 px-3.5 py-2.5 rounded-xl text-xs text-slate-800 focus:bg-white focus:outline-none focus:border-[var(--accent)] font-semibold"
                 />
               </div>
               <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] text-white/50 font-bold uppercase tracking-wider">Password</label>
+                <label className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Password</label>
                 <input
                   type="password"
                   value={loginPassword}
                   onChange={(e) => setLoginPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full bg-[#050811] border border-white/10 px-3.5 py-2.5 rounded-xl text-xs text-white focus:outline-none focus:border-sky-400"
+                  className="w-full bg-slate-50 border border-slate-200 px-3.5 py-2.5 rounded-xl text-xs text-slate-800 focus:bg-white focus:outline-none focus:border-[var(--accent)] font-semibold"
                 />
               </div>
               <button
                 onClick={handlePasswordAuth}
                 disabled={loadingLogin || !loginEmail.includes("@") || loginPassword.length < 6 || (authMode === "signup" && !signupName.trim())}
-                className="w-full py-3 bg-gradient-to-r from-sky-400 to-indigo-500 rounded-xl font-bold text-xs text-white uppercase tracking-wider shadow-md cursor-pointer disabled:opacity-50 flex items-center justify-center gap-1.5"
+                className="w-full py-3 bg-gradient-to-r from-sky-600 to-indigo-600 rounded-xl font-black text-xs text-white uppercase tracking-wider shadow-md hover:brightness-110 active:scale-95 transition-all shadow-sky-600/10 cursor-pointer disabled:opacity-50 flex items-center justify-center gap-1.5"
               >
                 {loadingLogin ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : authMode === "signup" ? "Register & Enter" : "Access Copilot"}
               </button>
