@@ -392,8 +392,11 @@ export default function DemoPage() {
 
       {/* Header */}
       <header className="w-full max-w-7xl mx-auto px-6 py-6 flex justify-between items-center relative z-20 select-none">
-        <a href="/copilot" className="flex items-center gap-2 hover:opacity-90 transition">
-          <img src="/logo-horizontal-dark.svg" className="h-14 w-auto select-none" alt="CrackTheLoop Logo" />
+        <a href="/copilot" className="flex items-center gap-2.5 hover:opacity-90 transition">
+          <img src="/logo.svg" className="h-9 w-9 rounded-lg select-none border border-white/10" alt="CrackTheLoop Logo Icon" />
+          <span className="font-extrabold tracking-tight text-xl text-white" style={{ fontFamily: "var(--font-display)" }}>
+            CrackTheLoop
+          </span>
         </a>
         <div className="flex items-center gap-6 font-semibold">
           <a href="/" className="text-sm text-slate-400 hover:text-white transition flex items-center gap-1">

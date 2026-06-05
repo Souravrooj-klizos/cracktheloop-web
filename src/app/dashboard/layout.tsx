@@ -87,8 +87,11 @@ export default function DashboardLayout({
       <aside className="hidden md:flex md:w-64 bg-[#0c1125]/85 border-r border-white/5 flex-col p-6 relative z-30 justify-between select-none">
         <div className="flex flex-col gap-8">
           {/* Logo */}
-          <a href="/" className="flex items-center gap-2 hover:opacity-90 transition px-2">
-            <img src="/logo-horizontal-dark.svg" className="h-14 w-auto select-none" alt="Logo" />
+          <a href="/" className="flex items-center gap-2.5 hover:opacity-90 transition px-2">
+            <img src="/logo.svg" className="h-9 w-9 rounded-lg select-none border border-white/10" alt="CrackTheLoop Logo Icon" />
+            <span className="font-extrabold tracking-tight text-xl text-white" style={{ fontFamily: "var(--font-display)" }}>
+              CrackTheLoop
+            </span>
           </a>
 
           {/* Navigation links */}
@@ -150,8 +153,11 @@ export default function DashboardLayout({
 
       {/* Mobile Top Header */}
       <div className="md:hidden w-full bg-[#0c1125]/85 border-b border-white/5 px-6 py-4 flex justify-between items-center relative z-40 select-none">
-        <a href="/" className="flex items-center gap-2 hover:opacity-90 transition">
-          <img src="/logo-horizontal-dark.svg" className="h-10 w-auto select-none" alt="Logo" />
+        <a href="/" className="flex items-center gap-2.5 hover:opacity-90 transition">
+          <img src="/logo.svg" className="h-8 w-8 rounded-lg select-none border border-white/10" alt="CrackTheLoop Logo Icon" />
+          <span className="font-extrabold tracking-tight text-lg text-white" style={{ fontFamily: "var(--font-display)" }}>
+            CrackTheLoop
+          </span>
         </a>
         <button 
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}

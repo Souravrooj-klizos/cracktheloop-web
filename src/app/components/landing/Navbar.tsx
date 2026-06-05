@@ -1,18 +1,33 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { Globe, Menu, X } from "lucide-react";
+import { motion, useScroll, useSpring } from "framer-motion";
+import { Sparkles, Menu, X } from "lucide-react";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001,
+  });
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const menuItems = [
+    { label: "Features", href: "#features" },
+    { label: "How It Works", href: "#how-it-works" },
+    { label: "Use Cases", href: "#use-cases" },
+    { label: "Pricing", href: "/pricing" },
+    { label: "FAQ", href: "#faq" },
+  ];
 
   return (
     <motion.header
@@ -27,32 +42,35 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
         <a
           href="/"
-          className="flex items-center gap-2 hover:opacity-90 transition cursor-pointer select-none"
+          className="flex items-center gap-2.5 hover:opacity-90 transition cursor-pointer select-none"
         >
           <img
-            src="/logo-horizontal-dark.svg"
-            className="h-10 w-auto select-none"
-            alt="CrackTheLoop Logo"
+            src="/logo.svg"
+            className="h-9 w-9 rounded-lg select-none border border-[var(--border-light)]"
+            alt="CrackTheLoop Logo Icon"
           />
+          <span className="font-extrabold tracking-tight text-xl text-[var(--text-primary)]" style={{ fontFamily: "var(--font-display)" }}>
+            CrackTheLoop
+          </span>
         </a>
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-8">
-          {["Features", "Demo", "Pricing"].map((link) => (
+          {menuItems.map((item) => (
             <a
-              key={link}
-              href={`/${link.toLowerCase()}`}
+              key={item.label}
+              href={item.href}
               className="text-sm font-medium text-[var(--text-muted)] hover:text-[var(--text-primary)] transition cursor-pointer"
             >
-              {link}
+              {item.label}
             </a>
           ))}
           <a
-            href="/copilot"
-            className="btn-primary !py-2.5 !px-6 !text-sm !rounded-full cursor-pointer"
+            href="/pricing"
+            className="btn-primary !py-2.5 !px-6 !text-sm !rounded-[8px] cursor-pointer"
           >
-            <Globe className="w-3.5 h-3.5" />
-            Launch Copilot
+            <Sparkles className="w-3.5 h-3.5" />
+            Start Preparing
           </a>
         </nav>
 
@@ -75,23 +93,35 @@ export default function Navbar() {
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="md:hidden glass-light mx-4 mb-4 rounded-2xl p-6 flex flex-col gap-4"
+          className="md:hidden glass-light mx-4 mb-4 rounded-lg p-6 flex flex-col gap-4"
         >
-          {["Features", "Demo", "Pricing"].map((link) => (
+          {menuItems.map((item) => (
             <a
-              key={link}
-              href={`/${link.toLowerCase()}`}
+              key={item.label}
+              href={item.href}
               className="text-sm font-medium text-[var(--text-primary)] py-2 cursor-pointer"
+              onClick={() => setMobileOpen(false)}
             >
-              {link}
+              {item.label}
             </a>
           ))}
-          <a href="/copilot" className="btn-primary !text-sm !rounded-full justify-center cursor-pointer">
-            <Globe className="w-3.5 h-3.5" />
-            Launch Copilot
+          <a
+            href="/pricing"
+            className="btn-primary !text-sm !rounded-[8px] justify-center cursor-pointer"
+            onClick={() => setMobileOpen(false)}
+          >
+            <Sparkles className="w-3.5 h-3.5" />
+            Start Preparing
           </a>
         </motion.div>
       )}
+
+      {/* Sticky Scroll Progress Bar */}
+      <motion.div
+        className="absolute bottom-0 left-0 right-0 h-[3px] bg-[var(--accent)] origin-left z-50"
+        style={{ scaleX }}
+      />
     </motion.header>
   );
 }
+

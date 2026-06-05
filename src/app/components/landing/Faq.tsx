@@ -7,32 +7,44 @@ import { ScrollReveal } from "./ScrollReveal";
 
 const faqs = [
   {
-    q: "Can interviewers detect CrackTheLoop?",
-    a: "No. The desktop overlay uses advanced system-level display features to ensure the window is completely invisible to screen-sharing and recording tools, including Zoom, Google Meet, Microsoft Teams, and Discord. The audio processing is handled privately on your device.",
+    q: "What does CrackTheLoop do?",
+    a: "CrackTheLoop is an AI-powered interview assistance buddy that helps candidates during interview conversations by listening to the interviewer’s questions and generating relevant answer guidance in real time.",
   },
   {
-    q: "Do I need to install any drivers or virtual audio cables?",
-    a: "No. CrackTheLoop captures your microphone and speaker audio directly without requiring any complex virtual cable installations, audio routing drivers, or administrator privileges. It works right out of the box.",
+    q: "Does the AI ask interview questions?",
+    a: "No. The AI does not act as an interviewer and does not ask questions to the candidate. Instead, the AI listens to the interviewer’s question during an interview or practice session and provides the candidate with helpful answer suggestions, key talking points, and structured response guidance.",
   },
   {
-    q: "How fast are the answers generated?",
-    a: "Answers appear in less than a second. The system captures the conversation, transcribes the questions, and generates structured, context-aware responses in real time as the conversation progresses.",
+    q: "How does it generate answer guidance?",
+    a: "The system captures the interviewer's question audio, transcribes it, and cross-references the question text with your uploaded resume and the job description to generate highly relevant, structured talking points.",
   },
   {
-    q: "Does it work for non-technical interviews?",
-    a: "Absolutely. CrackTheLoop supports behavioral, consulting, product management, case study, and technical interviews. It automatically selects the right framework (STAR, McKinsey, Product Design) based on the question context.",
+    q: "Can I upload my resume?",
+    a: "Yes. You can upload your resume (PDF/DOCX format) before starting your session. The system extracts your skills, projects, tools, and experience to personalize the suggested answers.",
   },
   {
-    q: "Is my data secure?",
-    a: "Your audio data and credentials are processed locally on your machine and are never stored, logged, or shared with third parties. Your privacy is our highest priority.",
+    q: "Can I add a job description?",
+    a: "Yes. You can upload or paste the target role's job description. The AI analyzes it to extract required technical keywords, core responsibilities, and team expectations, then highlights them in your suggestions.",
   },
   {
-    q: "Which platforms are supported?",
-    a: "The browser-based dashboard works on all platforms (Windows, macOS, and Linux). The fully invisible native desktop overlay supports both Windows and macOS natively.",
+    q: "Is it useful for freshers?",
+    a: "Yes. Freshers can use CrackTheLoop to structure academic project explanations, handle basic technical questions, and practice HR rounds with structured confidence.",
   },
   {
-    q: "Is there a free trial or demo?",
-    a: "Yes, you can try our interactive simulator on the Demo page to see the real-time response pipeline in action before upgrading to a premium pass.",
+    q: "Can it help with technical interviews?",
+    a: "Absolutely. The system supports technical, behavioral, consulting, and product management interviews. It automatically maps core question structures to corresponding frameworks (like STAR, CAR, or Case trees).",
+  },
+  {
+    q: "Is my resume data safe?",
+    a: "Yes. Your privacy is our highest priority. All resume details and conversation transcripts are processed securely and privately, and are never shared, logged, or used to train public models.",
+  },
+  {
+    q: "Can I use it during a live interview?",
+    a: "Yes, CrackTheLoop is designed to be used during permitted live interviews or practice prep sessions as a confidence-support and structure-guidance companion.",
+  },
+  {
+    q: "Does it give full answers or short talking points?",
+    a: "You have complete control. You can toggle between Short Answer Mode (quick 2-3 lines), Structured Answer Mode (complete framework outline), or Bullet Point Mode for natural talking points.",
   },
 ];
 
@@ -40,18 +52,12 @@ export default function Faq() {
   const [open, setOpen] = useState<number | null>(null);
 
   return (
-    <section id="faq" className="section-frost py-24 md:py-32 relative overflow-hidden">
+    <section id="faq" className="section-mist relative py-20 md:py-24 overflow-hidden">
       <div className="orb orb-slate w-[350px] h-[350px] -bottom-20 -right-20 animate-float-orb-slow" />
 
-      <div className="max-w-3xl mx-auto px-6 relative z-10">
+      <div className="max-w-7xl mx-auto px-6 relative z-10 w-full">
         <ScrollReveal>
           <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 glass-light rounded-full px-4 py-1.5 mb-6">
-              <MessageSquare className="w-3.5 h-3.5 text-[var(--accent)]" />
-              <span className="text-xs font-semibold text-[var(--text-secondary)]">
-                Frequently Asked Questions
-              </span>
-            </div>
             <h2
               className="text-3xl md:text-4xl font-extrabold tracking-tight text-[var(--text-primary)]"
               style={{ fontFamily: "var(--font-display)" }}
@@ -64,47 +70,50 @@ export default function Faq() {
           </div>
         </ScrollReveal>
 
-        <div className="flex flex-col gap-3">
-          {faqs.map((faq, i) => (
-            <ScrollReveal key={i} delay={i * 0.04}>
-              <div className="glass-card-light overflow-hidden">
-                <button
-                  id={`faq-q-${i}`}
-                  onClick={() => setOpen(open === i ? null : i)}
-                  className="w-full flex items-center justify-between px-6 py-4 text-left gap-4 cursor-pointer group"
-                >
-                  <span className="text-sm font-semibold text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors">
-                    {faq.q}
-                  </span>
-                  <motion.div
-                    animate={{ rotate: open === i ? 180 : 0 }}
-                    transition={{ duration: 0.25 }}
+        <div className="divide-y divide-[var(--border-light)] border-t border-b border-[var(--border-light)] mt-8">
+          {faqs.map((faq, i) => {
+            const isOpen = open === i;
+            return (
+              <ScrollReveal key={i} delay={i * 0.03} className="w-full">
+                <div className="py-1 transition-colors duration-200">
+                  <button
+                    id={`faq-q-${i}`}
+                    onClick={() => setOpen(isOpen ? null : i)}
+                    className="w-full flex items-center justify-between py-4 text-left gap-4 cursor-pointer group"
                   >
-                    <ChevronDown
-                      className={`w-4 h-4 shrink-0 transition-colors ${
-                        open === i ? "text-[var(--accent)]" : "text-[var(--text-muted)]"
-                      }`}
-                    />
-                  </motion.div>
-                </button>
-                <AnimatePresence>
-                  {open === i && (
+                    <span className="text-sm md:text-base font-semibold text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors">
+                      {faq.q}
+                    </span>
                     <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
-                      className="overflow-hidden"
+                      animate={{ rotate: isOpen ? 180 : 0 }}
+                      transition={{ duration: 0.25 }}
                     >
-                      <div className="px-6 pb-5 text-[var(--text-muted)] text-sm leading-relaxed border-t border-[var(--border-light)] pt-4">
-                        {faq.a}
-                      </div>
+                      <ChevronDown
+                        className={`w-4 h-4 shrink-0 transition-colors ${
+                          isOpen ? "text-[var(--accent)]" : "text-[var(--text-muted)]"
+                        }`}
+                      />
                     </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            </ScrollReveal>
-          ))}
+                  </button>
+                  <AnimatePresence initial={false}>
+                    {isOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+                        className="overflow-hidden"
+                      >
+                        <div className="pb-5 text-[var(--text-muted)] text-sm leading-relaxed pr-8">
+                          {faq.a}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </ScrollReveal>
+            );
+          })}
         </div>
       </div>
     </section>

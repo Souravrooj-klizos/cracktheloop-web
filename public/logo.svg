@@ -1,18 +1,21 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
   <defs>
-    <linearGradient id="appIconGrad" x1="0%" y1="100%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#6610f2" />
-      <stop offset="40%" stop-color="#6f42c1" />
-      <stop offset="70%" stop-color="#0d6efd" />
-      <stop offset="100%" stop-color="#0dcaf0" />
+    <!-- Premium Coral Gradient -->
+    <linearGradient id="coralGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#E8503A" />
+      <stop offset="100%" stop-color="#FF755F" />
     </linearGradient>
-    <filter id="iconShadow" x="-10%" y="-10%" width="130%" height="130%">
-      <feDropShadow dx="2" dy="4" stdDeviation="6" flood-color="#000" flood-opacity="0.3"/>
-    </filter>
   </defs>
-  <rect width="512" height="512" rx="110" fill="#0b0d19"/>
-  <g transform="translate(20, 20)">
-    <path d="M 236 100 A 136 136 0 1 0 372 236 A 136 136 0 0 0 340 145" fill="none" stroke="url(#appIconGrad)" stroke-width="48" stroke-linecap="round"/>
-    <path d="M 190 280 L 390 80 M 390 80 L 290 80 M 390 80 L 390 180" fill="none" stroke="url(#appIconGrad)" stroke-width="44" stroke-linecap="round" stroke-linejoin="round" filter="url(#iconShadow)"/>
-  </g>
+
+  <!-- Left Loop (Solid Circle) -->
+  <circle cx="68" cy="110" r="28" fill="none" stroke="url(#coralGrad)" stroke-width="13" />
+
+  <!-- Right Loop (Arc with gaps) -->
+  <path d="M 109,126 A 28,28 0 1,0 109,94" fill="none" stroke="url(#coralGrad)" stroke-width="13" stroke-linecap="round" />
+
+  <!-- Arrow Shaft -->
+  <path d="M 103,121 L 148,76" fill="none" stroke="url(#coralGrad)" stroke-width="13" stroke-linecap="round" />
+
+  <!-- Arrow Head (Triangle) -->
+  <path d="M 166,58 L 138,62 L 162,86 Z" fill="url(#coralGrad)" stroke="url(#coralGrad)" stroke-width="2" stroke-linejoin="round" />
 </svg>
