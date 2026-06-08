@@ -6,6 +6,38 @@ import { Sparkles, ArrowRight, FileText, CheckCircle2, MessageSquare, Users, Sta
 import { Parallax } from "./ScrollReveal";
 import Link from "next/link";
 
+const companyList = [
+  { name: "Google", src: "/images/landing-logo-google.webp" },
+  { name: "Microsoft", src: "/images/landing-logo-microsoft.webp" },
+  { name: "Amazon", src: "/images/landing-logo-amazon.webp" },
+  { name: "Meta", src: "/images/landing-logo-meta.webp" },
+  { name: "Tesla", src: "/images/landing-logo-tesla.webp" },
+  { name: "Apple", src: "https://cdn.svgporn.com/logos/apple.svg", showText: true, textClass: "font-semibold tracking-tight text-slate-800 text-sm md:text-base ml-1.5" },
+  { name: "Stripe", src: "https://cdn.svgporn.com/logos/stripe.svg" },
+  { name: "Netflix", src: "https://cdn.svgporn.com/logos/netflix.svg" },
+  { name: "Airbnb", src: "https://cdn.svgporn.com/logos/airbnb.svg" },
+  { name: "Spotify", src: "https://cdn.svgporn.com/logos/spotify.svg" },
+  { name: "Datadog", src: "https://cdn.svgporn.com/logos/datadog.svg" },
+  { name: "Snowflake", src: "https://cdn.svgporn.com/logos/snowflake.svg" },
+  { name: "NVIDIA", src: "https://cdn.svgporn.com/logos/nvidia.svg" },
+  { name: "Dropbox", src: "https://cdn.svgporn.com/logos/dropbox.svg" },
+  { name: "Shopify", src: "https://cdn.svgporn.com/logos/shopify.svg" },
+  { name: "Twilio", src: "https://cdn.svgporn.com/logos/twilio.svg" },
+  { name: "MongoDB", src: "https://cdn.svgporn.com/logos/mongodb.svg" },
+  { name: "Atlassian", src: "https://cdn.svgporn.com/logos/atlassian.svg" },
+  { name: "PayPal", src: "https://cdn.svgporn.com/logos/paypal.svg" },
+  { name: "HubSpot", src: "https://cdn.svgporn.com/logos/hubspot.svg" },
+  { name: "Twitch", src: "https://cdn.svgporn.com/logos/twitch.svg" },
+  { name: "Pinterest", src: "https://cdn.svgporn.com/logos/pinterest.svg" },
+  { name: "LinkedIn", src: "https://cdn.svgporn.com/logos/linkedin-icon.svg", showText: true, textClass: "font-bold tracking-tight text-[#0A66C2] text-sm md:text-base ml-1" },
+  { name: "Oracle", src: "https://cdn.svgporn.com/logos/oracle.svg" },
+  { name: "Slack", src: "https://cdn.svgporn.com/logos/slack.svg" },
+  { name: "Zoom", src: "https://cdn.svgporn.com/logos/zoom.svg" },
+  { name: "Adobe", src: "https://cdn.svgporn.com/logos/adobe.svg" },
+  { name: "GitHub", src: "https://cdn.svgporn.com/logos/github-icon.svg", showText: true, textClass: "font-bold tracking-tight text-slate-800 text-sm md:text-base ml-1" },
+  { name: "Figma", src: "https://cdn.svgporn.com/logos/figma.svg", showText: true, textClass: "font-bold tracking-tight text-slate-800 text-sm md:text-base ml-1.5" }
+];
+
 export default function Hero() {
   const [activeQuestion, setActiveQuestion] = useState(0);
   const [isAutoplay, setIsAutoplay] = useState(true);
@@ -338,17 +370,68 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="pt-6 border-t border-(--border-light) flex flex-col items-center gap-4 w-full"
+          className="pt-6 border-t border-(--border-light) flex flex-col items-center gap-4 w-full overflow-hidden"
         >
-          <span className="text-xs md:text-sm font-bold tracking-widest uppercase text-(--text-secondary) text-center">
+          <style dangerouslySetInnerHTML={{__html: `
+            @keyframes marquee {
+              0% { transform: translateX(0%); }
+              100% { transform: translateX(-50%); }
+            }
+            .animate-marquee-infinite {
+              animation: marquee 35s linear infinite;
+            }
+            .animate-marquee-infinite:hover {
+              animation-play-state: paused;
+            }
+          `}} />
+
+          <span className="text-xs md:text-sm font-bold tracking-widest uppercase text-(--text-secondary) text-center select-none">
             Built for candidates targeting offers at
           </span>
-          <div className="flex flex-wrap justify-center items-center gap-x-12 gap-y-6 transition-opacity duration-300">
-            <img src="/images/landing-logo-google.webp" alt="Google" className="h-6 md:h-7 w-auto object-contain select-none" />
-            <img src="/images/landing-logo-microsoft.webp" alt="Microsoft" className="h-6 md:h-7 w-auto object-contain select-none" />
-            <img src="/images/landing-logo-amazon.webp" alt="Amazon" className="h-6 md:h-7 w-auto object-contain select-none" />
-            <img src="/images/landing-logo-meta.webp" alt="Meta" className="h-6 md:h-7 w-auto object-contain select-none" />
-            <img src="/images/landing-logo-tesla.webp" alt="Tesla" className="h-6 md:h-7 w-auto object-contain select-none" />
+          
+          <div 
+            className="relative w-full overflow-hidden py-2"
+            style={{
+              maskImage: 'linear-gradient(to right, transparent, white 20%, white 80%, transparent)',
+              WebkitMaskImage: 'linear-gradient(to right, transparent, white 20%, white 80%, transparent)'
+            }}
+          >
+            <div className="flex w-max gap-12 animate-marquee-infinite items-center">
+              {/* First group */}
+              <div className="flex gap-12 items-center shrink-0">
+                {companyList.map((comp, idx) => (
+                  <div key={`c1-${idx}`} className="group flex items-center justify-center cursor-default select-none shrink-0">
+                    <img 
+                      src={comp.src} 
+                      alt={comp.name} 
+                      className="h-5 md:h-6 w-auto object-contain transition-all duration-300 opacity-90 group-hover:opacity-100" 
+                    />
+                    {comp.showText && (
+                      <span className={`text-slate-800 transition-all duration-300 opacity-90 group-hover:opacity-100 ${comp.textClass}`} style={{ fontFamily: "var(--font-display)" }}>
+                        {comp.name}
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+              {/* Duplicate group for infinite loop */}
+              <div className="flex gap-12 items-center shrink-0" aria-hidden="true">
+                {companyList.map((comp, idx) => (
+                  <div key={`c2-${idx}`} className="group flex items-center justify-center cursor-default select-none shrink-0">
+                    <img 
+                      src={comp.src} 
+                      alt={comp.name} 
+                      className="h-5 md:h-6 w-auto object-contain transition-all duration-300 opacity-90 group-hover:opacity-100" 
+                    />
+                    {comp.showText && (
+                      <span className={`text-slate-800 transition-all duration-300 opacity-90 group-hover:opacity-100 ${comp.textClass}`} style={{ fontFamily: "var(--font-display)" }}>
+                        {comp.name}
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </motion.div>
       </div>
