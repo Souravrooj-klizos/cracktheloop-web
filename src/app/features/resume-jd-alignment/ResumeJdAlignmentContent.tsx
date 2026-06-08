@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { FileText, Briefcase, CheckCircle2, ArrowRight, ShieldAlert, Sparkles, Filter, Terminal } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { FileText, Briefcase, CheckCircle2, ArrowRight, ShieldCheck, Sparkles, Filter } from "lucide-react";
 import Navbar from "../../components/landing/Navbar";
 import CtaFooter from "../../components/landing/CtaFooter";
 import Faq from "../../components/landing/Faq";
@@ -20,38 +19,38 @@ export default function ResumeJdAlignmentContent() {
   const resumeBulletPoints: Record<string, { project: string; points: string[]; match: string }> = {
     "api-integration": {
       project: "E-commerce Payment Gateway Refactor",
-      match: "98% Relevance Match",
+      match: "98% Match Relevance",
       points: [
-        "Integrated Stripe/Paypal API endpoints using webhooks, securing 100% transactional reliability.",
-        "Designed asynchronous task queues via BullMQ to handle payment retry logic for 50k+ daily transactions.",
-        "Refactored JSON payload marshalling to shave 200ms off database writes on payment checkout API paths."
+        "Integrated payment gateways using webhooks, securing 100% transactional reliability.",
+        "Designed asynchronous task queues to handle checkout retry logic for 50k+ daily transactions.",
+        "Refactored JSON payload processing to shave 200ms off database checkout response paths."
       ]
     },
     "react-nextjs": {
       project: "Analytics Dashboard Migration",
-      match: "95% Relevance Match",
+      match: "95% Match Relevance",
       points: [
-        "Migrated legacy React SPA to Next.js App Router, boosting organic Google PageSpeed scores from 55 to 94.",
-        "Leveraged React Server Components (RSC) to reduce bundle sizes by 40% and eliminate layout shift.",
-        "Implemented dynamic code splitting and client-side skeleton states for premium micro-animations."
+        "Migrated customer dashboard to Next.js, boosting organic page speed scores from 55 to 94.",
+        "Leveraged server components to reduce bundle sizes by 40% and eliminate layout shift.",
+        "Implemented dynamic code splitting and clean loading states for a smoother UI experience."
       ]
     },
     "scalability": {
       project: "Distributed Media Ingestion Pipeline",
-      match: "92% Relevance Match",
+      match: "92% Match Relevance",
       points: [
-        "Redesigned image compression pipeline using AWS Lambda, reducing processing costs by 35%.",
-        "Set up Redis cache layers for feed endpoints, scaling traffic limit tolerance from 1k to 10k RPS.",
-        "Leveraged horizontal database scaling and read replicas to drop database memory usage spikes by 60%."
+        "Redesigned media compression pipeline, reducing backend operational costs by 35%.",
+        "Set up Redis caching layers, scaling request load tolerance from 1k to 10k RPS.",
+        "Leveraged horizontal database scaling and read replicas to drop memory usage spikes by 60%."
       ]
     },
     "team-leadership": {
       project: "Legacy Platform Modernization",
-      match: "88% Relevance Match",
+      match: "88% Match Relevance",
       points: [
-        "Led cross-functional team of 6 engineers to deliver modernized app ahead of client schedule.",
-        "Implemented structured RFC process to align engineering and product management objectives objectively.",
-        "Mentored junior engineers on clean-code patterns, improving pull request approval speeds by 25%."
+        "Led cross-functional team of 6 engineers to deliver modernized app ahead of schedule.",
+        "Implemented structured RFC process to align engineering and product objectives.",
+        "Mentored junior engineers on clean-code patterns, improving review cycle speeds by 25%."
       ]
     }
   };
@@ -86,24 +85,24 @@ export default function ResumeJdAlignmentContent() {
   const customFaqs = [
     {
       q: "What file formats are supported for resume uploads?",
-      a: "We support standard text-based formats including PDF and Microsoft Word (.docx). The system automatically parses layout elements, section headers, work history, and bullet points.",
+      a: "We support standard text-based formats including PDF and Microsoft Word (.docx). The system automatically parses layouts, work history, and achievements.",
     },
     {
       q: "How does the matching algorithm select which project is relevant?",
-      a: "We generate semantic vector embeddings of your resume achievements and the target job description. When a question is detected during your interview, our semantic model indexes your portfolio to surface bullet points matching the target topic.",
+      a: "CrackTheLoop processes the semantic context of your resume and the target job description. When an interviewer asks a question, our context engine matches the topic to your exact achievements, showing you the best talking points.",
     },
     {
-      q: "Is my resume data sold or used for model training?",
-      a: "No. Security and ethics are central to our brand. Your uploaded resume is stored in encrypted, transient memory containers active only for your current session. We never sell, log, or feed your data to public LLM models.",
+      q: "Is my resume data secure?",
+      a: "Yes. All resumes and job description uploads are stored locally in secure transient containers during your active session. We never sell, log, or store your private career details on our servers.",
     },
     {
-      q: "Can I configure multiple target profiles for different tracks?",
-      a: "Yes. You can upload different versions of your resume and save multiple job descriptions (e.g., 'Senior Frontend Engineer' vs. 'Full Stack Lead'). Easily toggle profiles inside the dashboard based on the target role.",
+      q: "Can I configure multiple target profiles for different roles?",
+      a: "Yes. You can upload different versions of your resume and save multiple job descriptions. Easily toggle profiles inside the dashboard based on the target role.",
     },
     {
-      q: "Can I edit or override the AI suggestions in real-time?",
-      a: "Absolutely. You can edit the extracted key metrics, modify talking points, or add custom reminders inside the dashboard. The AI will prioritize your adjustments when structuring live answers.",
-    },
+      q: "Can I customize the suggestions in real-time?",
+      a: "Absolutely. You can edit the matched metric points, rewrite key details, or add custom reminders inside the dashboard. The assistant will prioritize your adjustments."
+    }
   ];
 
   return (
@@ -111,29 +110,29 @@ export default function ResumeJdAlignmentContent() {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="relative w-full max-w-7xl mx-auto px-6 pt-16 pb-12 text-center flex flex-col items-center gap-6">
+      <section className="relative w-full max-w-7xl mx-auto px-6 pt-16 pb-12 text-center flex flex-col items-center gap-6 select-none">
         <div className="inline-flex items-center gap-2 bg-(--accent-soft) border border-(--accent)/20 px-4 py-1.5 rounded-full text-xs font-semibold text-(--accent)">
-          <Sparkles className="w-3.5 h-3.5" />
-          Semantic Relevance Matcher
+          <Sparkles className="w-3.5 h-3.5 animate-pulse" />
+          Smart Context Alignment
         </div>
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-(--text-primary) leading-none max-w-3xl" style={{ fontFamily: "var(--font-display)" }}>
-          Personalized Answer Structuring <br />
-          <span className="text-gradient-coral">Aligned to the Job Description</span>
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-(--text-primary) leading-none max-w-3xl font-display" style={{ fontFamily: "var(--font-display)" }}>
+          Your Resume, Surfaced at the <br />
+          <span className="text-gradient-coral">Exact Right Moment</span>
         </h1>
         <p className="text-(--text-muted) text-base md:text-lg max-w-2xl leading-relaxed">
-          Surfacing the exact metrics and bullet points from your background that match the target role's expectations — instantly.
+          When interviewers ask about a topic, we surface yourpayment refactoring project — not a generic template. Speak about your actual impact, naturally.
         </p>
       </section>
 
       {/* Interactive Keyword Matcher Section */}
       <section className="w-full max-w-6xl mx-auto px-6 py-8">
-        <div className="bg-white border border-(--border-light) rounded-[12px] p-6 md:p-8 shadow-sm">
-          <div className="flex flex-col lg:flex-row justify-between lg:items-center border-b border-slate-100 pb-5 mb-8 gap-4">
+        <div className="bg-white border border-(--border-light) rounded-[20px] p-6 md:p-8 shadow-sm">
+          <div className="flex flex-col lg:flex-row justify-between lg:items-center border-b border-slate-100 pb-5 mb-8 gap-4 select-none">
             <div>
-              <h2 className="text-xl font-bold flex items-center gap-2 text-slate-800">
-                <Filter className="w-5 h-5 text-(--accent)" /> JD Relevance Sandbox
+              <h2 className="text-xl font-bold flex items-center gap-2 text-slate-800" style={{ fontFamily: "var(--font-display)" }}>
+                <Filter className="w-5 h-5 text-(--accent)" /> Relevance Simulator
               </h2>
-              <p className="text-xs text-slate-500 mt-1">Select a key JD requirement to see the AI dynamically extract matching experience and build STAR responses.</p>
+              <p className="text-xs text-slate-500 mt-1">Select a key job requirement below to preview how our matching system surfaces your relevant experience.</p>
             </div>
             {/* Horizontal tab selectors */}
             <div className="flex flex-wrap gap-2">
@@ -155,12 +154,12 @@ export default function ResumeJdAlignmentContent() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
             {/* Left Card: Extracted Resume Project */}
-            <div className="bg-slate-50/50 border border-slate-200/70 rounded-[8px] p-6 flex flex-col justify-between">
+            <div className="bg-slate-50/50 border border-slate-200/70 rounded-[12px] p-6 flex flex-col justify-between select-none">
               <div>
                 <div className="flex justify-between items-center mb-4">
                   <span className="inline-flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-wide text-slate-400">
                     <FileText className="w-4 h-4 text-slate-400" />
-                    Matched Resume Section
+                    Matched Experience
                   </span>
                   <span className="text-[10px] bg-emerald-50 text-emerald-700 font-bold border border-emerald-200 px-2 py-0.5 rounded-full">
                     {resumeBulletPoints[selectedKeyword].match}
@@ -169,20 +168,20 @@ export default function ResumeJdAlignmentContent() {
                 <h3 className="text-base font-bold text-slate-800 mb-3">{resumeBulletPoints[selectedKeyword].project}</h3>
                 <ul className="space-y-3">
                   {resumeBulletPoints[selectedKeyword].points.map((pt, i) => (
-                    <li key={i} className="flex gap-2.5 items-start text-xs text-slate-600 leading-relaxed">
+                    <li key={i} className="flex gap-2.5 items-start text-xs text-slate-600 leading-relaxed font-medium">
                       <span className="text-(--accent) font-bold mt-0.5 shrink-0">✦</span>
                       <span>{pt}</span>
                     </li>
                   ))}
                 </ul>
               </div>
-              <div className="mt-6 border-t border-slate-200/60 pt-4 text-[10px] font-mono text-slate-400">
-                ✓ Extracted from: Experience History Section
+              <div className="mt-6 border-t border-slate-200/60 pt-4 text-[10px] font-mono text-slate-450">
+                ✓ Extracted from: Work History Section
               </div>
             </div>
 
             {/* Right Card: Live STAR Suggestions */}
-            <div className="bg-white border border-(--border-light) rounded-[8px] p-6 flex flex-col justify-between shadow-sm relative overflow-hidden">
+            <div className="bg-white border border-(--border-light) rounded-[12px] p-6 flex flex-col justify-between shadow-sm relative overflow-hidden select-none">
               <div className="absolute top-0 right-0 w-32 h-32 bg-(--accent)/3 rounded-full blur-2xl" />
               <div>
                 <span className="inline-flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-wide text-(--accent) mb-4">
@@ -190,7 +189,7 @@ export default function ResumeJdAlignmentContent() {
                   Live STAR Answer Outline
                 </span>
                 
-                <div className="space-y-3.5">
+                <div className="space-y-3.5 font-medium">
                   {[
                     { label: "S", name: "Situation", val: starOutlines[selectedKeyword].s },
                     { label: "T", name: "Task", val: starOutlines[selectedKeyword].t },
@@ -214,15 +213,15 @@ export default function ResumeJdAlignmentContent() {
 
       {/* Narrative Section */}
       <section className="w-full max-w-6xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-        <div className="bg-white border border-(--border-light) rounded-[12px] p-6 shadow-sm flex flex-col gap-4">
+        <div className="bg-white border border-(--border-light) rounded-[20px] p-8 shadow-sm flex flex-col gap-5 select-none">
           <span className="text-[10px] text-(--accent) font-mono font-bold tracking-widest uppercase">Ethics & privacy guarantee</span>
-          <div className="space-y-4 text-xs text-slate-600 leading-relaxed">
+          <div className="space-y-4 text-xs text-slate-600 leading-relaxed font-medium">
             <p>
               Many tools store resumes globally to train their public models. At CrackTheLoop, we run a secure, stateless document parser.
             </p>
             <div className="flex gap-2.5 items-start">
               <span className="w-2 h-2 rounded-full bg-(--accent) mt-1.5 shrink-0" />
-              <span><strong>TLS 1.3 Encryption:</strong> All uploads use secure SSL/TLS protocols to prevent data interception.</span>
+              <span><strong>Secure Connections:</strong> All uploads are encrypted using secure protocols to prevent interception.</span>
             </div>
             <div className="flex gap-2.5 items-start">
               <span className="w-2 h-2 rounded-full bg-(--accent) mt-1.5 shrink-0" />
@@ -230,27 +229,27 @@ export default function ResumeJdAlignmentContent() {
             </div>
             <div className="flex gap-2.5 items-start">
               <span className="w-2 h-2 rounded-full bg-(--accent) mt-1.5 shrink-0" />
-              <span><strong>Stateless Processing:</strong> All documents are uploaded directly to ephemeral RAM disk layers, which automatically wipe themselves the moment your session concludes.</span>
+              <span><strong>Stateless Storage:</strong> Resumes and JDs are processed in-memory during active sessions, and automatically wiped the moment you log off.</span>
             </div>
           </div>
         </div>
 
         <div>
-          <h2 className="text-3xl font-extrabold tracking-tight mb-6" style={{ fontFamily: "var(--font-display)" }}>
+          <h2 className="text-3xl font-extrabold tracking-tight mb-6 text-slate-800" style={{ fontFamily: "var(--font-display)" }}>
             Never Guess What <br />
             <span className="text-gradient-coral">Interviewers Look For</span>
           </h2>
-          <p className="text-(--text-muted) text-sm leading-relaxed mb-6">
-            Interviewers judge answers based on specific skill keywords and structured framework outlines (like STAR). Our matching engine scans the job description in real-time, extracts these requirements, and highlights them directly within your dashboard suggestions.
+          <p className="text-(--text-muted) text-sm leading-relaxed mb-6 font-medium">
+            Interviewers judge answers based on specific skill keywords and structured frameworks (like STAR). Our matching engine scans the job description, pulls these requirements, and highlights them directly within your dashboard suggestions.
           </p>
-          <ul className="space-y-3.5 text-xs text-slate-700">
+          <ul className="space-y-3.5 text-xs text-slate-700 font-medium select-none">
             <li className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-              <span>Highlight core framework markers (STAR, CAR, or Case trees).</span>
+              <span>Highlights STAR framework structures for a concise delivery.</span>
             </li>
             <li className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-              <span>Surfaces precise metrics (percentages, numbers) to bolster your credibility.</span>
+              <span>Surfaces precise metrics (percentages, numbers) from your resume.</span>
             </li>
             <li className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-500" />

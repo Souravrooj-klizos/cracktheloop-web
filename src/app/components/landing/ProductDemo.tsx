@@ -154,7 +154,7 @@ export default function ProductDemo() {
   const isQuestionDone = questionText === currentData.question;
 
   return (
-    <section ref={sectionRef} id="product-demo" className="section-mist relative py-20 md:py-24 overflow-hidden">
+    <section ref={sectionRef} id="product-demo" className="section-frost relative py-20 md:py-24 overflow-hidden">
       <div className="orb orb-peach w-[500px] h-[500px] top-1/4 -left-40 animate-float-orb opacity-50" />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10 w-full">

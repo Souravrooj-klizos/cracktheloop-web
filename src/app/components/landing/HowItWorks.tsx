@@ -10,44 +10,44 @@ const steps = [
     icon: <Upload className="w-5 h-5" />,
     title: "Upload Resume",
     subtitle: "Candidate Context Setup",
-    desc: "CrackTheLoop deep-parses your professional history, tech stack, and achievements to build a comprehensive local candidate context. This ensures all live recommendations match your actual career milestones.",
+    desc: "Drop your resume or paste your LinkedIn — takes 30 seconds. CrackTheLoop reads your real projects, skills, and metrics to make every suggestion feel like it came from you.",
     points: [
-      "Securely index your projects, language competencies, and achievements.",
-      "Categorize key metrics and outcomes to use during behavioral answers.",
-      "Establish a localized knowledge base that remains completely private."
+      "Indexes your tech stack, achievements, and impact metrics.",
+      "Categorizes past roles for quick behavioral answer mapping.",
+      "Stays 100% local — never synced to external servers."
     ]
   },
   {
     icon: <FileText className="w-5 h-5" />,
     title: "Add Job Description",
     subtitle: "Target Requirement Mapping",
-    desc: "Paste the target role description. The AI instantly extracts expected duties, mandatory technical skills, and target competencies to customize talking points on the fly.",
+    desc: "Paste the target role's JD. The AI instantly pulls required skills, keywords, and priorities — so your answers always hit exactly what the interviewer is scoring for.",
     points: [
-      "Scan expected deliverables and mandatory keywords from the JD.",
-      "Identify situational themes (leadership, system design, conflict resolution).",
-      "Cross-reference your experience to highlight exact resume-JD overlaps."
+      "Extracts must-have technical skills and keywords.",
+      "Identifies behavioral themes: leadership, scale, conflict.",
+      "Cross-references JD against your resume to find perfect overlap."
     ]
   },
   {
     icon: <Terminal className="w-5 h-5" />,
     title: "Start Stealth Copilot",
     subtitle: "Stealth Assistant Activation",
-    desc: "Launch the overlay buddy when your call begins. The interface stays completely invisible beneath screen-sharing software (Zoom, Meet, Teams) to keep your assist private.",
+    desc: "Launch the overlay when your call begins. It activates on Zoom, Meet, and Teams calls and is 100% invisible to screen sharing — using Win32 Display Affinity so it never appears in recordings.",
     points: [
-      "Launch a clean, borderless overlay invisible to call recording software.",
-      "Activate high-fidelity speech recognition to decode interviewer questions.",
-      "System stands by, ready to immediately trigger structured prompt feeds."
+      "Zero virtual audio drivers — nothing shows in device list.",
+      "Captures system audio via WASAPI loopback, not mic.",
+      "Transparent HUD overlay — invisible to screen capture software."
     ]
   },
   {
     icon: <CheckSquare className="w-5 h-5" />,
     title: "Get Live Guidance",
     subtitle: "Interactive Real-Time Support",
-    desc: "As questions are detected, structured talking points (STAR/CAR frameworks) pop up in 1.5 seconds. Speed rate gauges assist you to stay calm and natural.",
+    desc: "As questions are asked, structured talking points appear in under 2 seconds — no typing, no searching. Your resume context, STAR framework, and JD keywords arrive exactly when you need them.",
     points: [
-      "Receive context-aware answer suggestions instantly as questions occur.",
-      "Get visual prompts for matching resume details to avoid blanking out.",
-      "Track speech pace alerts to maintain a balanced, natural conversation flow."
+      "Context-aware answer suggestions appear within 1.5s.",
+      "Surfaces the right resume project at the right moment.",
+      "Speech pace alerts keep you sounding calm and natural."
     ]
   }
 ];
@@ -83,12 +83,16 @@ export default function HowItWorks() {
               className="text-3xl md:text-4xl font-extrabold tracking-tight text-(--text-primary)"
               style={{ fontFamily: "var(--font-display)" }}
             >
-              From Resume to Confident Answers in{" "}
-              <span className="text-gradient-coral">4 Steps</span>
+              From Resume to Ready in{" "}
+              <span className="text-gradient-coral">Under 3 Minutes</span>
             </h2>
             <p className="text-(--text-muted) text-base mt-3 max-w-2xl mx-auto">
-              Set up your profile, load the target job, and let your AI buddy assist you when it matters.
+              Set up your profile, load the target job, and your AI copilot is ready to assist the moment the interviewer says hello.
             </p>
+            <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-(--accent-soft) border border-(--accent)/20">
+              <span className="w-1.5 h-1.5 rounded-full bg-(--accent) animate-pulse" />
+              <span className="text-xs font-bold text-(--accent) tracking-wide">⚡ Average setup time: under 3 minutes. Your next interview is covered.</span>
+            </div>
           </div>
         </ScrollReveal>
 
@@ -110,8 +114,8 @@ export default function HowItWorks() {
                       isCurrent
                         ? "text-(--accent) bg-(--accent-soft)"
                         : isActive
-                          ? "text-(--text-secondary) bg-slate-100"
-                          : "text-slate-400 bg-transparent"
+                          ? "text-(--text-secondary) bg-slate-100 hover:bg-slate-200"
+                          : "text-slate-400 bg-transparent hover:text-slate-700 hover:bg-slate-50"
                     }`}
                   >
                     Step 0{i + 1}
@@ -144,12 +148,12 @@ export default function HowItWorks() {
                         setActiveStep(i);
                         setIsPaused(true);
                       }}
-                      className={`w-3.5 h-3.5 rounded-full border-2 transition-all duration-500 bg-white cursor-pointer ${
+                      className={`w-3.5 h-3.5 rounded-full border-2 transition-all duration-300 bg-white cursor-pointer hover:scale-125 ${
                         isCurrent
                           ? "border-(--accent) bg-(--accent) scale-125 shadow-xs"
                           : isActive
                             ? "border-(--accent) bg-(--accent)"
-                            : "border-slate-200"
+                            : "border-slate-200 hover:border-slate-400"
                       }`}
                     />
                   </div>
@@ -177,7 +181,7 @@ export default function HowItWorks() {
                 className={`border rounded-[6px] p-6 transition-all duration-500 flex flex-col cursor-pointer justify-between ${
                   isCurrent
                     ? "bg-white border-(--accent) shadow-md scale-[1.03] -translate-y-2 z-10"
-                    : "bg-white/40 border-(--border-light) opacity-70 hover:opacity-95 hover:bg-white/60 hover:-translate-y-1"
+                    : "bg-white/40 border-(--border-light) opacity-70 hover:opacity-100 hover:bg-white/80 hover:border-slate-350 hover:-translate-y-1 hover:shadow-xs"
                 }`}
               >
                 <div className="flex flex-col gap-4">
@@ -205,7 +209,7 @@ export default function HowItWorks() {
                   </div>
 
                   {/* Description Paragraph */}
-                  <p className={`text-xs leading-relaxed transition-colors duration-500 ${
+                  <p className={`text-sm leading-relaxed transition-colors duration-500 ${
                     isCurrent ? "text-(--text-secondary)" : "text-(--text-muted)"
                   }`}>
                     {step.desc}
@@ -256,18 +260,18 @@ export default function HowItWorks() {
                     setActiveStep(i);
                     setIsPaused(true);
                   }}
-                  className={`absolute -left-[23px] top-1.5 w-3.5 h-3.5 rounded-full border-2 bg-white transition-all duration-300 cursor-pointer ${
+                  className={`absolute -left-[23px] top-1.5 w-3.5 h-3.5 rounded-full border-2 bg-white transition-all duration-300 cursor-pointer hover:scale-125 ${
                     isCurrent
                       ? "border-(--accent) bg-(--accent) scale-110 shadow-xs"
                       : isActive
                         ? "border-(--accent) bg-(--accent)"
-                        : "border-slate-200"
+                        : "border-slate-200 hover:border-slate-400"
                   }`}
                 />
 
                 {/* Badge & Title */}
                 <div className="flex items-center gap-3">
-                  <span className={`text-[9px] font-mono font-bold tracking-wider uppercase px-2 py-0.5 rounded-full ${
+                  <span className={`text-[10px] font-mono font-bold tracking-wider uppercase px-2 py-0.5 rounded-full ${
                     isCurrent
                       ? "text-(--accent) bg-(--accent-soft)"
                       : "text-slate-400 bg-slate-50"
@@ -290,10 +294,10 @@ export default function HowItWorks() {
                   className={`border rounded-[8px] p-5 transition-all duration-500 flex flex-col gap-3 cursor-pointer ${
                     isCurrent
                       ? "bg-white border-(--accent) shadow-md"
-                      : "bg-white/40 border-(--border-light) opacity-70"
+                      : "bg-white/40 border-(--border-light) opacity-70 hover:opacity-100 hover:bg-white/80 hover:border-slate-350"
                   }`}
                 >
-                  <p className="text-xs text-(--text-secondary) leading-relaxed">
+                  <p className="text-sm text-(--text-secondary) leading-relaxed">
                     {step.desc}
                   </p>
                   <ul className="flex flex-col gap-2 mt-2 pt-3 border-t border-slate-100 text-xs text-(--text-secondary) font-medium">

@@ -196,12 +196,11 @@ export default function PainPoints() {
               className="text-3xl md:text-4xl font-extrabold tracking-tight text-(--text-primary)"
               style={{ fontFamily: "var(--font-display)" }}
             >
-              You Know the Answer. <br className="hidden sm:inline" />
-              But Interviews Make It{" "}
-              <span className="text-gradient-coral">Hard to Say It Right.</span>
+              Your Brain Knows the Answer. <br className="hidden sm:inline" />
+              <span className="text-gradient-coral">Your Mouth Betrays You.</span>
             </h2>
             <p className="text-(--text-muted) text-base mt-3 max-w-xl mx-auto">
-              Preparing is only half the battle. Communicating clearly under pressure is where most candidates fall short.
+              You prepare for weeks. But the moment the interviewer asks, your mind goes blank, your words scramble, and the answer that was clear in your head disappears.
             </p>
           </div>
         </ScrollReveal>

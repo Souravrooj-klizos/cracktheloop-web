@@ -42,9 +42,9 @@ export default function Sidebar({ user, onLogout }: SidebarProps) {
         <div className="flex flex-col gap-8">
           {/* Logo */}
           <a href="/" className="flex items-center gap-2.5 hover:opacity-90 transition px-2">
-            <img src="/logo.svg" className="h-9 w-9 rounded-lg select-none border border-(--border-light)" alt="CrackTheLoop Logo Icon" />
-            <span className="font-extrabold tracking-tight text-xl text-slate-800" style={{ fontFamily: "var(--font-display)" }}>
-              CrackTheLoop
+            <img src="/logo.png" className="h-10 w-auto select-none object-contain" alt="CrackTheLoop Logo Icon" />
+            <span className="font-bold tracking-tight text-xl text-slate-800" style={{ fontFamily: "var(--font-display)" }}>
+              Crack<span className="text-gradient-coral font-black">TheLoop</span>
             </span>
           </a>
 
@@ -108,9 +108,9 @@ export default function Sidebar({ user, onLogout }: SidebarProps) {
       {/* Mobile Top Header */}
       <div className="md:hidden w-full bg-white border-b border-(--border-light) px-6 py-4 flex justify-between items-center relative z-40 select-none shadow-xs shrink-0">
         <a href="/" className="flex items-center gap-2.5 hover:opacity-90 transition">
-          <img src="/logo.svg" className="h-8 w-8 rounded-lg select-none border border-(--border-light)" alt="CrackTheLoop Logo Icon" />
-          <span className="font-extrabold tracking-tight text-lg text-slate-800" style={{ fontFamily: "var(--font-display)" }}>
-            CrackTheLoop
+          <img src="/logo.png" className="h-9 w-auto select-none object-contain" alt="CrackTheLoop Logo Icon" />
+          <span className="font-bold tracking-tight text-lg text-slate-800" style={{ fontFamily: "var(--font-display)" }}>
+            Crack<span className="text-gradient-coral font-black">TheLoop</span>
           </span>
         </a>
         <button 

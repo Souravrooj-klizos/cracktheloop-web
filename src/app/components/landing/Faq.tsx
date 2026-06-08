@@ -7,44 +7,32 @@ import { ScrollReveal } from "./ScrollReveal";
 
 const faqs = [
   {
-    q: "What does CrackTheLoop do?",
-    a: "CrackTheLoop is an AI-powered interview assistance buddy that helps candidates during interview conversations by listening to the interviewer’s questions and generating relevant answer guidance in real time.",
+    q: "Can the interviewer detect I'm using this?",
+    a: "No. CrackTheLoop uses Win32 Display Affinity to make the overlay invisible to screen-sharing software — it will never appear in Zoom, Teams, or Meet recordings. We also use WASAPI system audio loopback instead of virtual audio drivers, so nothing unusual appears in your device list.",
   },
   {
-    q: "Does the AI ask interview questions?",
-    a: "No. The AI does not act as an interviewer and does not ask questions to the candidate. Instead, the AI listens to the interviewer’s question during an interview or practice session and provides the candidate with helpful answer suggestions, key talking points, and structured response guidance.",
+    q: "How fast does it actually respond?",
+    a: "End-to-end latency is 650–950ms from question detection to the first talking point appearing on screen. The full STAR answer structure streams in within 1.5–2 seconds. This feels instantaneous in a normal conversation where you'd naturally pause to think anyway.",
   },
   {
-    q: "How does it generate answer guidance?",
-    a: "The system captures the interviewer's question audio, transcribes it, and cross-references the question text with your uploaded resume and the job description to generate highly relevant, structured talking points.",
+    q: "Is my resume and conversation data stored?",
+    a: "Your data never leaves your device. Resume parsing and session transcripts are processed and stored in localStorage only. We have no server-side logging of your resume content or conversation audio. Zero.",
   },
   {
-    q: "Can I upload my resume?",
-    a: "Yes. You can upload your resume (PDF/DOCX format) before starting your session. The system extracts your skills, projects, tools, and experience to personalize the suggested answers.",
+    q: "Does it work with AI screener bots like HireVue, Karat, or Byteboard?",
+    a: "Yes. CrackTheLoop captures any system audio playing through your speakers or headphones — including prompts from AI screener platforms. Whether it’s a pre-recorded video question or a live bot, the system detects and processes it the same way.",
   },
   {
-    q: "Can I add a job description?",
-    a: "Yes. You can upload or paste the target role's job description. The AI analyzes it to extract required technical keywords, core responsibilities, and team expectations, then highlights them in your suggestions.",
+    q: "What is a credit and how long does 300 credits last?",
+    a: "1 credit = 1 minute of active live session time. 300 credits = 5 hours of copilot usage. Credits only run during an active session — not while you’re in setup, reviewing answers, or idle. The free tier includes 15 credits (a full 15-minute practice session).",
   },
   {
-    q: "Is it useful for freshers?",
-    a: "Yes. Freshers can use CrackTheLoop to structure academic project explanations, handle basic technical questions, and practice HR rounds with structured confidence.",
-  },
-  {
-    q: "Can it help with technical interviews?",
-    a: "Absolutely. The system supports technical, behavioral, consulting, and product management interviews. It automatically maps core question structures to corresponding frameworks (like STAR, CAR, or Case trees).",
-  },
-  {
-    q: "Is my resume data safe?",
-    a: "Yes. Your privacy is our highest priority. All resume details and conversation transcripts are processed securely and privately, and are never shared, logged, or used to train public models.",
-  },
-  {
-    q: "Can I use it during a live interview?",
-    a: "Yes, CrackTheLoop is designed to be used during permitted live interviews or practice prep sessions as a confidence-support and structure-guidance companion.",
+    q: "Does it work on Mac?",
+    a: "The Browser Copilot (web-based prep mode) works on all platforms including Mac and Linux. The native Stealth HUD Overlay — which uses Win32 Display Affinity for screen share invisibility — is currently Windows-only. Mac support for the native client is on our roadmap for Q3 2026.",
   },
   {
     q: "Does it give full answers or short talking points?",
-    a: "You have complete control. You can toggle between Short Answer Mode (quick 2-3 lines), Structured Answer Mode (complete framework outline), or Bullet Point Mode for natural talking points.",
+    a: "Both. You can toggle between Quick Answer Mode (2–3 crisp lines), STAR Framework Mode (full structured behavioral outline), and Bullet Point Mode (natural talking-point prompts). Switch modes mid-session based on the question type.",
   },
 ];
 
@@ -67,10 +55,11 @@ export default function Faq({ faqList }: FaqProps = {}) {
               className="text-3xl md:text-4xl font-extrabold tracking-tight text-(--text-primary)"
               style={{ fontFamily: "var(--font-display)" }}
             >
-              Common Questions
+              Everything You Want to Ask{" "}
+              <span className="text-gradient-coral">Before You Buy</span>
             </h2>
             <p className="text-(--text-muted) text-base mt-3 max-w-xl mx-auto">
-              Everything you need to know about safety, setup, and features.
+              Detection, privacy, speed, and platform questions — answered directly.
             </p>
           </div>
         </ScrollReveal>

@@ -1290,10 +1290,10 @@ export default function CopilotPage() {
           {/* Header */}
           <div className="flex justify-between items-center relative z-10 select-none">
             <div className="flex items-center gap-3">
-              <img src="/logo.svg" className="w-10 h-10 rounded-xl border border-slate-200 shadow-xs" alt="Logo" />
+              <img src="/logo.png" className="h-11 w-auto select-none object-contain" alt="Logo" />
               <div>
-                <h1 className="text-2xl font-black tracking-tight text-gradient-coral flex items-center gap-2">
-                  CrackTheLoop <span className="text-[10px] font-bold bg-(--accent-soft) text-(--accent) border border-(--accent)/15 px-2 py-0.5 rounded-md tracking-widest uppercase">WEB v2.0</span>
+                <h1 className="text-2xl font-black tracking-tight text-slate-800 flex items-center gap-2">
+                  Crack<span className="text-gradient-coral">TheLoop</span> <span className="text-[10px] font-bold bg-(--accent-soft) text-(--accent) border border-(--accent)/15 px-2 py-0.5 rounded-md tracking-widest uppercase">WEB v2.0</span>
                 </h1>
                 <p className="text-xs text-slate-400 mt-0.5 font-semibold">Anti-Share Stealth Browser Audio Copilot</p>
               </div>
