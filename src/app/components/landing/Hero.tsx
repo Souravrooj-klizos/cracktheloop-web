@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Sparkles, ArrowRight, FileText, CheckCircle2, MessageSquare, Users, Star, Zap, Terminal, ShieldCheck, Coins, Network, Code2 } from "lucide-react";
 import { Parallax } from "./ScrollReveal";
+import Link from "next/link";
 
 export default function Hero() {
   const [activeQuestion, setActiveQuestion] = useState(0);
@@ -143,14 +144,29 @@ export default function Hero() {
               Automatically get structured, context-aware answers to every interview question. An AI interview copilot designed to work in real-time, completely private and invisible.
             </p>
 
-            <div className="flex flex-wrap items-start gap-6 mt-2">
-              {/* Column 1: Try For Free + Trust Info */}
-              <div className="flex flex-col gap-2.5 items-start">
-                <a href="/pricing" className="btn-primary-glow cursor-pointer !py-4 !px-8">
+            <div className="flex flex-col gap-4 mt-2">
+              {/* Buttons Row */}
+              <div className="flex flex-wrap items-center gap-4">
+                <Link href="/pricing" className="btn-primary-glow cursor-pointer !py-4 !px-8">
                   Try For Free
                   <ArrowRight className="w-4 h-4" />
-                </a>
-                <div className="flex flex-col gap-1 text-sm font-medium text-slate-600 pl-2">
+                </Link>
+                <Link
+                  href="#platform-picker"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    const el = document.getElementById("platform-picker");
+                    if (el) el.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className="btn-secondary-pill cursor-pointer !py-4 !px-8"
+                >
+                  Get Our App
+                </Link>
+              </div>
+              
+              {/* Helper & Referral Row */}
+              <div className="flex flex-wrap items-center gap-x-8 gap-y-2.5 pl-2 mt-1">
+                <div className="flex flex-col gap-1 text-sm font-medium text-slate-600">
                   <span className="flex items-center gap-1.5">
                     <ShieldCheck className="w-4 h-4 text-emerald-600" />
                     No Credit Card Required
@@ -159,20 +175,18 @@ export default function Hero() {
                     Free Trial Credits Included
                   </span>
                 </div>
-              </div>
-              
-              {/* Column 2: Get Our App + Referral Info */}
-              <div className="flex flex-col gap-2.5 items-start">
-                <a href="#platform-picker" className="btn-secondary-pill cursor-pointer !py-4 !px-8">
-                  Get Our App
-                </a>
-                <a 
+                <Link 
                   href="#referral-program" 
-                  className="text-sm text-indigo-650 hover:text-indigo-850 font-bold flex items-center gap-1 transition-all duration-300 hover:translate-x-0.5 select-none pl-2 pt-0.5"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    const el = document.getElementById("referral-program");
+                    if (el) el.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className="text-sm text-indigo-650 hover:text-indigo-850 font-bold flex items-center gap-1 transition-all duration-300 hover:translate-x-0.5 select-none pt-0.5"
                 >
                   <span>🎁 Give 20%, Get 50% credits</span>
                   <ArrowRight className="w-4 h-4" />
-                </a>
+                </Link>
               </div>
             </div>
 

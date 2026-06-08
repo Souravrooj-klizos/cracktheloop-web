@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { FileText, CheckCircle2, Mic, Clock, BrainCircuit, ShieldAlert, ChevronRight, ArrowRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ScrollReveal } from "./ScrollReveal";
+import Link from "next/link";
 
 const AUTOPLAY_DURATION = 4500;
 
@@ -433,12 +434,12 @@ export default function BentoFeatures() {
                     </p>
                     {featureLinks[active] && (
                       <div className="mt-3">
-                        <a 
+                        <Link 
                           href={featureLinks[active]} 
                           className="inline-flex items-center gap-1 text-xs font-bold text-(--accent) hover:text-[#f06b57] transition cursor-pointer"
                         >
                           Explore feature details <ArrowRight className="w-3.5 h-3.5" />
-                        </a>
+                        </Link>
                       </div>
                     )}
                   </div>

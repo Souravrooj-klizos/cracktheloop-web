@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useInView, useScroll, useTransform, type MotionValue } from "framer-motion";
+import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
 
 /* ── Fade-in on scroll (replaces IntersectionObserver approach) ── */
 export function ScrollReveal({
@@ -15,24 +15,21 @@ export function ScrollReveal({
   delay?: number;
   direction?: "up" | "down" | "left" | "right";
 }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-60px" });
-
   const dirMap = {
-    up: { y: 40, x: 0 },
-    down: { y: -40, x: 0 },
-    left: { y: 0, x: 40 },
-    right: { y: 0, x: -40 },
+    up: { y: 30, x: 0 },
+    down: { y: -30, x: 0 },
+    left: { y: 0, x: 30 },
+    right: { y: 0, x: -30 },
   };
 
   return (
     <motion.div
-      ref={ref}
       className={className}
       initial={{ opacity: 0, y: dirMap[direction].y, x: dirMap[direction].x }}
-      animate={isInView ? { opacity: 1, y: 0, x: 0 } : {}}
+      whileInView={{ opacity: 1, y: 0, x: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
       transition={{
-        duration: 0.6,
+        duration: 0.5,
         delay,
         ease: [0.25, 0.46, 0.45, 0.94],
       }}
@@ -76,15 +73,12 @@ export function StaggerContainer({
   className?: string;
   staggerDelay?: number;
 }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-40px" });
-
   return (
     <motion.div
-      ref={ref}
       className={className}
       initial="hidden"
-      animate={isInView ? "visible" : "hidden"}
+      whileInView="visible"
+      viewport={{ once: true, margin: "-40px" }}
       variants={{
         visible: {
           transition: { staggerChildren: staggerDelay },

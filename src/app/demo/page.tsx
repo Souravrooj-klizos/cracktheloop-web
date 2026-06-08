@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import Navbar from "../components/landing/Navbar";
 import CtaFooter from "../components/landing/CtaFooter";
+import Link from "next/link";
 
 /* ─────────────────────────────────────────────
    PIPELINE DIAGRAM
@@ -583,12 +584,12 @@ export default function DemoPage() {
             Deploy the live copilot straight inside your browser or grab our native Windows desktop client installer.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <a
+            <Link
               href="/copilot"
               className="px-6 py-3.5 bg-gradient-to-r from-sky-500 to-indigo-500 hover:brightness-110 text-white rounded-xl font-bold text-xs transition active:scale-95 flex items-center gap-1.5 shadow-sm"
             >
               Launch Browser Copilot <Globe className="w-4 h-4" />
-            </a>
+            </Link>
             <a
               href="https://github.com/Souravrooj-klizos/cracktheloop-desktop/releases"
               target="_blank"
@@ -597,12 +598,12 @@ export default function DemoPage() {
             >
               Download Desktop App
             </a>
-            <a
+            <Link
               href="/pricing"
               className="px-6 py-3.5 bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-800 rounded-xl font-bold text-xs transition active:scale-95 cursor-pointer"
             >
               Get License Key
-            </a>
+            </Link>
           </div>
         </div>
       </section>

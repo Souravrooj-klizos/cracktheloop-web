@@ -15,6 +15,7 @@ import {
   Lock,
   Download
 } from "lucide-react";
+import Link from "next/link";
 
 export default function FeaturesPage() {
   return (
@@ -26,23 +27,23 @@ export default function FeaturesPage() {
 
       {/* Navigation Header */}
       <header className="w-full max-w-7xl mx-auto px-6 py-6 flex justify-between items-center relative z-20">
-        <a href="/" className="flex items-center gap-2.5 hover:opacity-90 transition">
+        <Link href="/" className="flex items-center gap-2.5 hover:opacity-90 transition">
           <img src="/logo.png" className="h-10 w-auto select-none object-contain" alt="CrackTheLoop Logo Icon" />
           <span className="font-bold tracking-tight text-xl text-white" style={{ fontFamily: "var(--font-display)" }}>
             Crack<span className="text-gradient-coral font-black">TheLoop</span>
           </span>
-        </a>
+        </Link>
         <div className="flex items-center gap-6 font-semibold">
-          <a href="/" className="text-sm text-slate-400 hover:text-white transition flex items-center gap-1">
+          <Link href="/" className="text-sm text-slate-400 hover:text-white transition flex items-center gap-1">
             <Home className="w-4 h-4" /> Home
-          </a>
-          <a href="/pricing" className="text-sm text-slate-400 hover:text-white transition">Pricing</a>
-          <a 
+          </Link>
+          <Link href="/pricing" className="text-sm text-slate-400 hover:text-white transition">Pricing</Link>
+          <Link 
             href="/copilot" 
             className="text-xs px-5 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-full font-bold hover:brightness-110 transition active:scale-95 shadow-md shadow-indigo-600/25 flex items-center gap-1.5"
           >
             <Globe className="w-3.5 h-3.5" /> Launch Copilot
-          </a>
+          </Link>
         </div>
       </header>
 
@@ -123,12 +124,12 @@ export default function FeaturesPage() {
               </li>
             </ul>
             <div className="pt-2">
-              <a 
+              <Link 
                 href="/features/stealth-overlay" 
                 className="inline-flex items-center gap-1 text-xs font-bold text-purple-400 hover:text-purple-300 transition cursor-pointer"
               >
                 Explore Stealth Overlay HUD <ArrowRight className="w-3.5 h-3.5" />
-              </a>
+              </Link>
             </div>
           </div>
           <div className="bg-slate-950 border border-slate-900 rounded-[20px] p-8 flex flex-col gap-6 shadow-inner">
@@ -213,12 +214,12 @@ export default function FeaturesPage() {
               </li>
             </ul>
             <div className="pt-2">
-              <a 
+              <Link 
                 href="/features/live-transcription" 
                 className="inline-flex items-center gap-1 text-xs font-bold text-emerald-400 hover:text-emerald-300 transition cursor-pointer"
               >
                 Explore Live Audio Transcription <ArrowRight className="w-3.5 h-3.5" />
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -236,18 +237,18 @@ export default function FeaturesPage() {
             Test the live transcription engine and interactive interface directly in your browser with our evaluation platform.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <a 
+            <Link 
               href="/pricing"
               className="px-8 py-4 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white rounded-xl font-bold text-xs uppercase tracking-wider transition active:scale-95 flex items-center gap-1.5 shadow-lg shadow-purple-950/20"
             >
               Start Free Trial <ArrowRight className="w-4 h-4" />
-            </a>
-            <a 
+            </Link>
+            <Link 
               href="/#platform-picker" 
               className="px-8 py-4 bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800 rounded-xl font-bold text-xs uppercase tracking-wider transition active:scale-95"
             >
               View Desktop Platforms
-            </a>
+            </Link>
           </div>
         </div>
       </section>

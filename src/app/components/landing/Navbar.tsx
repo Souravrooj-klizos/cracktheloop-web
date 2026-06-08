@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, useScroll, useSpring } from "framer-motion";
 import { Sparkles, Menu, X, ChevronDown, ArrowRight, Download, Monitor, Apple } from "lucide-react";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -61,7 +62,7 @@ export default function Navbar() {
       }`}
     >
       <div className="px-6 py-2.5 md:py-3 flex justify-between items-center w-full">
-        <a
+        <Link
           href="/"
           className="flex items-center gap-2.5 hover:opacity-90 transition cursor-pointer select-none"
         >
@@ -73,7 +74,7 @@ export default function Navbar() {
           <span className="font-bold tracking-tight text-xl md:text-2xl text-(--text-primary)" style={{ fontFamily: "var(--font-display)" }}>
             Crack<span className="text-gradient-coral font-black">TheLoop</span>
           </span>
-        </a>
+        </Link>
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-8">
@@ -93,22 +94,22 @@ export default function Navbar() {
                   <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 w-64 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-300 transform origin-top scale-95 group-hover:scale-100 flex flex-col z-50">
                     <div className="bg-white/95 backdrop-blur-md border border-slate-200/80 rounded-xl p-3 shadow-lg flex flex-col gap-1.5">
                       {item.dropdown.map((subItem) => (
-                        <a
+                        <Link
                           key={subItem.label}
                           href={subItem.href}
                           className="flex flex-col px-3 py-2 rounded-lg hover:bg-slate-50 transition cursor-pointer"
                         >
                           <span className="text-xs font-bold text-slate-800">{subItem.label}</span>
                           <span className="text-[10px] text-slate-400 font-medium leading-normal mt-0.5">{subItem.desc}</span>
-                        </a>
+                        </Link>
                       ))}
                       <div className="border-t border-slate-100 mt-1.5 pt-2">
-                        <a
+                        <Link
                           href={getHref(item.href)}
                           className="text-[10px] font-bold text-(--accent) hover:underline px-3 flex items-center gap-1 cursor-pointer"
                         >
                           View All Features <ArrowRight className="w-3 h-3" />
-                        </a>
+                        </Link>
                       </div>
                     </div>
                   </div>
@@ -117,13 +118,13 @@ export default function Navbar() {
             }
 
             return (
-              <a
+              <Link
                 key={item.label}
                 href={getHref(item.href)}
                 className="text-sm font-medium text-(--text-muted) hover:text-(--text-primary) transition cursor-pointer"
               >
                 {item.label}
-              </a>
+              </Link>
             );
           })}
           <div className="relative group py-2">
@@ -136,28 +137,34 @@ export default function Navbar() {
             {/* Dropdown Wrapper for Download */}
             <div className="absolute top-full right-0 pt-2 w-48 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-300 transform origin-top scale-95 group-hover:scale-100 flex flex-col z-50">
               <div className="bg-white/95 backdrop-blur-md border border-slate-200/80 rounded-xl p-2 shadow-lg flex flex-col gap-1">
-                <a
-                  href="#platform-picker"
-                  onClick={() => {
-                    const el = document.getElementById("platform-picker");
-                    if (el) el.scrollIntoView({ behavior: "smooth" });
+                <Link
+                  href={getHref("#platform-picker")}
+                  onClick={(e) => {
+                    if (pathname === "/") {
+                      e.preventDefault();
+                      const el = document.getElementById("platform-picker");
+                      if (el) el.scrollIntoView({ behavior: "smooth" });
+                    }
                   }}
                   className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-50 transition cursor-pointer text-xs font-bold text-slate-800"
                 >
                   <Monitor className="w-3.5 h-3.5 text-slate-500" />
                   <span>Windows (.exe)</span>
-                </a>
-                <a
-                  href="#platform-picker"
-                  onClick={() => {
-                    const el = document.getElementById("platform-picker");
-                    if (el) el.scrollIntoView({ behavior: "smooth" });
+                </Link>
+                <Link
+                  href={getHref("#platform-picker")}
+                  onClick={(e) => {
+                    if (pathname === "/") {
+                      e.preventDefault();
+                      const el = document.getElementById("platform-picker");
+                      if (el) el.scrollIntoView({ behavior: "smooth" });
+                    }
                   }}
                   className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-50 transition cursor-pointer text-xs font-bold text-slate-800"
                 >
                   <Apple className="w-3.5 h-3.5 text-slate-500" />
                   <span>macOS (.dmg)</span>
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -193,63 +200,69 @@ export default function Navbar() {
                   </span>
                   <div className="flex flex-col gap-2 pl-3 border-l border-slate-200">
                     {item.dropdown.map((subItem) => (
-                      <a
+                      <Link
                         key={subItem.label}
                         href={subItem.href}
                         className="text-sm font-semibold text-slate-700 hover:text-(--accent) py-1.5 cursor-pointer"
                         onClick={() => setMobileOpen(false)}
                       >
                         {subItem.label}
-                      </a>
+                      </Link>
                     ))}
-                    <a
+                    <Link
                       href={getHref(item.href)}
                       className="text-xs font-bold text-(--accent) py-1.5 cursor-pointer"
                       onClick={() => setMobileOpen(false)}
                     >
                       View All Features →
-                    </a>
+                    </Link>
                   </div>
                 </div>
               );
             }
 
             return (
-              <a
+              <Link
                 key={item.label}
                 href={getHref(item.href)}
                 className="text-sm font-medium text-(--text-primary) py-2 cursor-pointer"
                 onClick={() => setMobileOpen(false)}
               >
                 {item.label}
-              </a>
+              </Link>
             );
           })}
           <div className="flex flex-col gap-2 mt-2 pt-2 border-t border-slate-100">
-            <a
-              href="#platform-picker"
+            <Link
+              href={getHref("#platform-picker")}
               className="btn-primary !text-sm !rounded-full justify-center cursor-pointer !py-2.5 flex items-center gap-1.5"
-              onClick={() => {
+              onClick={(e) => {
                 setMobileOpen(false);
-                const el = document.getElementById("platform-picker");
-                if (el) el.scrollIntoView({ behavior: "smooth" });
+                if (pathname === "/") {
+                  e.preventDefault();
+                  const el = document.getElementById("platform-picker");
+                  if (el) el.scrollIntoView({ behavior: "smooth" });
+                }
               }}
             >
               <Download className="w-3.5 h-3.5" />
               Download Windows App
-            </a>
-            <a
-              href="#platform-picker"
+            </Link>
+            <Link
+              href={getHref("#platform-picker")}
               className="btn-ghost-dark !text-sm !rounded-full justify-center cursor-pointer !py-2.5 flex items-center gap-1.5"
-              onClick={() => {
+              onClick={(e) => {
                 setMobileOpen(false);
-                const el = document.getElementById("platform-picker");
-                if (el) el.scrollIntoView({ behavior: "smooth" });
+                if (pathname === "/") {
+                  e.preventDefault();
+                  const el = document.getElementById("platform-picker");
+                  if (el) el.scrollIntoView({ behavior: "smooth" });
+                }
               }}
             >
               <Download className="w-3.5 h-3.5" />
               Download macOS App
-            </a>
+            </Link>
           </div>
         </motion.div>
       )}

@@ -3,6 +3,7 @@
 import { ArrowRight, Shield, Users, Sparkles, Star } from "lucide-react";
 import { ScrollReveal } from "./ScrollReveal";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 export default function CtaFooter() {
   const pathname = usePathname();
@@ -68,19 +69,19 @@ export default function CtaFooter() {
                 Get 15 free credits the moment you sign up. No credit card. One full mock session included — set up in under 3 minutes.
               </p>
               <div className="flex flex-wrap justify-center gap-4 mb-6">
-                <a
+                <Link
                   href="/pricing"
                   className="btn-primary-glow cursor-pointer !py-4 !px-8 !rounded-lg !text-base"
                 >
                   Start Free (15 Credits Included)
                   <ArrowRight className="w-4 h-4" />
-                </a>
-                <a
+                </Link>
+                <Link
                   href="/demo"
                   className="btn-ghost-light cursor-pointer bg-white !py-4 !px-8 !rounded-lg !text-base !font-semibold"
                 >
                   Watch Demo First
-                </a>
+                </Link>
               </div>
               <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-sm text-(--text-muted) font-medium">
                 <span>✓ No card required</span>
@@ -99,7 +100,7 @@ export default function CtaFooter() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 pb-12">
             {/* Logo and Tagline Column */}
             <div className="flex flex-col gap-4">
-              <a
+              <Link
                 href="/"
                 className="flex items-center gap-2.5 hover:opacity-90 transition cursor-pointer select-none"
               >
@@ -111,7 +112,7 @@ export default function CtaFooter() {
                 <span className="font-bold tracking-tight text-lg md:text-xl text-(--text-primary)" style={{ fontFamily: "var(--font-display)" }}>
                   Crack<span className="text-gradient-coral font-black">TheLoop</span>
                 </span>
-              </a>
+              </Link>
               <p className="text-sm text-(--text-muted) leading-relaxed max-w-xs">
                 CrackTheLoop is the ultimate real-time confidence companion for technical interviews. Tailor answers, transcribe audio live, and stay perfectly aligned with target roles, privately.
               </p>
@@ -129,13 +130,13 @@ export default function CtaFooter() {
               <span className="text-xs font-bold text-slate-800 uppercase tracking-widest">Product</span>
               <div className="flex flex-col gap-2">
                 {productLinks.map((link) => (
-                  <a
+                  <Link
                     key={link.label}
                     href={getHref(link.href)}
                     className="text-sm text-(--text-muted) hover:text-(--text-primary) transition cursor-pointer font-medium"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 ))}
               </div>
             </div>
@@ -145,13 +146,20 @@ export default function CtaFooter() {
               <span className="text-xs font-bold text-slate-800 uppercase tracking-widest">Platforms & Apps</span>
               <div className="flex flex-col gap-2">
                 {platformLinks.map((link) => (
-                  <a
+                  <Link
                     key={link.label}
                     href={getHref(link.href)}
+                    onClick={(e) => {
+                      if (link.href.startsWith("#") && pathname === "/") {
+                        e.preventDefault();
+                        const el = document.getElementById(link.href.substring(1));
+                        if (el) el.scrollIntoView({ behavior: "smooth" });
+                      }
+                    }}
                     className="text-sm text-(--text-muted) hover:text-(--text-primary) transition cursor-pointer font-medium"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 ))}
               </div>
             </div>
@@ -161,13 +169,22 @@ export default function CtaFooter() {
               <span className="text-xs font-bold text-slate-800 uppercase tracking-widest">Resources & Legal</span>
               <div className="flex flex-col gap-2">
                 {resourcesLegalLinks.map((link) => (
-                  <a
+                  <Link
                     key={link.label}
                     href={getHref(link.href)}
+                    onClick={(e) => {
+                      const hashIndex = link.href.indexOf("#");
+                      const hash = hashIndex !== -1 ? link.href.substring(hashIndex + 1) : "";
+                      if (hash && pathname === "/") {
+                        e.preventDefault();
+                        const el = document.getElementById(hash);
+                        if (el) el.scrollIntoView({ behavior: "smooth" });
+                      }
+                    }}
                     className="text-sm text-(--text-muted) hover:text-(--text-primary) transition cursor-pointer font-medium"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 ))}
               </div>
             </div>

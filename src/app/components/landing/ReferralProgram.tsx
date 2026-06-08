@@ -2,6 +2,7 @@
 
 import { Gift, Share2, UserPlus, ArrowRight, Sparkles, Check } from "lucide-react";
 import { ScrollReveal } from "./ScrollReveal";
+import Link from "next/link";
 
 export default function ReferralProgram() {
   const steps = [
@@ -189,12 +190,12 @@ export default function ReferralProgram() {
               </p>
             </div>
             
-            <a
+            <Link
               href="/login?redirect=/dashboard/referrals"
               className="btn-primary w-full md:w-auto text-center justify-center cursor-pointer !text-xs uppercase tracking-wider !py-3.5 !px-6"
             >
               Get My Invite Link <ArrowRight className="w-4 h-4 ml-1.5 inline-block" />
-            </a>
+            </Link>
           </div>
         </ScrollReveal>
 

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Globe, Monitor, Apple, Download, ArrowRight, Check, Sparkles } from "lucide-react";
 import { ScrollReveal } from "./ScrollReveal";
+import Link from "next/link";
 
 export default function PlatformPicker() {
   const [activePlatform, setActivePlatform] = useState<"web" | "windows" | "mac">("windows");
@@ -145,8 +146,15 @@ export default function PlatformPicker() {
                   </div>
 
                   <div>
-                    <a
+                    <Link
                       href={platform.ctaLink}
+                      onClick={(e) => {
+                        if (platform.ctaLink.startsWith("#")) {
+                          e.preventDefault();
+                          const el = document.getElementById(platform.ctaLink.substring(1));
+                          if (el) el.scrollIntoView({ behavior: "smooth" });
+                        }
+                      }}
                       className={`w-full py-3 px-5 rounded-lg font-bold text-xs uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 select-none ${
                         isFeatured
                           ? "btn-primary shadow-sm active:scale-97"
@@ -164,7 +172,7 @@ export default function PlatformPicker() {
                           <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                         </>
                       )}
-                    </a>
+                    </Link>
                     
                     {platform.isDownload && (
                       <p className="text-[10px] text-(--text-muted) text-center mt-3 font-medium">
