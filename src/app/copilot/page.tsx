@@ -23,8 +23,13 @@ import {
   LogOut,
   User,
   Save,
-  Loader2
+  Loader2,
+  Briefcase,
+  FileText,
+  UploadCloud,
+  Mail
 } from "lucide-react";
+import Link from "next/link";
 import mammoth from "mammoth";
 
 interface STTResult {
@@ -1281,7 +1286,12 @@ export default function CopilotPage() {
       {!isOverlayMode && (
         <div
           style={{ background: `rgba(255, 255, 255, ${opacity})` }}
-          className="w-[780px] h-[640px] rounded-3xl p-6 flex flex-col justify-between text-slate-800 border border-(--border-light) relative overflow-hidden shadow-2xl animate-fade-in backdrop-blur-md"
+          className={`glass-light w-[780px] h-[670px] rounded-3xl p-7 flex flex-col justify-between text-slate-800 border-2 relative overflow-hidden shadow-2xl animate-fade-in backdrop-blur-md transition-all duration-300 ${
+            activeLlmProvider === "openai" ? "border-emerald-500/20 shadow-emerald-500/5" :
+            activeLlmProvider === "anthropic" ? "border-amber-500/20 shadow-amber-500/5" :
+            activeLlmProvider === "gemini" ? "border-blue-500/20 shadow-blue-500/5" :
+            "border-teal-500/20 shadow-teal-500/5"
+          }`}
         >
           {/* Subtle glowing orbs */}
           <div className="absolute top-0 right-0 w-[220px] h-[220px] bg-(--accent)/3 rounded-full blur-[90px] pointer-events-none"></div>
@@ -1289,15 +1299,15 @@ export default function CopilotPage() {
 
           {/* Header */}
           <div className="flex justify-between items-center relative z-10 select-none">
-            <div className="flex items-center gap-3">
-              <img src="/logo.svg" className="w-10 h-10 rounded-xl border border-slate-200 shadow-xs" alt="Logo" />
+            <Link href="/" className="flex items-center gap-3 hover:opacity-95 transition cursor-pointer">
+              <img src="/logo.png" className="h-11 w-auto select-none object-contain" alt="Logo" />
               <div>
-                <h1 className="text-2xl font-black tracking-tight text-gradient-coral flex items-center gap-2">
-                  CrackTheLoop <span className="text-[10px] font-bold bg-(--accent-soft) text-(--accent) border border-(--accent)/15 px-2 py-0.5 rounded-md tracking-widest uppercase">WEB v2.0</span>
+                <h1 className="text-2xl font-black tracking-tight text-slate-800 flex items-center gap-2">
+                  Crack<span className="text-gradient-coral font-black">TheLoop</span> <span className="text-[10px] font-bold bg-(--accent-soft) text-(--accent) border border-(--accent)/15 px-2 py-0.5 rounded-md tracking-widest uppercase">WEB v2.0</span>
                 </h1>
                 <p className="text-xs text-slate-400 mt-0.5 font-semibold">Anti-Share Stealth Browser Audio Copilot</p>
               </div>
-            </div>
+            </Link>
 
             {/* Authenticated user status vs Login controls */}
             <div className="flex items-center gap-2 relative z-20">
@@ -1337,20 +1347,20 @@ export default function CopilotPage() {
                   <span className="text-slate-700 font-bold uppercase tracking-wider">{status}</span>
                 </div>
               )}
-              <a
+              <Link
                 href="/dashboard"
                 className="w-8 h-8 rounded-full bg-slate-50 hover:bg-slate-100 text-slate-500 flex justify-center items-center border border-slate-200 font-black transition active:scale-90 cursor-pointer"
                 title="Go to User Dashboard"
               >
                 <Layers className="w-4 h-4" />
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/"
                 className="w-8 h-8 rounded-full bg-slate-50 hover:bg-slate-100 text-slate-500 flex justify-center items-center border border-slate-200 font-black transition active:scale-90 cursor-pointer"
                 title="Go Back to Home Landing"
               >
                 <Home className="w-4 h-4" />
-              </a>
+              </Link>
             </div>
           </div>
           {/* Credits Warning Banner */}
@@ -1360,63 +1370,111 @@ export default function CopilotPage() {
             </div>
           )}
 
-          {/* Credentials Inputs Removed */}
-
           {/* Pre-Interview Context Setup Widget */}
-          <div className="flex flex-col gap-3 bg-white border border-(--border-light) p-4 rounded-2xl relative z-10 shadow-xs">
-            <span className="text-[10px] text-slate-400 font-black uppercase tracking-widest flex items-center gap-1.5 border-b border-slate-100 pb-2">
+          <div className="flex flex-col gap-3.5 bg-white border border-(--border-light) p-5 rounded-2xl relative z-10 shadow-xs">
+            <span className="text-[10px] text-slate-450 font-black uppercase tracking-widest flex items-center gap-1.5 border-b border-slate-100 pb-2.5 select-none">
               💼 Pre-Interview Context Setup
               {!interviewRole.trim() && (
-                <span className="text-[9px] px-1.5 py-0.5 bg-rose-50 text-rose-600 border border-rose-200 rounded animate-pulse font-black uppercase">
-                  ⚠️ Interview Role Required
+                <span className="text-[9px] px-2 py-0.5 bg-rose-50 text-rose-600 border border-rose-200 rounded animate-pulse font-black uppercase tracking-wider">
+                  Interview Role Required
                 </span>
               )}
               {interviewRole.trim() && (
-                <span className="text-[9px] px-1.5 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded font-black uppercase">
+                <span className="text-[9px] px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded font-black uppercase tracking-wider">
                   Ready
                 </span>
               )}
             </span>
 
-            <div className="flex flex-col gap-3 mt-1">
-              {/* Row 1: Mandatory Interview Role */}
-              <div className="flex flex-col gap-1">
-                <label className="text-[10px] text-slate-500 font-bold uppercase tracking-wider flex items-center gap-1">
-                  Interview Role <span className="text-rose-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  value={interviewRole}
-                  onChange={(e) => setInterviewRole(e.target.value)}
-                  placeholder="e.g. Senior Frontend Engineer"
-                  className={`w-full bg-slate-50 border ${!interviewRole.trim() ? "border-rose-500/30 shadow-[0_0_8px_rgba(244,63,94,0.05)]" : "border-slate-200"
-                    } px-3.5 py-2 rounded-xl text-xs focus:outline-none focus:border-(--accent) focus:bg-white transition placeholder-slate-400 text-slate-800 font-semibold`}
-                />
+            <div className="flex flex-col gap-3.5 mt-0.5">
+              {/* Row 1: Mandatory Interview Role & Model Provider Selector */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[10px] text-slate-500 font-bold uppercase tracking-wider flex items-center gap-1">
+                    Interview Role <span className="text-rose-500">*</span>
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={interviewRole}
+                      onChange={(e) => setInterviewRole(e.target.value)}
+                      placeholder="e.g. Senior Frontend Engineer"
+                      className={`w-full bg-slate-50/60 border ${!interviewRole.trim() ? "border-rose-500/30 shadow-[0_0_8px_rgba(244,63,94,0.05)]" : "border-slate-200"
+                        } px-3.5 py-2 pl-10 rounded-xl text-xs focus:outline-none focus:border-(--accent) focus:bg-white focus:ring-4 focus:ring-(--accent)/5 transition-all duration-300 placeholder-slate-400 text-slate-800 font-semibold`}
+                    />
+                    <Briefcase className="w-4 h-4 text-slate-400 absolute left-3.5 top-2.5" />
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">
+                    AI Copilot Model Engine
+                  </label>
+                  <div className="grid grid-cols-4 gap-1.5">
+                    {(["openai", "anthropic", "gemini", "groq"] as const).map((prov) => {
+                      const isSelected = activeLlmProvider === prov;
+                      const details = {
+                        openai: { label: "GPT-4o", desc: "Balanced", logo: "🟢" },
+                        anthropic: { label: "Claude", desc: "Coding", logo: "🟠" },
+                        gemini: { label: "Gemini", desc: "Context", logo: "🔵" },
+                        groq: { label: "Llama", desc: "Latency", logo: "⚡" },
+                      }[prov];
+                      
+                      return (
+                        <button
+                          key={prov}
+                          type="button"
+                          onClick={() => {
+                            setActiveLlmProvider(prov);
+                            setLlmKey("server");
+                            setLlmProviderStatus("verified");
+                          }}
+                          className={`py-1.5 px-1 rounded-xl border text-center flex flex-col items-center justify-between transition-all duration-300 cursor-pointer ${
+                            isSelected
+                              ? prov === "openai" ? "bg-emerald-50/50 border-emerald-500 shadow-xs scale-102" :
+                                prov === "anthropic" ? "bg-amber-50/50 border-amber-500 shadow-xs scale-102" :
+                                prov === "gemini" ? "bg-blue-50/50 border-blue-500 shadow-xs scale-102" :
+                                "bg-teal-50/50 border-teal-500 shadow-xs scale-102"
+                              : "bg-slate-50/50 border-slate-200/80 hover:bg-slate-50 hover:border-slate-350"
+                          }`}
+                        >
+                          <span className="text-xs">{details.logo}</span>
+                          <span className="text-[9px] font-black text-slate-800 tracking-tight leading-none mt-1">{details.label}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
               </div>
 
               {/* Row 2: Job Description */}
-              <div className="flex flex-col gap-1">
+              <div className="flex flex-col gap-1.5">
                 <label className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">
                   Job Description (Optional)
                 </label>
-                <textarea
-                  rows={2}
-                  value={jobDescription}
-                  onChange={(e) => setJobDescription(e.target.value)}
-                  placeholder="Paste target job details, requirements, or tech stack..."
-                  className="bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs placeholder-slate-400 scrollbar-thin h-[50px] min-h-[50px] max-h-[50px] focus:outline-none focus:border-(--accent) focus:bg-white text-slate-800 font-semibold"
-                />
+                <div className="relative">
+                  <textarea
+                    rows={2}
+                    value={jobDescription}
+                    onChange={(e) => setJobDescription(e.target.value)}
+                    placeholder="Paste target job details, requirements, or tech stack..."
+                    className="w-full bg-slate-50/60 border border-slate-200 rounded-xl p-3.5 pl-10 text-xs placeholder-slate-400 scrollbar-thin h-[55px] min-h-[55px] max-h-[55px] focus:outline-none focus:border-(--accent) focus:bg-white focus:ring-4 focus:ring-(--accent)/5 transition-all duration-300 text-slate-800 font-semibold"
+                  />
+                  <FileText className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+                </div>
               </div>
 
               {/* Row 3: Resume Uploader */}
-              <div className="flex flex-col gap-1">
+              <div className="flex flex-col gap-1.5">
                 <label className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">
                   Resume File (Optional)
                 </label>
                 {!resumeFileName ? (
-                  <label className="flex flex-col items-center justify-center border border-dashed border-slate-200 hover:border-(--accent) bg-slate-50 hover:bg-slate-100 rounded-xl p-2 cursor-pointer select-none transition group h-[50px]">
-                    <span className="text-xs group-hover:scale-110 transition duration-300">📎</span>
-                    <span className="text-[9px] text-slate-500 font-black uppercase tracking-wider mt-0.5 group-hover:text-slate-700 transition">Upload Resume PDF or DOCX</span>
+                  <label className="flex flex-col items-center justify-center border border-dashed border-slate-200 hover:border-(--accent) hover:bg-(--accent-soft)/10 bg-slate-50/60 rounded-xl p-2 cursor-pointer select-none transition-all duration-300 group h-[52px] shadow-xs">
+                    <div className="flex items-center gap-2">
+                      <UploadCloud className="w-4.5 h-4.5 text-slate-400 group-hover:text-(--accent) transition duration-300" />
+                      <span className="text-[9px] text-slate-500 font-black uppercase tracking-wider group-hover:text-slate-700 transition">Upload Resume PDF or DOCX</span>
+                    </div>
                     <input
                       type="file"
                       accept=".pdf,.docx"
@@ -1425,11 +1483,11 @@ export default function CopilotPage() {
                     />
                   </label>
                 ) : (
-                  <div className="flex justify-between items-center bg-emerald-50 border border-emerald-200 px-3.5 py-1.5 rounded-xl text-xs text-emerald-700 font-bold shadow-xs animate-fade-in relative overflow-hidden group h-[50px]">
-                    <div className="flex items-center gap-2 relative z-10">
-                      <span className="text-base">📄</span>
+                  <div className="flex justify-between items-center bg-emerald-50/50 border border-emerald-200 px-4 py-1.5 rounded-xl text-xs text-emerald-800 font-bold shadow-xs animate-fade-in relative overflow-hidden group h-[52px]">
+                    <div className="flex items-center gap-2.5 relative z-10">
+                      <FileText className="w-5 h-5 text-emerald-600" />
                       <div className="flex flex-col">
-                        <span className="text-[10px] text-slate-700 font-extrabold truncate w-[220px]">{resumeFileName}</span>
+                        <span className="text-[10px] text-slate-700 font-extrabold truncate w-[260px]">{resumeFileName}</span>
                         <span className="text-[8px] text-emerald-700 font-bold uppercase tracking-widest mt-0.5">Extraction Active</span>
                       </div>
                     </div>
@@ -1439,7 +1497,7 @@ export default function CopilotPage() {
                         setResumeFileName("");
                         setCandidateResume("");
                       }}
-                      className="px-2 py-1 bg-rose-50 hover:bg-rose-100 border border-rose-200 rounded-lg text-[8.5px] font-black text-rose-600 transition active:scale-90 cursor-pointer relative z-10 uppercase tracking-wider"
+                      className="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 border border-rose-200 rounded-lg text-[8.5px] font-black text-rose-600 transition active:scale-90 cursor-pointer relative z-10 uppercase tracking-wider"
                     >
                       Clear
                     </button>
@@ -1450,22 +1508,23 @@ export default function CopilotPage() {
           </div>
 
           {/* Waveform Visualizer & Audio Source Panel */}
-          <div className="flex justify-between items-center bg-white border border-(--border-light) px-4 py-2 rounded-2xl relative z-10 text-xs gap-4 shadow-xs">
-            <div className="flex items-center gap-2 font-bold uppercase tracking-wider select-none shrink-0 text-slate-500">
+          <div className="flex justify-between items-center bg-white border border-(--border-light) px-4 py-2.5 rounded-2xl relative z-10 text-xs gap-4 shadow-xs">
+            <div className="flex items-center gap-2 font-bold uppercase tracking-wider select-none shrink-0 text-slate-400 text-[10px]">
               Waveform:
             </div>
 
             {/* Visual Waveform Canvas */}
-            <div className="flex-1 h-9 bg-slate-50 rounded-xl overflow-hidden border border-slate-200 shadow-inner shrink min-w-0">
-              <canvas ref={canvasRef} width="320" height="36" className="w-full h-full" />
+            <div className="flex-1 h-9 bg-slate-950/90 rounded-xl overflow-hidden border border-slate-900 shadow-inner shrink min-w-0">
+              <canvas ref={canvasRef} width="320" height="36" className="w-full h-full opacity-85" />
             </div>
 
             <div className="flex items-center gap-2 shrink-0">
               {/* Mic Toggle Button */}
               <button
+                type="button"
                 onClick={handleToggleMic}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold transition border cursor-pointer ${captureMic
-                    ? "bg-sky-50 text-sky-700 border-sky-200 hover:bg-sky-100"
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-xl font-bold text-[10px] uppercase tracking-wider transition border cursor-pointer ${captureMic
+                    ? "bg-sky-50 text-sky-700 border-sky-200 hover:bg-sky-100/80 shadow-xs"
                     : "bg-slate-50 text-slate-400 border-slate-200 hover:bg-slate-100"
                   }`}
               >
@@ -1475,9 +1534,10 @@ export default function CopilotPage() {
 
               {/* System Toggle Button */}
               <button
+                type="button"
                 onClick={handleToggleSystem}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold transition border cursor-pointer ${captureSystem
-                    ? "bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100"
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-xl font-bold text-[10px] uppercase tracking-wider transition border cursor-pointer ${captureSystem
+                    ? "bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100/80 shadow-xs"
                     : "bg-slate-50 text-slate-400 border-slate-200 hover:bg-slate-100"
                   }`}
                 title="Captures shared Chrome/Edge tab audio"
@@ -1493,13 +1553,13 @@ export default function CopilotPage() {
             <button
               onClick={handleToggleOverlay}
               disabled={!interviewRole.trim() || !deepgramKey.trim() || !llmKey.trim() || !token}
-              className={`w-full py-3 bg-gradient-to-r ${
-                activeLlmProvider === "openai" ? "from-emerald-600 to-teal-600 shadow-emerald-600/10" :
-                activeLlmProvider === "anthropic" ? "from-amber-600 to-orange-600 shadow-orange-600/10" :
-                activeLlmProvider === "gemini" ? "from-blue-600 to-indigo-600 shadow-indigo-600/10" :
-                activeLlmProvider === "groq" ? "from-teal-600 to-cyan-600 shadow-teal-600/10" :
+              className={`w-full py-3.5 bg-gradient-to-r ${
+                activeLlmProvider === "openai" ? "from-emerald-600 to-teal-650 shadow-emerald-600/10" :
+                activeLlmProvider === "anthropic" ? "from-amber-600 to-orange-650 shadow-orange-600/10" :
+                activeLlmProvider === "gemini" ? "from-blue-600 to-indigo-650 shadow-indigo-600/10" :
+                activeLlmProvider === "groq" ? "from-teal-600 to-cyan-650 shadow-teal-600/10" :
                 "from-slate-600 to-slate-700"
-              } hover:brightness-110 text-white rounded-xl font-black text-xs transition active:scale-98 flex justify-center items-center gap-2 cursor-pointer shadow-lg tracking-wider uppercase disabled:opacity-50 disabled:cursor-not-allowed`}
+              } hover:brightness-110 text-white rounded-xl font-black text-xs transition active:scale-98 flex justify-center items-center gap-2 cursor-pointer shadow-lg tracking-widest uppercase disabled:opacity-50 disabled:cursor-not-allowed`}
             >
               <Maximize2 className="w-4 h-4" />
               {!token ? "Sign In Required to Launch Overlay" : "Launch Web Stealth Overlay"}
@@ -1559,12 +1619,9 @@ export default function CopilotPage() {
             )}
           </div>
         </div>
-      )}
-
-      {/* Password Authentication Modal */}
-      {showLoginModal && (
+      )}      {showLoginModal && (
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md flex justify-center items-center z-[200] p-6 animate-fade-in">
-          <div className="w-[360px] bg-white border border-slate-200 rounded-2xl p-6 flex flex-col gap-6 shadow-2xl relative text-slate-800">
+          <div className="w-[380px] glass-card-light p-8 flex flex-col gap-6 shadow-2xl relative text-slate-850">
             <button
               onClick={() => setShowLoginModal(false)}
               className="text-slate-400 hover:text-slate-800 transition cursor-pointer font-bold absolute top-4 right-4"
@@ -1573,18 +1630,18 @@ export default function CopilotPage() {
             </button>
 
             {/* Header / Tabs */}
-            <div className="flex flex-col gap-3">
-              <div className="text-center">
-                <h3 className="text-lg font-black text-slate-800 flex items-center justify-center gap-2">
+            <div className="flex flex-col gap-3.5">
+              <div className="text-center select-none">
+                <h3 className="text-lg font-black text-slate-850 flex items-center justify-center gap-2">
                   <Shield className="w-5 h-5 text-sky-600" />
                   {authMode === "signup" ? "Create Account" : "Sign In"}
                 </h3>
               </div>
-              <div className="flex bg-slate-100 p-1 rounded-xl border border-slate-200">
+              <div className="flex bg-slate-100/80 p-1 rounded-xl border border-slate-205">
                 <button
                   type="button"
                   onClick={() => setAuthMode("signin")}
-                  className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${authMode === "signin" ? "bg-sky-600 text-white shadow-xs" : "text-slate-500 hover:text-slate-800"
+                  className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all duration-300 cursor-pointer ${authMode === "signin" ? "bg-white border border-slate-250 text-slate-800 shadow-xs" : "text-slate-500 hover:text-slate-800"
                     }`}
                 >
                   Sign In
@@ -1592,7 +1649,7 @@ export default function CopilotPage() {
                 <button
                   type="button"
                   onClick={() => setAuthMode("signup")}
-                  className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${authMode === "signup" ? "bg-sky-600 text-white shadow-xs" : "text-slate-500 hover:text-slate-800"
+                  className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all duration-300 cursor-pointer ${authMode === "signup" ? "bg-white border border-slate-250 text-slate-800 shadow-xs" : "text-slate-500 hover:text-slate-800"
                     }`}
                 >
                   Sign Up
@@ -1603,40 +1660,49 @@ export default function CopilotPage() {
             <div className="flex flex-col gap-4">
               {authMode === "signup" && (
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Full Name</label>
-                  <input
-                    type="text"
-                    value={signupName}
-                    onChange={(e) => setSignupName(e.target.value)}
-                    placeholder="John Doe"
-                    className="w-full bg-slate-50 border border-slate-200 px-3.5 py-2.5 rounded-xl text-xs text-slate-800 focus:bg-white focus:outline-none focus:border-(--accent) font-semibold"
-                  />
+                  <label className="text-[10px] text-slate-400 font-black uppercase tracking-widest pl-1">Full Name</label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={signupName}
+                      onChange={(e) => setSignupName(e.target.value)}
+                      placeholder="John Doe"
+                      className="w-full bg-slate-50/60 border border-slate-200/85 px-3.5 py-2.5 pl-10 rounded-xl text-xs text-slate-800 focus:bg-white focus:outline-none focus:border-(--accent) focus:ring-4 focus:ring-(--accent)/5 transition-all duration-300 font-semibold"
+                    />
+                    <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+                  </div>
                 </div>
               )}
               <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Email Address</label>
-                <input
-                  type="email"
-                  value={loginEmail}
-                  onChange={(e) => setLoginEmail(e.target.value)}
-                  placeholder="you@example.com"
-                  className="w-full bg-slate-50 border border-slate-200 px-3.5 py-2.5 rounded-xl text-xs text-slate-800 focus:bg-white focus:outline-none focus:border-(--accent) font-semibold"
-                />
+                <label className="text-[10px] text-slate-400 font-black uppercase tracking-widest pl-1">Email Address</label>
+                <div className="relative">
+                  <input
+                    type="email"
+                    value={loginEmail}
+                    onChange={(e) => setLoginEmail(e.target.value)}
+                    placeholder="you@example.com"
+                    className="w-full bg-slate-50/60 border border-slate-200/85 px-3.5 py-2.5 pl-10 rounded-xl text-xs text-slate-800 focus:bg-white focus:outline-none focus:border-(--accent) focus:ring-4 focus:ring-(--accent)/5 transition-all duration-300 font-semibold"
+                  />
+                  <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+                </div>
               </div>
               <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Password</label>
-                <input
-                  type="password"
-                  value={loginPassword}
-                  onChange={(e) => setLoginPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="w-full bg-slate-50 border border-slate-200 px-3.5 py-2.5 rounded-xl text-xs text-slate-800 focus:bg-white focus:outline-none focus:border-(--accent) font-semibold"
-                />
+                <label className="text-[10px] text-slate-400 font-black uppercase tracking-widest pl-1">Password</label>
+                <div className="relative">
+                  <input
+                    type="password"
+                    value={loginPassword}
+                    onChange={(e) => setLoginPassword(e.target.value)}
+                    placeholder="••••••••"
+                    className="w-full bg-slate-50/60 border border-slate-200/85 px-3.5 py-2.5 pl-10 rounded-xl text-xs text-slate-800 focus:bg-white focus:outline-none focus:border-(--accent) focus:ring-4 focus:ring-(--accent)/5 transition-all duration-300 font-semibold"
+                  />
+                  <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+                </div>
               </div>
               <button
                 onClick={handlePasswordAuth}
                 disabled={loadingLogin || !loginEmail.includes("@") || loginPassword.length < 6 || (authMode === "signup" && !signupName.trim())}
-                className="w-full py-3 bg-gradient-to-r from-sky-600 to-indigo-600 rounded-xl font-black text-xs text-white uppercase tracking-wider shadow-md hover:brightness-110 active:scale-95 transition-all shadow-sky-600/10 cursor-pointer disabled:opacity-50 flex items-center justify-center gap-1.5"
+                className="btn-primary-glow w-full !py-3.5 justify-center !rounded-xl font-bold text-xs text-white uppercase tracking-widest cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1.5"
               >
                 {loadingLogin ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : authMode === "signup" ? "Register & Enter" : "Access Copilot"}
               </button>

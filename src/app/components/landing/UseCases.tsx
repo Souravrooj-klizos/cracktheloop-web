@@ -1,76 +1,58 @@
 "use client";
 
-import { GraduationCap, UserPlus, Briefcase, Shuffle, AlertCircle } from "lucide-react";
+import { User, Users, Bot, CheckCircle2, Zap, ShieldCheck } from "lucide-react";
 import { ScrollReveal, StaggerContainer, StaggerItem } from "./ScrollReveal";
 
-const useCases = [
+const formats = [
   {
-    icon: GraduationCap,
-    title: "College Students",
-    tag: "Early Career",
-    desc: "Turn academic projects, hackathons, and internship experience into compelling, structured answers — even without full-time experience.",
+    icon: User,
+    tag: "1-on-1 Technical Round",
+    title: "One Engineer. One Shot.",
+    anxiety: "Blanking out mid-answer. Losing structure. Verbal fillers taking over.",
+    solution:
+      "STAR method AI interview suggestions surface in under 2 seconds. Resume projects mapped to the exact question. Behavioral interview AI keeps you composed and structured.",
     points: [
-      "Translates class projects to STAR context",
-      "Highlights internship achievements",
-      "Assists with foundational technical questions",
+      "Behavioral answers structured to STAR in real time",
+      "Surfaces relevant resume projects automatically",
+      "Speech pace alerts keep delivery natural",
     ],
-    stat: { value: "3×", label: "more callbacks" },
+    stat: { value: "1.5s", label: "avg. first answer point" },
   },
   {
-    icon: UserPlus,
-    title: "Freshers",
-    tag: "0–1 Year Exp",
-    desc: "Prepare structured, role-relevant responses for core technical concepts and HR rounds — with JD keyword alignment built in.",
+    icon: Users,
+    tag: "Multi-Interviewer Panel",
+    title: "Five People. Rapid-Fire Questions.",
+    anxiety:
+      "Overwhelm. Losing track of who asked what. Forgetting key technical details under pressure.",
+    solution:
+      "CrackTheLoop captures each question as it's spoken, structures the answer, and queues context from your resume - so you always have something strong to say.",
     points: [
-      "Structures behavioral STAR responses",
-      "Maps technical keywords from the JD",
-      "Highlights relevant coursework",
+      "Captures any speaker's question, regardless of who asks",
+      "Fast-switch answer mode for rapid question sequences",
+      "Keeps JD keyword alignment across all answers",
     ],
-    stat: { value: "91%", label: "feel more confident" },
-  },
-  {
-    icon: Briefcase,
-    title: "Working Professionals",
-    tag: "Senior & Mid-Level",
-    desc: "You have the experience — CrackTheLoop helps you communicate it with precision. Distill complex career history, leadership decisions, and key metrics into clear, high-impact stories the interviewer remembers.",
-    points: [
-      "Surfaces quantifiable metrics & scale impact",
-      "Formulates leadership & system design narratives",
-      "Crafts C-suite-ready architectural reasoning",
-    ],
-    stat: { value: "2.4×", label: "offer rate increase" },
+    stat: { value: "5×", label: "panelists - zero panic" },
     featured: true,
   },
   {
-    icon: Shuffle,
-    title: "Career Switchers",
-    tag: "Domain Change",
-    desc: "Bridge the gap between your previous industry and your target role. Map transferable skills to new expectations seamlessly.",
+    icon: Bot,
+    tag: "HireVue AI Interview Helper",
+    title: "HireVue. Karat. Byteboard.",
+    anxiety:
+      "Unnatural pace, timer anxiety, robotic scoring rubrics, no room to think.",
+    solution:
+      "Captures system audio from any video platform or AI screener. Generates AI interview suggestions matched to the rubric's scoring format - behavioral, competency, or technical.",
     points: [
-      "Translates transferable skills to new domain",
-      "Highlights relevant cross-functional projects",
-      "Aligns vocabulary with new industry standards",
+      "Works with any AI video screener via system audio capture",
+      "Suggestions aligned to rubric scoring criteria",
+      "Handles pre-recorded and live bot question formats",
     ],
-    stat: { value: "68%", label: "land first interview" },
-  },
-  {
-    icon: AlertCircle,
-    title: "Rejected Job Seekers",
-    tag: "Bounce Back",
-    desc: "Debug exactly why answers fall flat. Eliminate filler, fix missing keywords, and rebuild answer delivery that actually lands offers.",
-    points: [
-      "Replaces generic answers with STAR frameworks",
-      "Ensures required JD skills are highlighted",
-      "Reduces verbal filler and rambling under stress",
-    ],
-    stat: { value: "5×", label: "faster improvement" },
+    stat: { value: "100%", label: "AI screener compatible" },
   },
 ];
 
 export default function UseCases() {
-  const topRow = useCases.slice(0, 2);
-  const featured = useCases[2];
-  const bottomRow = useCases.slice(3);
+  const [left, center, right] = formats;
 
   return (
     <section
@@ -88,158 +70,126 @@ export default function UseCases() {
               className="text-3xl md:text-4xl font-extrabold tracking-tight text-(--text-primary)"
               style={{ fontFamily: "var(--font-display)" }}
             >
-              Made for Every Candidate Who Wants to{" "}
-              <span className="text-gradient-coral">Answer Better</span>
+              AI Interview Helper for Every Format{" "}
+              <span className="text-gradient-coral">- Live &amp; Undetectable</span>
             </h2>
             <p className="text-(--text-muted) text-base mt-3 max-w-xl mx-auto leading-relaxed">
-              CrackTheLoop adapts its assistance to your unique career stage — no generic advice, only context-aware guidance.
+              Whether it&apos;s a single recruiter, a five-person panel, or a HireVue AI screener - CrackTheLoop generates real-time AI interview guidance for every format, completely undetectable.
             </p>
           </div>
         </ScrollReveal>
 
-        {/* Bento Grid */}
-        <StaggerContainer className="flex flex-col gap-4" staggerDelay={0.07}>
+        {/* Cards Grid */}
+        <StaggerContainer
+          className="grid grid-cols-1 md:grid-cols-3 gap-5"
+          staggerDelay={0.08}
+        >
+          {formats.map((fmt, i) => {
+            const Icon = fmt.icon;
+            const isFeatured = fmt.featured;
 
-          {/* Row 1: 2 smaller cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {topRow.map((uc, i) => {
-              const Icon = uc.icon;
-              return (
-                <StaggerItem key={i}>
-                  <div className="group relative bg-white/60 border border-(--border-light) rounded-[6px] p-6 flex flex-col gap-4 overflow-hidden hover:-translate-y-1 transition-all duration-300 cursor-default h-full">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-mono font-bold tracking-wider uppercase px-2.5 py-1 rounded-full border bg-(--accent-soft) text-(--accent) border-(--accent)/20">
-                        {uc.tag}
+            return (
+              <StaggerItem key={i}>
+                <div
+                  className={`group relative rounded-[12px] p-6 md:p-7 flex flex-col gap-5 overflow-hidden h-full transition-all duration-300 hover:-translate-y-1.5 cursor-default ${isFeatured
+                      ? "bg-(--accent-soft) border-2 border-(--accent)/30 shadow-md"
+                      : "bg-white/70 border border-(--border-light) shadow-xs hover:shadow-md hover:border-(--accent)/20"
+                    }`}
+                >
+                  {/* Glow for featured */}
+                  {isFeatured && (
+                    <div className="absolute -right-16 -top-16 w-56 h-56 rounded-full bg-(--accent)/10 blur-3xl pointer-events-none" />
+                  )}
+
+                  {/* Tag + Stat */}
+                  <div className="flex items-center justify-between flex-wrap gap-2">
+                    <span
+                      className={`text-[10px] font-mono font-bold tracking-wider uppercase px-2.5 py-1 rounded-full border ${isFeatured
+                          ? "bg-white/80 text-(--accent) border-(--accent)/20"
+                          : "bg-(--accent-soft) text-(--accent) border-(--accent)/20"
+                        }`}
+                    >
+                      {fmt.tag}
+                    </span>
+                    <div className="text-right">
+                      <span className="text-xl font-black text-(--accent) block leading-none">
+                        {fmt.stat.value}
                       </span>
-                      <span className="text-right">
-                        <span className="text-2xl font-black text-(--accent)">{uc.stat.value}</span>
-                        <span className="text-[10px] text-(--text-muted) block">{uc.stat.label}</span>
+                      <span className="text-[10px] text-(--text-muted)">
+                        {fmt.stat.label}
                       </span>
                     </div>
-
-                    <div className="flex items-center gap-3">
-                      <div className="w-11 h-11 rounded-[6px] bg-(--accent-soft) text-(--accent) flex items-center justify-center shrink-0">
-                        <Icon className="w-5 h-5" />
-                      </div>
-                      <h3 className="text-lg font-extrabold text-(--text-primary) leading-snug">{uc.title}</h3>
-                    </div>
-
-                    <p className="text-sm text-(--text-muted) leading-relaxed">{uc.desc}</p>
-
-                    <ul className="flex flex-col gap-2 pt-4 border-t border-(--border-light)">
-                      {uc.points.map((pt, j) => (
-                        <li key={j} className="flex items-start gap-2 text-xs text-(--text-secondary) font-medium">
-                          <span className="mt-0.5 shrink-0 w-3.5 h-3.5 rounded-full bg-(--accent-soft) flex items-center justify-center">
-                            <span className="w-1.5 h-1.5 rounded-full bg-(--accent)" />
-                          </span>
-                          {pt}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </StaggerItem>
-              );
-            })}
-          </div>
-
-          {/* Row 2: Featured wide card */}
-          <StaggerItem>
-            <div className="group relative bg-(--accent-soft) border border-(--accent)/20 rounded-[6px] p-7 md:p-8 overflow-hidden hover:-translate-y-1 transition-all duration-300 cursor-default">
-              <div className="absolute -right-20 -top-20 w-60 h-60 rounded-full bg-(--accent)/10 blur-3xl pointer-events-none" />
-
-              <div className="relative flex flex-col md:flex-row gap-8 items-start">
-                <div className="flex-1 flex flex-col gap-5">
-                  <div className="flex items-center gap-3 flex-wrap">
-                    <span className="text-[10px] font-mono font-bold tracking-wider uppercase px-2.5 py-1 rounded-full border bg-white/80 text-(--accent) border-(--accent)/20">
-                      {featured.tag}
-                    </span>
-                    <span className="text-[10px] font-mono font-bold tracking-wider uppercase px-2.5 py-1 rounded-full bg-(--accent) text-white">
-                      ★ Most Popular
-                    </span>
                   </div>
 
+                  {/* Icon + Title */}
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-[6px] bg-white/80 text-(--accent) flex items-center justify-center shrink-0">
-                      <Briefcase className="w-6 h-6" />
+                    <div
+                      className={`w-11 h-11 rounded-[8px] flex items-center justify-center shrink-0 ${isFeatured
+                          ? "bg-white/80 text-(--accent)"
+                          : "bg-(--accent-soft) text-(--accent)"
+                        }`}
+                    >
+                      <Icon className="w-5 h-5" />
                     </div>
-                    <h3 className="text-2xl font-black text-(--text-primary) leading-tight">{featured.title}</h3>
+                    <h3 className="text-lg font-extrabold text-(--text-primary) leading-snug">
+                      {fmt.title}
+                    </h3>
                   </div>
 
-                  <p className="text-sm text-(--text-muted) leading-relaxed max-w-lg">{featured.desc}</p>
+                  {/* Anxiety block */}
+                  <div className="rounded-[8px] bg-red-50 border border-red-100 px-4 py-3">
+                    <span className="text-[10px] font-mono font-bold uppercase text-red-400 tracking-wider block mb-1">
+                      Candidate Anxiety
+                    </span>
+                    <p className="text-sm text-red-700 leading-relaxed font-medium">
+                      {fmt.anxiety}
+                    </p>
+                  </div>
 
-                  <ul className="flex flex-col gap-2.5">
-                    {featured.points.map((pt, j) => (
-                      <li key={j} className="flex items-start gap-2 text-sm text-(--text-secondary) font-medium">
-                        <span className="mt-0.5 shrink-0 w-4 h-4 rounded-full bg-white/70 flex items-center justify-center">
-                          <span className="w-2 h-2 rounded-full bg-(--accent)" />
-                        </span>
+                  {/* Solution block */}
+                  <div
+                    className={`rounded-[8px] px-4 py-3 border ${isFeatured
+                        ? "bg-white/70 border-white/80"
+                        : "bg-(--accent-soft) border-(--accent)/15"
+                      }`}
+                  >
+                    <span className="text-[10px] font-mono font-bold uppercase text-(--accent) tracking-wider block mb-1">
+                      How CrackTheLoop Helps
+                    </span>
+                    <p className="text-sm text-(--text-secondary) leading-relaxed">
+                      {fmt.solution}
+                    </p>
+                  </div>
+
+                  {/* Feature points */}
+                  <ul className="flex flex-col gap-2 pt-2 border-t border-(--border-light) mt-auto">
+                    {fmt.points.map((pt, j) => (
+                      <li key={j} className="flex items-start gap-2 text-xs text-(--text-secondary) font-medium">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-(--accent) shrink-0 mt-0.5" />
                         {pt}
                       </li>
                     ))}
                   </ul>
                 </div>
-
-                {/* Right: Stats block */}
-                <div className="shrink-0 flex flex-row md:flex-col gap-4 w-full md:w-44">
-                  <div className="flex-1 bg-white/70 backdrop-blur-sm rounded-[8px] p-4 border border-white/80 flex flex-col gap-1 shadow-sm">
-                    <span className="text-3xl font-black text-(--accent)">{featured.stat.value}</span>
-                    <span className="text-[11px] text-(--text-muted) font-medium leading-snug">{featured.stat.label}</span>
-                  </div>
-                  <div className="flex-1 bg-white/70 backdrop-blur-sm rounded-[8px] p-4 border border-white/80 flex flex-col gap-1 shadow-sm">
-                    <span className="text-3xl font-black text-(--accent)">1.5s</span>
-                    <span className="text-[11px] text-(--text-muted) font-medium leading-snug">avg. answer suggestion speed</span>
-                  </div>
-                  <div className="flex-1 bg-white/70 backdrop-blur-sm rounded-[8px] p-4 border border-white/80 flex flex-col gap-1 shadow-sm">
-                    <span className="text-3xl font-black text-(--accent)">100%</span>
-                    <span className="text-[11px] text-(--text-muted) font-medium leading-snug">JD keyword alignment</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </StaggerItem>
-
-          {/* Row 3: 2 smaller cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {bottomRow.map((uc, i) => {
-              const Icon = uc.icon;
-              return (
-                <StaggerItem key={i}>
-                  <div className="group relative bg-white/60 border border-(--border-light) rounded-[6px] p-6 flex flex-col gap-4 overflow-hidden hover:-translate-y-1 transition-all duration-300 cursor-default h-full">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-mono font-bold tracking-wider uppercase px-2.5 py-1 rounded-full border bg-(--accent-soft) text-(--accent) border-(--accent)/20">
-                        {uc.tag}
-                      </span>
-                      <span className="text-right">
-                        <span className="text-2xl font-black text-(--accent)">{uc.stat.value}</span>
-                        <span className="text-[10px] text-(--text-muted) block">{uc.stat.label}</span>
-                      </span>
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                      <div className="w-11 h-11 rounded-[6px] bg-(--accent-soft) text-(--accent) flex items-center justify-center shrink-0">
-                        <Icon className="w-5 h-5" />
-                      </div>
-                      <h3 className="text-lg font-extrabold text-(--text-primary) leading-snug">{uc.title}</h3>
-                    </div>
-
-                    <p className="text-sm text-(--text-muted) leading-relaxed">{uc.desc}</p>
-
-                    <ul className="flex flex-col gap-2 pt-4 border-t border-(--border-light)">
-                      {uc.points.map((pt, j) => (
-                        <li key={j} className="flex items-start gap-2 text-xs text-(--text-secondary) font-medium">
-                          <span className="mt-0.5 shrink-0 w-3.5 h-3.5 rounded-full bg-(--accent-soft) flex items-center justify-center">
-                            <span className="w-1.5 h-1.5 rounded-full bg-(--accent)" />
-                          </span>
-                          {pt}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </StaggerItem>
-              );
-            })}
-          </div>
+              </StaggerItem>
+            );
+          })}
         </StaggerContainer>
+
+        {/* Bottom callout strip */}
+        <ScrollReveal className="mt-8">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-6 py-5 px-6 rounded-[10px] bg-white/60 border border-(--border-light) backdrop-blur-sm">
+            <div className="flex items-center gap-2 text-sm font-medium text-(--text-secondary)">
+              <Zap className="w-4 h-4 text-(--accent) shrink-0" />
+              Works on Zoom, Google Meet, Teams, HireVue &amp; Karat
+            </div>
+            <div className="hidden sm:block w-px h-4 bg-(--border-light)" />
+            <div className="flex items-center gap-2 text-sm font-medium text-(--text-secondary)">
+              <ShieldCheck className="w-4 h-4 text-(--accent) shrink-0" />
+              100% invisible to screen share &mdash; Win32 Display Affinity protected
+            </div>
+          </div>
+        </ScrollReveal>
       </div>
     </section>
   );
