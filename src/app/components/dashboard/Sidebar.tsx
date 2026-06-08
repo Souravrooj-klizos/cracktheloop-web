@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 import { 
   Shield, 
   Home, 
@@ -46,7 +47,7 @@ export default function Sidebar({ user, onLogout }: SidebarProps) {
             <span className="font-bold tracking-tight text-xl text-slate-800" style={{ fontFamily: "var(--font-display)" }}>
               Crack<span className="text-gradient-coral font-black">TheLoop</span>
             </span>
-          </a>
+          </Link>
 
           {/* Navigation links */}
           <nav className="flex flex-col gap-2">
@@ -55,7 +56,7 @@ export default function Sidebar({ user, onLogout }: SidebarProps) {
               const Icon = item.icon;
               const isActive = pathname.startsWith(item.href);
               return (
-                <a
+                <Link
                   key={item.href}
                   href={item.href}
                   className={`flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold transition duration-200 group border ${
@@ -66,7 +67,7 @@ export default function Sidebar({ user, onLogout }: SidebarProps) {
                 >
                   <Icon className={`w-4 h-4 transition ${isActive ? "text-(--accent)" : "text-slate-400 group-hover:text-slate-600"}`} />
                   {item.name}
-                </a>
+                </Link>
               );
             })}
           </nav>
@@ -80,20 +81,20 @@ export default function Sidebar({ user, onLogout }: SidebarProps) {
           </div>
 
           <div className="flex flex-col gap-2 font-semibold">
-            <a 
+            <Link 
               href="/"
               className="flex items-center gap-2.5 px-3.5 py-2 rounded-lg text-[11px] text-slate-500 hover:text-slate-800 transition hover:bg-slate-50"
             >
               <Home className="w-3.5 h-3.5 text-slate-400" />
               Website Home
-            </a>
-            <a 
+            </Link>
+            <Link 
               href="/copilot"
               className="flex items-center gap-2.5 px-3.5 py-2 rounded-lg text-[11px] text-slate-500 hover:text-slate-800 transition hover:bg-slate-50"
             >
               <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
               Open Copilot HUD
-            </a>
+            </Link>
             <button
               onClick={onLogout}
               className="w-full text-left flex items-center gap-2.5 px-3.5 py-2 rounded-lg text-[11px] text-rose-600 hover:bg-rose-50/70 border border-transparent hover:border-rose-100 transition cursor-pointer"
@@ -112,7 +113,7 @@ export default function Sidebar({ user, onLogout }: SidebarProps) {
           <span className="font-bold tracking-tight text-lg text-slate-800" style={{ fontFamily: "var(--font-display)" }}>
             Crack<span className="text-gradient-coral font-black">TheLoop</span>
           </span>
-        </a>
+        </Link>
         <button 
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           className="p-1.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-600 hover:text-slate-800 cursor-pointer"
@@ -131,7 +132,7 @@ export default function Sidebar({ user, onLogout }: SidebarProps) {
                 const Icon = item.icon;
                 const isActive = pathname.startsWith(item.href);
                 return (
-                  <a
+                  <Link
                     key={item.href}
                     href={item.href}
                     onClick={() => setMobileMenuOpen(false)}
@@ -143,7 +144,7 @@ export default function Sidebar({ user, onLogout }: SidebarProps) {
                   >
                     <Icon className={`w-4 h-4 ${isActive ? "text-(--accent)" : "text-slate-400"}`} />
                     {item.name}
-                  </a>
+                  </Link>
                 );
               })}
             </nav>
@@ -156,20 +157,20 @@ export default function Sidebar({ user, onLogout }: SidebarProps) {
             </div>
 
             <div className="flex flex-col gap-2 font-semibold">
-              <a 
+              <Link 
                 href="/"
                 className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[11px] text-slate-500 hover:text-slate-800"
               >
                 <Home className="w-3.5 h-3.5 text-slate-400" />
                 Website Home
-              </a>
-              <a 
+              </Link>
+              <Link 
                 href="/copilot"
                 className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[11px] text-slate-500 hover:text-slate-800"
               >
                 <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
                 Open Copilot HUD
-              </a>
+              </Link>
               <button
                 onClick={() => {
                   setMobileMenuOpen(false);
