@@ -57,6 +57,19 @@ function ReferralsHubContent() {
   const [copiedCode, setCopiedCode] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
 
+  const [trialReferrerBonus, setTrialReferrerBonus] = useState(8);
+
+  useEffect(() => {
+    fetch("/api/plans")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.settings) {
+          setTrialReferrerBonus(data.settings.trial_referrer_bonus ?? 8);
+        }
+      })
+      .catch((err) => console.error("Error loading referral settings:", err));
+  }, []);
+
   function getCookie(name: string): string | null {
     if (typeof document === "undefined") return null;
     const matches = document.cookie.match(new RegExp(
@@ -315,9 +328,8 @@ function ReferralsHubContent() {
                   Share your unique invite link with friends. When they sign up using your link:
                 </p>
                 <ul className="list-disc pl-4 flex flex-col gap-1.5 font-medium">
-                  <li>They instantly get a <span className="text-sky-600 font-bold">+20% credit bonus</span> on any package they select.</li>
-                  <li>Once they sign up and start a trial, you get <span className="text-purple-600 font-bold">+8 bonus credits</span>.</li>
-                  <li>When they purchase any paid subscription plan, you automatically get a credit payload equal to <span className="text-emerald-600 font-bold">50% of their base credits</span> (+50 for Starter, +150 for Pro, +500 for Elite).</li>
+                  <li>They instantly receive <span className="text-sky-600 font-bold">50 free credits</span> on signup.</li>
+                  <li>You instantly receive <span className="text-purple-600 font-bold">+{trialReferrerBonus} free credits</span> in your account as the referrer.</li>
                 </ul>
               </div>
             </div>

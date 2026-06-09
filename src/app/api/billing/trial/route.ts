@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/db";
 import { User } from "@/models/User";
 import { Referral } from "@/models/Referral";
+import { ReferralSetting } from "@/models/ReferralSetting";
 import { logCreditTransaction, logSubscriptionHistory } from "@/lib/transactions";
 import jwt from "jsonwebtoken";
 
@@ -29,13 +30,26 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "You already have an active subscription or trial plan." }, { status: 400 });
     }
 
-    // Set trial expiration (7 days from now)
-    const trialExpiry = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-    user.subscription_tier = "trial";
-    user.trial_expires_at = trialExpiry;
-    user.plan_allocated_credits = 15;
+    // Fetch referral settings dynamically from MongoDB
+    const refSetting = await ReferralSetting.findOne({});
+    const trialBase = refSetting?.trial_base_credits ?? 15;
+    const trialReferredBonus = refSetting?.trial_referred_bonus ?? 3;
+    const trialReferrerBonus = refSetting?.trial_referrer_bonus ?? 8;
+    const trialExpiryDays = refSetting ? (refSetting.trial_expiry_days ?? refSetting.trial_expiration_days ?? -1) : -1;
 
-    let grantedCredits = 15;
+    user.subscription_tier = "trial";
+    user.plan_allocated_credits = trialBase;
+
+    // Apply trial expiration if dynamic setting is configured (> 0)
+    if (trialExpiryDays > 0) {
+      user.trial_expires_at = new Date(Date.now() + trialExpiryDays * 24 * 60 * 60 * 1000);
+      console.log(`[TRIAL ACTIVATION] Setting trial expiration date to ${user.trial_expires_at.toISOString()}`);
+    } else {
+      user.trial_expires_at = undefined;
+      console.log(`[TRIAL ACTIVATION] Setting trial with NO expiration date (trialExpiryDays: ${trialExpiryDays})`);
+    }
+
+    let grantedCredits = trialBase;
     let isReferred = false;
 
     // Apply Referral Credit Bonuses using Referral collection
@@ -43,32 +57,32 @@ export async function POST(req: Request) {
     if (referral && !referral.trial_bonus_paid) {
       const referrer = await User.findById(referral.referrer);
       if (referrer) {
-        // Referred user gets +20% (15 * 1.2 = 18 credits)
-        grantedCredits = 18;
+        // Referred user gets base + referred bonus
+        grantedCredits = trialBase + trialReferredBonus;
         isReferred = true;
 
-        // Referrer gets +50% of base (15 * 0.5 = 7.5, rounded up to 8 credits)
-        referrer.credits = (referrer.credits || 0) + 8;
-        referrer.total_gain_credits = (referrer.total_gain_credits || 0) + 8;
+        // Referrer gets referrer bonus
+        referrer.credits = (referrer.credits || 0) + trialReferrerBonus;
+        referrer.total_gain_credits = (referrer.total_gain_credits || 0) + trialReferrerBonus;
         await referrer.save();
 
         referral.status = "trial_activated";
         referral.trial_bonus_paid = true;
-        referral.referrer_trial_bonus = 8;
-        referral.referred_trial_bonus = 3; // 18 - 15 = 3
+        referral.referrer_trial_bonus = trialReferrerBonus;
+        referral.referred_trial_bonus = trialReferredBonus;
         await referral.save();
         
-        console.log(`[REFERRAL SUCCESS] Trial activated for ${user.email}. Referrer ${referrer.email} credited +8 credits, referee got +3 credits.`);
-        await logCreditTransaction(referrer._id, 8, "add", "referral_trial_bonus");
+        console.log(`[REFERRAL SUCCESS] Trial activated for ${user.email}. Referrer ${referrer.email} credited +${trialReferrerBonus} credits, referee got +${trialReferredBonus} credits.`);
+        await logCreditTransaction(referrer._id, trialReferrerBonus, "add", "referral_trial_bonus");
       }
     } else if (!referral && user.referred_by) {
       // Fallback: If referral record was missing but user.referred_by exists
       const referrer = await User.findOne({ referral_code: user.referred_by });
       if (referrer && referrer._id.toString() !== user._id.toString()) {
-        grantedCredits = 18;
+        grantedCredits = trialBase + trialReferredBonus;
         isReferred = true;
-        referrer.credits = (referrer.credits || 0) + 8;
-        referrer.total_gain_credits = (referrer.total_gain_credits || 0) + 8;
+        referrer.credits = (referrer.credits || 0) + trialReferrerBonus;
+        referrer.total_gain_credits = (referrer.total_gain_credits || 0) + trialReferrerBonus;
         await referrer.save();
 
         await Referral.create({
@@ -78,11 +92,11 @@ export async function POST(req: Request) {
           status: "trial_activated",
           trial_bonus_paid: true,
           purchase_bonus_paid: false,
-          referrer_trial_bonus: 8,
-          referred_trial_bonus: 3,
+          referrer_trial_bonus: trialReferrerBonus,
+          referred_trial_bonus: trialReferredBonus,
         });
-        console.log(`[REFERRAL FALLBACK] Trial activated for ${user.email} (created referral). Referrer ${referrer.email} got +8 credits.`);
-        await logCreditTransaction(referrer._id, 8, "add", "referral_trial_bonus");
+        console.log(`[REFERRAL FALLBACK] Trial activated for ${user.email} (created referral). Referrer ${referrer.email} got +${trialReferrerBonus} credits.`);
+        await logCreditTransaction(referrer._id, trialReferrerBonus, "add", "referral_trial_bonus");
       }
     }
 
@@ -92,15 +106,15 @@ export async function POST(req: Request) {
 
     // Log user trial credit transaction and subscription history
     if (isReferred) {
-      await logCreditTransaction(user._id, 15, "add", "trial_activation");
-      await logCreditTransaction(user._id, 3, "add", "referral_trial_bonus");
+      await logCreditTransaction(user._id, trialBase, "add", "trial_activation");
+      await logCreditTransaction(user._id, trialReferredBonus, "add", "referral_trial_bonus");
     } else {
-      await logCreditTransaction(user._id, 15, "add", "trial_activation");
+      await logCreditTransaction(user._id, trialBase, "add", "trial_activation");
     }
 
-    await logSubscriptionHistory(user._id, "trial", "start", 15);
+    await logSubscriptionHistory(user._id, "trial", "start", trialBase);
 
-    console.log(`[TRIAL ACTIVATION] Activated 7-day trial with ${grantedCredits} credits for ${user.email}`);
+    console.log(`[TRIAL ACTIVATION] Activated trial with ${grantedCredits} credits for ${user.email}`);
 
     return NextResponse.json({
       success: true,

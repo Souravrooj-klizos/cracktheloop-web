@@ -12,12 +12,6 @@ function SelectPlanContent() {
   const [errorMsg, setErrorMsg] = useState("");
   const [statusText, setStatusText] = useState("Redirecting you to the secure checkout...");
 
-  const priceIds: Record<string, string> = {
-    "Starter Pass": "price_1TeCnyEkHwm1l3fZV45CSLvV",
-    "Pro Pass": "price_1TeCpEEkHwm1l3fZej0zzJhb",
-    "Elite Pass": "price_1TeCpaEkHwm1l3fZj9f7Gh31"
-  };
-
   function getCookie(name: string): string | null {
     if (typeof document === "undefined") return null;
     const matches = document.cookie.match(new RegExp(
@@ -30,17 +24,12 @@ function SelectPlanContent() {
     const plan = searchParams.get("plan");
 
     // If no plan, or it's a Free Trial, redirect to dashboard directly
-    if (!plan || plan === "Free Trial") {
+    if (!plan || plan.toLowerCase().includes("free")) {
       window.location.replace("/dashboard");
       return;
     }
 
-    const priceId = priceIds[plan];
-    if (!priceId) {
-      setErrorMsg(`Invalid plan selected: "${plan}". Please return to the pricing page.`);
-      setLoading(false);
-      return;
-    }
+    const planName = plan;
 
     // Check auth status
     const token = getCookie("ctl_token");
@@ -48,7 +37,7 @@ function SelectPlanContent() {
 
     if (!token || !userStr) {
       // Not logged in -> Redirect to login page and preserve plan selection
-      window.location.replace(`/login?mode=signup&plan=${encodeURIComponent(plan)}`);
+      window.location.replace(`/login?mode=signup&plan=${encodeURIComponent(planName)}`);
       return;
     }
 
@@ -66,10 +55,30 @@ function SelectPlanContent() {
       return;
     }
 
-    // Call checkout API directly
-    async function triggerCheckout() {
-      setStatusText(`Preparing your secure checkout session for ${plan}...`);
+    // Call dynamic plan resolution and checkout API
+    async function resolvePlanAndCheckout() {
+      setStatusText(`Resolving plan configuration for ${planName}...`);
       try {
+        const plansRes = await fetch("/api/plans");
+        const plansData = await plansRes.json();
+        if (!plansRes.ok || !plansData.success) {
+          throw new Error(plansData.error || "Failed to load plans from database");
+        }
+
+        const dbPlan = plansData.plans.find(
+          (p: any) => p.name.toLowerCase() === planName.toLowerCase() || 
+                      (p.name.toLowerCase().includes("starter") && planName.toLowerCase().includes("starter")) ||
+                      (p.name.toLowerCase().includes("pro") && planName.toLowerCase().includes("pro"))
+        );
+
+        if (!dbPlan || !dbPlan.price_id) {
+          throw new Error(`Plan "${planName}" is not currently available or active.`);
+        }
+
+        const priceId = dbPlan.price_id;
+
+        setStatusText(`Preparing your secure checkout session for ${dbPlan.name}...`);
+        
         const res = await fetch("/api/billing/checkout", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -91,7 +100,7 @@ function SelectPlanContent() {
       }
     }
 
-    triggerCheckout();
+    resolvePlanAndCheckout();
   }, [searchParams]);
 
   if (errorMsg) {

@@ -4,6 +4,8 @@ import Stripe from "stripe";
 import { connectToDatabase } from "@/lib/db";
 import { User } from "@/models/User";
 import { Referral } from "@/models/Referral";
+import { Plan } from "@/models/Plan";
+import { ReferralSetting } from "@/models/ReferralSetting";
 import { logCreditTransaction, logSubscriptionHistory } from "@/lib/transactions";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
@@ -59,17 +61,134 @@ export async function POST(request: Request) {
         const session = event.data.object as Stripe.Checkout.Session;
         const email = session.customer_email || session.customer_details?.email;
         const customerId = session.customer as string;
-        const subscriptionId = session.subscription as string;
 
+        console.log(`[WEBHOOK] checkout.session.completed triggered for ${email || 'unknown email'}`);
+
+        let user = null;
         if (email) {
-          const user = await User.findOne({ email });
-          if (user) {
-            user.stripe_customer_id = customerId;
-            user.stripe_subscription_id = subscriptionId;
-            await user.save();
-            console.log(`[WEBHOOK] Linked Stripe IDs for ${email} on checkout.session.completed`);
+          user = await User.findOne({ email });
+        }
+        if (!user && customerId) {
+          user = await User.findOne({ stripe_customer_id: customerId });
+        }
+
+        if (!user) {
+          console.warn(`[WEBHOOK WARNING] No user found for checkout session ${session.id}`);
+          break;
+        }
+
+        // Retrieve the line items of the checkout session to find the purchased Price ID
+        let priceId = "";
+        try {
+          const lineItems = await stripe.checkout.sessions.listLineItems(session.id);
+          if (lineItems.data.length > 0) {
+            priceId = lineItems.data[0].price?.id || "";
+          }
+        } catch (err: any) {
+          console.error(`[WEBHOOK ERROR] Failed to list line items for checkout session ${session.id}:`, err.message);
+        }
+
+        console.log(`[WEBHOOK] Resolving plan for Price ID: "${priceId}", Amount paid: ${session.amount_total} cents`);
+
+        // Resolve plan dynamically from database
+        let plan: { tier: string; credits: number; price: number; name: string } | null = null;
+        if (priceId) {
+          const dbPlan = await Plan.findOne({ price_id: priceId, is_active: true });
+          if (dbPlan) {
+            const nameLower = dbPlan.name.toLowerCase();
+            let tier = "starter";
+            if (nameLower.includes("pro")) tier = "pro";
+            else if (nameLower.includes("elite") || nameLower.includes("enterprise")) tier = "elite";
+            else if (dbPlan.price > 35) tier = "elite";
+            else if (dbPlan.price > 20) tier = "pro";
+
+            plan = {
+              tier,
+              credits: dbPlan.credits,
+              price: dbPlan.price,
+              name: dbPlan.name
+            };
           }
         }
+
+        if (!plan) {
+          // Fallback mapping based on session.amount_total (in cents)
+          const amount = session.amount_total ?? 0;
+          if (amount <= 0) {
+            console.warn(`[WEBHOOK WARNING] Skipping zero amount checkout session: ${session.id}`);
+            break;
+          } else if (amount < 2000) {
+            plan = { tier: "starter", credits: 100, price: 15, name: "Starter Pass" };
+          } else if (amount < 3500) {
+            plan = { tier: "pro", credits: 200, price: 25, name: "Pro Pass" };
+          } else {
+            plan = { tier: "elite", credits: 500, price: 49, name: "Enterprise Pass" };
+          }
+          console.log(`[WEBHOOK WARNING] Plan not registered in DB or priceId mismatch. Amount fallback used → tier: ${plan.tier}, credits: ${plan.credits}`);
+        }
+
+        // Fetch Referral Setting parameters from DB
+        const refSetting = await ReferralSetting.findOne({});
+        const referredMultiplier = refSetting?.purchase_referred_multiplier ?? 1.2;
+        const referrerRatio = refSetting?.purchase_referrer_ratio ?? 0.5;
+
+        // Apply credit top-up logic: add plan credits to user's existing balance
+        const baseCredits = plan.credits;
+        let userCreditedAmount = baseCredits;
+        let isReferredPurchase = false;
+
+        user.is_subscribed = true;
+        user.subscription_tier = plan.tier;
+        user.stripe_customer_id = customerId;
+        user.plan_allocated_credits = baseCredits;
+
+        // Process referral reward (only mark converted in Referral collection)
+        const referral = await Referral.findOne({ referred_user: user._id });
+        if (referral) {
+          if (!referral.purchase_bonus_paid) {
+            referral.status = "subscribed";
+            referral.purchase_bonus_paid = true;
+            referral.purchase_tier = plan.tier;
+            await referral.save();
+            console.log(`[REFERRAL] Marked referee ${user.email} referral converted (no purchase bonus awarded).`);
+          }
+        } else if (user.referred_by) {
+          // Fallback if referral record was missing but user.referred_by exists
+          const referrer = await User.findOne({ referral_code: user.referred_by });
+          if (referrer && referrer._id.toString() !== user._id.toString()) {
+            await Referral.create({
+              referrer: referrer._id,
+              referred_user: user._id,
+              referral_code: user.referred_by,
+              status: "subscribed",
+              trial_bonus_paid: false,
+              purchase_bonus_paid: true,
+              referrer_purchase_bonus: 0,
+              referred_purchase_bonus: 0,
+              purchase_tier: plan.tier,
+            });
+            console.log(`[REFERRAL FALLBACK] Created subscribed referral for ${user.email} (no purchase bonus awarded).`);
+          }
+        }
+
+        // Credit the user's account (top-up: current + base credits of the plan)
+        user.credits = (user.credits || 0) + baseCredits;
+        user.total_gain_credits = (user.total_gain_credits || 0) + baseCredits;
+        await user.save();
+
+        console.log(`[WEBHOOK SUCCESS] Top-up complete for ${user.email}. Added ${baseCredits} credits. New total: ${user.credits}`);
+
+        // Log transaction history
+        await logCreditTransaction(user._id, baseCredits, "add", "subscription_purchase");
+
+        await logSubscriptionHistory(
+          user._id,
+          plan.tier,
+          "renew",
+          baseCredits,
+          session.id
+        );
+
         break;
       }
 
@@ -355,86 +474,38 @@ export async function POST(request: Request) {
         user.subscription_tier = plan.tier;
         user.plan_allocated_credits = plan.credits;
 
-        // ── Referral Bonus Logic ─────────────────────────────────────────
+        // ── Referral Bonus Logic (Only mark converted, no purchase bonus) ──
         const referral = await Referral.findOne({ referred_user: user._id });
         if (referral) {
           if (!referral.purchase_bonus_paid) {
-            // This is their first purchase! Pay out the bonus.
-            const referrer = await User.findById(referral.referrer);
-
-            // Referred user gets +20% on top of base credits
-            const bonusCredits = Math.ceil(plan.credits * REFERRED_USER_MULTIPLIER);
-            user.credits = bonusCredits;
-            user.total_gain_credits = (user.total_gain_credits || 0) + bonusCredits;
-
-            let referrerBonus = 0;
-            if (referrer) {
-              referrerBonus = Math.ceil(plan.credits * REFERRER_BONUS_RATIO);
-              referrer.credits = (referrer.credits || 0) + referrerBonus;
-              referrer.total_gain_credits = (referrer.total_gain_credits || 0) + referrerBonus;
-              await referrer.save();
-              console.log(`[REFERRAL] Referrer ${referrer.email} credited +${referrerBonus} credits (50% of ${plan.credits})`);
-              await logCreditTransaction(referrer._id, referrerBonus, "add", "referral_purchase_bonus");
-            }
-
-            // Update referral status and paid flag
             referral.status = "subscribed";
             referral.purchase_bonus_paid = true;
-            referral.referrer_purchase_bonus = referrerBonus;
-            referral.referred_purchase_bonus = bonusCredits - plan.credits;
             referral.purchase_tier = plan.tier;
             await referral.save();
-
-            console.log(`[REFERRAL] Referred user ${user.email} gets ${bonusCredits} credits (+20% of ${plan.credits})`);
-            await logCreditTransaction(user._id, plan.credits, "add", "subscription_purchase");
-            await logCreditTransaction(user._id, bonusCredits - plan.credits, "add", "referral_purchase_bonus");
-          } else {
-            // Already paid out purchase bonus on a previous cycle/invoice.
-            // Give them standard plan credits.
-            user.credits = plan.credits;
-            user.total_gain_credits = (user.total_gain_credits || 0) + plan.credits;
-            console.log(`[REFERRAL] User ${user.email} already had purchase bonus paid. Loaded standard plan credits: ${plan.credits}`);
-            await logCreditTransaction(user._id, plan.credits, "add", "subscription_purchase");
+            console.log(`[REFERRAL] Marked referee ${user.email} referral converted (no purchase bonus awarded).`);
           }
         } else if (user.referred_by) {
-          // Fallback: If referral record was missing but user has referred_by, create it, pay out bonus
+          // Fallback if referral record was missing but user.referred_by exists
           const referrer = await User.findOne({ referral_code: user.referred_by });
           if (referrer && referrer._id.toString() !== user._id.toString()) {
-            const bonusCredits = Math.ceil(plan.credits * REFERRED_USER_MULTIPLIER);
-            user.credits = bonusCredits;
-            user.total_gain_credits = (user.total_gain_credits || 0) + bonusCredits;
-
-            const referrerBonus = Math.ceil(plan.credits * REFERRER_BONUS_RATIO);
-            referrer.credits = (referrer.credits || 0) + referrerBonus;
-            referrer.total_gain_credits = (referrer.total_gain_credits || 0) + referrerBonus;
-            await referrer.save();
-            await logCreditTransaction(referrer._id, referrerBonus, "add", "referral_purchase_bonus");
-
             await Referral.create({
               referrer: referrer._id,
               referred_user: user._id,
               referral_code: user.referred_by,
               status: "subscribed",
-              trial_bonus_paid: false, // trial skipped or not recorded
+              trial_bonus_paid: false,
               purchase_bonus_paid: true,
-              referrer_purchase_bonus: referrerBonus,
-              referred_purchase_bonus: bonusCredits - plan.credits,
+              referrer_purchase_bonus: 0,
+              referred_purchase_bonus: 0,
               purchase_tier: plan.tier,
             });
-            console.log(`[REFERRAL FALLBACK] Subscribed referral created for ${user.email}. Referrer ${referrer.email} credited +${referrerBonus}.`);
-            await logCreditTransaction(user._id, plan.credits, "add", "subscription_purchase");
-            await logCreditTransaction(user._id, bonusCredits - plan.credits, "add", "referral_purchase_bonus");
-          } else {
-            user.credits = plan.credits;
-            user.total_gain_credits = (user.total_gain_credits || 0) + plan.credits;
-            await logCreditTransaction(user._id, plan.credits, "add", "subscription_purchase");
+            console.log(`[REFERRAL FALLBACK] Created subscribed referral for ${user.email} (no purchase bonus awarded).`);
           }
-        } else {
-          // Non-referred user gets standard base credits
-          user.credits = plan.credits;
-          user.total_gain_credits = (user.total_gain_credits || 0) + plan.credits;
-          await logCreditTransaction(user._id, plan.credits, "add", "subscription_purchase");
         }
+
+        user.credits = plan.credits;
+        user.total_gain_credits = (user.total_gain_credits || 0) + plan.credits;
+        await logCreditTransaction(user._id, plan.credits, "add", "subscription_purchase");
         // ─────────────────────────────────────────────────────────────────
 
         await logSubscriptionHistory(

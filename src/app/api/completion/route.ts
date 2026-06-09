@@ -43,25 +43,20 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "User account not found" }, { status: 404 });
     }
 
-    if (!user.is_subscribed && user.subscription_tier !== "trial") {
-      return NextResponse.json(
-        { error: "Active subscription or trial required to run AI Copilot" },
-        { status: 402 }
-      );
-    }
-
+    // Enforce Free Trial expiration if a trial expiry date is set in the database
     if (user.subscription_tier === "trial") {
       if (user.trial_expires_at && new Date() > user.trial_expires_at) {
         return NextResponse.json(
-          { error: "Your 7-day Free Trial has expired. Please purchase a plan to continue." },
+          { error: "Your Free Trial has expired. Please purchase a top-up plan to continue." },
           { status: 402 }
         );
       }
     }
 
+    // Direct credits check (at least 10 credits are required)
     if ((user.credits || 0) < 10) {
       return NextResponse.json(
-        { error: "Insufficient credits. At least 10 credits are required to run AI Copilot." },
+        { error: "Insufficient credits. At least 10 credits are required to run AI Copilot. Please top up your account." },
         { status: 402 }
       );
     }

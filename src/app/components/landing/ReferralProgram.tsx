@@ -1,6 +1,6 @@
 "use client";
 
-import { Gift, Share2, UserPlus, ArrowRight, Sparkles, Check } from "lucide-react";
+import { Gift, Share2, UserPlus, ArrowRight, Sparkles } from "lucide-react";
 import { ScrollReveal } from "./ScrollReveal";
 import Link from "next/link";
 
@@ -15,14 +15,14 @@ export default function ReferralProgram() {
     {
       id: 2,
       icon: UserPlus,
-      title: "Friend Joins & Subscribes",
-      desc: "They sign up and purchase any paid pass - and instantly receive +20% bonus credits."
+      title: "Friend Signs Up",
+      desc: "They sign up using your link to instantly get 50 free credits and start practicing."
     },
     {
       id: 3,
       icon: Gift,
       title: "Get Rewarded",
-      desc: "You instantly receive +50% of their plan's base credits. Share more, earn more!"
+      desc: "You instantly receive +50 free credits in your account the moment they join."
     }
   ];
 
@@ -53,7 +53,7 @@ export default function ReferralProgram() {
               Spread the Word. <span className="text-gradient-coral">Earn Free Credits</span>.
             </h2>
             <p className="text-(--text-muted) text-base max-w-xl mt-3 leading-relaxed">
-              Invite your network to CrackTheLoop. Our two-sided referral program rewards both of you the moment they subscribe to any plan.
+              Invite your network to CrackTheLoop. Our two-sided referral program rewards both of you the moment they register.
             </p>
           </div>
         </ScrollReveal>
@@ -75,30 +75,9 @@ export default function ReferralProgram() {
                   </div>
                 </div>
 
-                <p className="text-xs text-(--text-muted) leading-relaxed mb-6 font-medium">
-                  When someone registers using your invitation link, they get an automatic <span className="text-(--accent) font-bold">+20% bonus credits</span> on their initial purchase.
+                <p className="text-xs text-(--text-muted) leading-relaxed font-medium">
+                  When someone registers using your invitation link, they get <span className="text-(--accent) font-bold">50 free credits</span> instantly on sign-up to start practicing mock interviews.
                 </p>
-
-                <div className="space-y-3 font-medium">
-                  <div className="flex justify-between items-center text-xs py-2.5 border-b border-slate-100">
-                    <span className="text-(--text-secondary)">Starter Pass (usually 100)</span>
-                    <span className="text-(--accent) font-extrabold flex items-center gap-1">
-                      120 credits <span className="text-[10px] text-(--accent)/70 font-normal">(+20)</span>
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center text-xs py-2.5 border-b border-slate-100">
-                    <span className="text-(--text-secondary)">Pro Pass (usually 300)</span>
-                    <span className="text-(--accent) font-extrabold flex items-center gap-1">
-                      360 credits <span className="text-[10px] text-(--accent)/70 font-normal">(+60)</span>
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center text-xs py-2.5">
-                    <span className="text-(--text-secondary)">Elite Pass (usually 1000)</span>
-                    <span className="text-(--accent) font-extrabold flex items-center gap-1">
-                      1,200 credits <span className="text-[10px] text-(--accent)/70 font-normal">(+200)</span>
-                    </span>
-                  </div>
-                </div>
               </div>
             </div>
 
@@ -115,30 +94,9 @@ export default function ReferralProgram() {
                   </div>
                 </div>
 
-                <p className="text-xs text-(--text-muted) leading-relaxed mb-6 font-medium">
-                  Every single time a referred colleague upgrades to a paid pass, you receive a massive <span className="text-(--accent) font-bold">+50% of their plan's credits</span>.
+                <p className="text-xs text-(--text-muted) leading-relaxed font-medium">
+                  Every time a referred colleague signs up and activates their trial, you instantly receive <span className="text-(--accent) font-bold">+50 free credits</span> loaded into your account.
                 </p>
-
-                <div className="space-y-3 font-medium">
-                  <div className="flex justify-between items-center text-xs py-2.5 border-b border-slate-100">
-                    <span className="text-(--text-secondary)">Friend subscribes to Starter</span>
-                    <span className="text-(--accent) font-extrabold flex items-center gap-1">
-                      +50 credits <span className="text-[10px] text-(--accent)/70 font-normal">(worth $10)</span>
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center text-xs py-2.5 border-b border-slate-100">
-                    <span className="text-(--text-secondary)">Friend subscribes to Pro</span>
-                    <span className="text-(--accent) font-extrabold flex items-center gap-1">
-                      +150 credits <span className="text-[10px] text-(--accent)/70 font-normal">(worth $20)</span>
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center text-xs py-2.5">
-                    <span className="text-(--text-secondary)">Friend subscribes to Elite</span>
-                    <span className="text-(--accent) font-extrabold flex items-center gap-1">
-                      +500 credits <span className="text-[10px] text-(--accent)/70 font-normal">(worth $40)</span>
-                    </span>
-                  </div>
-                </div>
               </div>
             </div>
 

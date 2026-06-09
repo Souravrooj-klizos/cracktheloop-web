@@ -1,5 +1,6 @@
 "use client";
-
+ 
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   Shield,
@@ -9,14 +10,49 @@ import {
   Gift,
   ArrowRight,
   UserPlus,
+  Loader2,
 } from "lucide-react";
 import Navbar from "../components/landing/Navbar";
 import CtaFooter from "../components/landing/CtaFooter";
 import Link from "next/link";
-
+ 
 export default function PricingPage() {
   const router = useRouter();
+  const [plans, setPlans] = useState<any[]>([]);
+  const [trialCredits, setTrialCredits] = useState(15);
+  const [trialExpiryDays, setTrialExpiryDays] = useState(-1);
 
+  useEffect(() => {
+    fetch("/api/plans")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          if (data.plans) setPlans(data.plans);
+          if (data.settings) {
+            setTrialCredits(data.settings.trial_base_credits ?? 15);
+            setTrialExpiryDays(data.settings.trial_expiry_days ?? data.settings.trial_expiration_days ?? -1);
+          }
+        }
+      })
+      .catch((err) => console.error("Error loading plans:", err));
+  }, []);
+
+  // Helper to extract plan data dynamically with fallback support
+  const getPlanData = (tier: string, defaultPrice: number, defaultCredits: number, defaultFeatures: string[], defaultDesc: string) => {
+    const matched = plans.find(
+      (p) =>
+        p.name.toLowerCase().includes(tier) ||
+        (p.description && p.description.toLowerCase().includes(tier))
+    );
+    return {
+      price: matched ? matched.price : defaultPrice,
+      credits: matched ? matched.credits : defaultCredits,
+      features: matched && matched.features?.length > 0 ? matched.features : defaultFeatures,
+      description: matched ? matched.description : defaultDesc,
+    };
+  };
+
+  
   // Handle plan purchase selection by routing to secure auth-protected /select-plan
   function handlePlanSelect(planName: string) {
     router.push(`/select-plan?plan=${encodeURIComponent(planName)}`);
@@ -48,175 +84,87 @@ export default function PricingPage() {
 
       {/* Pricing Cards Section */}
       <section className="w-full max-w-7xl mx-auto px-6 pt-16 relative z-20">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 items-stretch">
-
-          {/* Free Trial */}
-          <div className="bg-white/85 backdrop-blur-md border border-(--border-light) rounded-[12px] p-6 md:p-8 flex flex-col justify-between shadow-xs hover:border-(--accent)/40 hover:-translate-y-1 hover:shadow-sm transition-all duration-300 min-h-[420px]">
-            <div>
-              <div className="flex justify-between items-start">
-                <h3 className="text-xl font-bold text-slate-800" style={{ fontFamily: "var(--font-display)" }}>Free Trial</h3>
-                <span className="bg-(--accent-soft) text-(--accent) border border-(--accent)/15 px-2.5 py-0.5 rounded-full font-black text-[9px] uppercase tracking-wider">Free</span>
-              </div>
-              <p className="text-xs text-(--text-muted) mt-1 font-medium">Evaluate the platform first</p>
-              <div className="flex items-baseline gap-1 mt-6">
-                <span className="text-4xl font-extrabold text-slate-800">$0</span>
-                <span className="text-xs text-(--text-muted)">/ one-time</span>
-              </div>
-              <ul className="text-xs text-slate-600 flex flex-col gap-3.5 border-t border-slate-100 pt-6 mt-6">
-                <li className="flex items-center gap-2 font-bold text-(--accent)">
-                  <Check className="w-4 h-4 text-(--accent)" />
-                  15 AI Fuel Credits included
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-slate-400" />
-                  Limit: 1 Interview session
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-slate-400" />
-                  Limit: 1 AI Report analysis
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-slate-400" />
-                  7-Day Trial validity
-                </li>
-              </ul>
-            </div>
-            <div className="mt-8">
-              <button
-                onClick={() => handlePlanSelect("Free Trial")}
-                className="btn-ghost-dark w-full text-center justify-center cursor-pointer !py-3.5 !px-6 !text-xs !font-bold uppercase tracking-wider"
-              >
-                Start Trial
-              </button>
-            </div>
+        {plans.length === 0 ? (
+          <div className="flex justify-center items-center py-24">
+            <Loader2 className="w-8 h-8 text-(--accent) animate-spin" />
           </div>
-
-          {/* Starter Plan */}
-          <div className="bg-white/85 backdrop-blur-md border border-(--border-light) rounded-[12px] p-6 md:p-8 flex flex-col justify-between shadow-xs hover:border-(--accent)/40 hover:-translate-y-1 hover:shadow-sm transition-all duration-300 min-h-[420px]">
-            <div>
-              <h3 className="text-xl font-bold text-slate-800" style={{ fontFamily: "var(--font-display)" }}>Starter Pass</h3>
-              <p className="text-xs text-(--text-muted) mt-1 font-medium">For beginners practicing code challenges</p>
-              <div className="flex items-baseline gap-1 mt-6">
-                <span className="text-4xl font-extrabold text-slate-800">$19</span>
-                <span className="text-xs text-(--text-muted)">/ month</span>
-              </div>
-              <ul className="text-xs text-slate-600 flex flex-col gap-3.5 border-t border-slate-100 pt-6 mt-6">
-                <li className="flex items-center gap-2 font-bold text-(--accent)">
-                  <Check className="w-4 h-4 text-(--accent)" />
-                  100 Fuel Credits included
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-slate-400" />
-                  Streaming STT voice capturing
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-slate-400" />
-                  Standard low-latency audio capture
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-slate-400" />
-                  LLaMA-3.1 model support
-                </li>
-              </ul>
-            </div>
-            <div className="mt-8">
-              <button
-                onClick={() => handlePlanSelect("Starter Pass")}
-                className="btn-ghost-dark w-full text-center justify-center cursor-pointer !py-3.5 !px-6 !text-xs !font-bold uppercase tracking-wider"
-              >
-                Upgrade to Starter
-              </button>
-            </div>
+        ) : (
+          <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-${plans.length} gap-8 items-stretch max-w-5xl mx-auto`}>
+            {plans.map((plan) => {
+              const isPro = plan.name.toLowerCase().includes("pro");
+              const isFree = plan.price === 0 || plan.name.toLowerCase().includes("free");
+              
+              return (
+                <div 
+                  key={plan._id || plan.name}
+                  className={`backdrop-blur-md rounded-[12px] p-6 md:p-8 flex flex-col justify-between transition-all duration-300 min-h-[420px] relative ${
+                    isPro 
+                      ? "bg-white/95 border-2 border-(--accent) shadow-md z-10 hover:-translate-y-1 hover:shadow-lg" 
+                      : "bg-white/85 border border-(--border-light) shadow-xs hover:border-(--accent)/40 hover:-translate-y-1 hover:shadow-sm"
+                  }`}
+                >
+                  {isPro && (
+                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-(--accent) text-white px-4 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase shadow-sm">
+                      Popular
+                    </div>
+                  )}
+                  
+                  <div>
+                    <div className="flex justify-between items-start">
+                      <h3 className="text-xl font-bold text-slate-800" style={{ fontFamily: "var(--font-display)" }}>
+                        {plan.name}
+                      </h3>
+                      {isFree && (
+                        <span className="bg-(--accent-soft) text-(--accent) border border-(--accent)/15 px-2.5 py-0.5 rounded-full font-black text-[9px] uppercase tracking-wider">
+                          Free
+                        </span>
+                      )}
+                    </div>
+                    
+                    <p className="text-xs text-(--text-muted) mt-1 font-medium">
+                      {plan.description}
+                    </p>
+                    
+                    <div className="flex items-baseline gap-1 mt-6">
+                      <span className="text-4xl font-extrabold text-slate-800">${plan.price}</span>
+                      <span className="text-xs text-(--text-muted)">
+                        {isFree 
+                          ? (trialExpiryDays > 0 ? `/ ${trialExpiryDays} days` : '/ one-time') 
+                          : `/ ${plan.interval || 'one-time'}`
+                        }
+                      </span>
+                    </div>
+                    
+                    <ul className="text-xs text-slate-600 flex flex-col gap-3.5 border-t border-slate-100 pt-6 mt-6">
+                      {plan.features?.map((feat: string, idx: number) => {
+                        const isFirst = idx === 0;
+                        return (
+                          <li key={idx} className={`flex items-center gap-2 ${isFirst ? "font-bold text-(--accent)" : ""}`}>
+                            <Check className={`w-4 h-4 ${isFirst || isPro ? "text-(--accent)" : "text-slate-400"}`} />
+                            {feat}
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                  
+                  <div className="mt-8">
+                    <button
+                      onClick={() => handlePlanSelect(plan.name)}
+                      className={`w-full text-center justify-center cursor-pointer !py-3.5 !px-6 !text-xs uppercase tracking-wider ${
+                        isPro 
+                          ? "btn-primary shadow-md shadow-[#E8503A]/20" 
+                          : "btn-ghost-dark !font-bold"
+                      }`}
+                    >
+                      {isFree ? "Start Trial" : `Upgrade to ${plan.name.replace(" Pass", "").replace(" Plan", "")}`}
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
           </div>
-
-          {/* Pro Pass Card */}
-          <div className="bg-white/95 backdrop-blur-md border-2 border-(--accent) rounded-[12px] p-6 md:p-8 flex flex-col justify-between shadow-md relative min-h-[420px] z-10 hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
-            <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-(--accent) text-white px-4 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase shadow-sm">
-              Popular
-            </div>
-            <div>
-              <h3 className="text-xl font-bold text-slate-800" style={{ fontFamily: "var(--font-display)" }}>Pro Pass</h3>
-              <p className="text-xs text-(--text-muted) mt-1 font-medium">Ideal for active interview stages</p>
-              <div className="flex items-baseline gap-1 mt-6">
-                <span className="text-4xl font-extrabold text-slate-800">$39</span>
-                <span className="text-xs text-(--text-muted)">/ month</span>
-              </div>
-              <ul className="text-xs text-slate-600 flex flex-col gap-3.5 border-t border-slate-100 pt-6 mt-6">
-                <li className="flex items-center gap-2 font-bold text-(--accent)">
-                  <Check className="w-4 h-4 text-(--accent)" />
-                  300 Fuel Credits included
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-(--accent)" />
-                  Sub-second latency streaming STT
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-(--accent)" />
-                  Interactive Desktop Practice HUD
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-(--accent)" />
-                  Unlimited concurrent LLM runs
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-slate-400" />
-                  Standard Groq & xAI keys support
-                </li>
-              </ul>
-            </div>
-            <div className="mt-8">
-              <button
-                onClick={() => handlePlanSelect("Pro Pass")}
-                className="btn-primary w-full text-center justify-center cursor-pointer !py-3.5 !px-6 !text-xs uppercase tracking-wider shadow-md shadow-[#E8503A]/20"
-              >
-                Upgrade to Pro
-              </button>
-            </div>
-          </div>
-
-          {/* Elite Pass Card */}
-          <div className="bg-white/85 backdrop-blur-md border border-(--border-light) rounded-[12px] p-6 md:p-8 flex flex-col justify-between shadow-xs hover:border-(--accent)/40 hover:-translate-y-1 hover:shadow-sm transition-all duration-300 min-h-[420px]">
-            <div>
-              <h3 className="text-xl font-bold text-slate-800" style={{ fontFamily: "var(--font-display)" }}>Elite Pass</h3>
-              <p className="text-xs text-(--text-muted) mt-1 font-medium">Advanced custom context models</p>
-              <div className="flex items-baseline gap-1 mt-6">
-                <span className="text-4xl font-extrabold text-slate-800">$79</span>
-                <span className="text-xs text-(--text-muted)">/ month</span>
-              </div>
-              <ul className="text-xs text-slate-600 flex flex-col gap-3.5 border-t border-slate-100 pt-6 mt-6">
-                <li className="flex items-center gap-2 font-bold text-(--accent)">
-                  <Check className="w-4 h-4 text-(--accent)" />
-                  1000 Fuel Credits included
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-slate-400" />
-                  All Pro features included
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-slate-400" />
-                  Highest accuracy GPT-4o-mini & Claude
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-slate-400" />
-                  PDF & DOCX Resume parsing extraction
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-slate-400" />
-                  Priority routing API proxy pipelines
-                </li>
-              </ul>
-            </div>
-            <div className="mt-8">
-              <button
-                onClick={() => handlePlanSelect("Elite Pass")}
-                className="btn-ghost-dark w-full text-center justify-center cursor-pointer !py-3.5 !px-6 !text-xs !font-bold uppercase tracking-wider"
-              >
-                Upgrade to Elite
-              </button>
-            </div>
-          </div>
-
-        </div>
+        )}
       </section>
 
       {/* Referral Program Section */}
@@ -227,8 +175,8 @@ export default function PricingPage() {
               <Gift className="w-5 h-5 text-(--accent) animate-bounce" />
               Referral Rewards Program
             </h2>
-            <p className="text-xs text-(--text-muted) leading-relaxed max-w-xl font-medium">
-              Share CrackTheLoop with friends and colleagues - both of you earn bonus credits when they subscribe.
+             <p className="text-xs text-(--text-muted) leading-relaxed max-w-xl font-medium">
+              Share CrackTheLoop with friends and colleagues - both of you get 50 free credits upon signup.
             </p>
           </div>
 
@@ -242,20 +190,9 @@ export default function PricingPage() {
                 </div>
                 <span className="text-xs font-black text-slate-800 uppercase tracking-widest">You're Invited</span>
               </div>
-              <p className="text-[11px] text-slate-500 leading-relaxed font-medium">
-                When you sign up using a friend's referral link, you get <span className="text-(--accent) font-bold">+20% bonus credits</span> on any plan you choose.
+              <p className="text-[11px] text-slate-500 leading-relaxed font-semibold">
+                When you sign up using a friend's referral link, you get <span className="text-(--accent) font-bold">50 free credits</span> instantly on sign-up to start practicing mock interviews.
               </p>
-              <div className="flex flex-col gap-2 text-[10px] font-bold">
-                <div className="flex justify-between text-slate-600 border-b border-slate-200/65 pb-1.5">
-                  <span>Starter Pass (referred)</span><span className="text-(--accent)">120 credits</span>
-                </div>
-                <div className="flex justify-between text-slate-600 border-b border-slate-200/65 pb-1.5">
-                  <span>Pro Pass (referred)</span><span className="text-(--accent)">360 credits</span>
-                </div>
-                <div className="flex justify-between text-slate-600">
-                  <span>Elite Pass (referred)</span><span className="text-(--accent)">1,200 credits</span>
-                </div>
-              </div>
             </div>
 
             {/* Referrer benefits */}
@@ -266,20 +203,9 @@ export default function PricingPage() {
                 </div>
                 <span className="text-xs font-black text-slate-800 uppercase tracking-widest">You Referred Someone</span>
               </div>
-              <p className="text-[11px] text-slate-500 leading-relaxed font-medium">
-                Every time a friend you referred subscribes to a paid plan, you earn <span className="text-(--accent) font-bold">+50% of their plan's base credits</span>.
+              <p className="text-[11px] text-slate-500 leading-relaxed font-semibold">
+                When a referred friend signs up and activates their trial, <span className="text-(--accent) font-bold">both of you get 50 free credits</span> instantly.
               </p>
-              <div className="flex flex-col gap-2 text-[10px] font-bold">
-                <div className="flex justify-between text-slate-600 border-b border-slate-200/65 pb-1.5">
-                  <span>Friend buys Starter</span><span className="text-(--accent)">+50 credits to you</span>
-                </div>
-                <div className="flex justify-between text-slate-600 border-b border-slate-200/65 pb-1.5">
-                  <span>Friend buys Pro</span><span className="text-(--accent)">+150 credits to you</span>
-                </div>
-                <div className="flex justify-between text-slate-600">
-                  <span>Friend buys Elite</span><span className="text-(--accent)">+500 credits to you</span>
-                </div>
-              </div>
             </div>
 
           </div>

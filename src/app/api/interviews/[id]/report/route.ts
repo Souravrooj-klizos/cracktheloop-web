@@ -50,14 +50,6 @@ export async function POST(
       return NextResponse.json({ error: "User not found" }, { status: 404, headers: corsHeaders });
     }
 
-    // Verify credit balance (5 credits per analysis)
-    if (user.credits < 5) {
-      return NextResponse.json(
-        { error: "Insufficient credits. Running an evaluation report requires 5 credits." },
-        { status: 402, headers: corsHeaders }
-      );
-    }
-
     // Trial report limit check (maximum 1 report generated)
     if (user.subscription_tier === "trial") {
       const reportCount = await InterviewSession.countDocuments({
@@ -79,6 +71,14 @@ export async function POST(
 
     if (!session) {
       return NextResponse.json({ error: "Interview session not found or access denied" }, { status: 404, headers: corsHeaders });
+    }
+
+    // Prevent re-evaluation if a report has already been generated
+    if (session.report && session.report.overall_score !== undefined && session.report.overall_score > 0) {
+      return NextResponse.json(
+        { error: "This interview session has already been evaluated. Evaluation reports can only be generated once." },
+        { status: 400, headers: corsHeaders }
+      );
     }
 
     if (!session.transcript || session.transcript.length === 0) {
@@ -246,11 +246,6 @@ Generate the evaluation report.`;
     };
 
     await session.save();
-
-    // Deduct 5 credits from user
-    user.credits = Math.max(0, user.credits - 5);
-    user.total_burn_credits = (user.total_burn_credits || 0) + 5;
-    await user.save();
 
     // Parse token usage from the API response
     let promptTokens = 0;
