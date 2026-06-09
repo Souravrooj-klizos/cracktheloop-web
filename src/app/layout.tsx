@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Sora, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import SmoothScrolling from "@/app/components/SmoothScrolling";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -438,7 +439,9 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col">
-        {children}
+        <SmoothScrolling>
+          {children}
+        </SmoothScrolling>
       </body>
     </html>
   );
