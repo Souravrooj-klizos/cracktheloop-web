@@ -36,7 +36,6 @@ const companyList = [
   { name: "LinkedIn", src: "https://cdn.svgporn.com/logos/linkedin-icon.svg", showText: true, textClass: "font-bold tracking-tight text-[#0A66C2] text-sm md:text-base ml-1" },
   { name: "Oracle", src: "https://cdn.svgporn.com/logos/oracle.svg" },
   { name: "Slack", src: "https://cdn.svgporn.com/logos/slack.svg" },
-  { name: "Zoom", src: "https://cdn.svgporn.com/logos/zoom.svg" },
   { name: "Adobe", src: "https://cdn.svgporn.com/logos/adobe.svg" },
   { name: "GitHub", src: "https://cdn.svgporn.com/logos/github-icon.svg", showText: true, textClass: "font-bold tracking-tight text-slate-800 text-sm md:text-base ml-1" },
   { name: "Figma", src: "https://cdn.svgporn.com/logos/figma.svg", showText: true, textClass: "font-bold tracking-tight text-slate-800 text-sm md:text-base ml-1.5" }
@@ -133,7 +132,7 @@ export default function Hero() {
       id="hero"
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="hero-gradient-mesh relative min-h-screen flex flex-col pt-28 pb-8 overflow-hidden"
+      className="hero-gradient-mesh relative min-h-screen flex flex-col pt-36 md:pt-35 pb-12 overflow-hidden"
     >
       {/* Subtle grid pattern overlay */}
       <div
@@ -176,31 +175,54 @@ export default function Hero() {
               Never let your mind go blank. Sits on your desktop, listens to the interview, and provides structured response outlines and memory prompts in real-time during live sessions.
             </p>
 
-            <div className="flex flex-col gap-4 mt-2">
-              {/* Buttons Row */}
-              <div className="flex flex-wrap items-center gap-6">
-                <Link href="/login?mode=signup&plan=Free%20Trial" className="btn-primary-glow cursor-pointer !py-4 !px-8">
+            <div className="flex flex-col gap-6 mt-4 max-w-xl">
+              {/* Action Button */}
+              <div>
+                <Link href="/login?mode=signup&plan=Free%20Trial" className="btn-primary-glow inline-flex cursor-pointer !py-4 !px-8">
                   Try Live Interview Copilot
                   <ArrowRight className="w-4 h-4" />
                 </Link>
+              </div>
 
-                <div className="flex flex-col gap-1.5 pl-1">
-                  <span className="flex items-center gap-1.5 text-sm font-semibold text-slate-600">
-                    <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                    50 Free Credits Loaded Instantly · No Credit Card Required
-                  </span>
-                  <Link
-                    href="#referral-program"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      const el = document.getElementById("referral-program");
-                      if (el) el.scrollIntoView({ behavior: "smooth" });
-                    }}
-                    className="text-sm text-indigo-650 hover:text-indigo-850 font-bold flex items-center gap-1 transition-all duration-300 hover:translate-x-0.5 select-none cursor-pointer"
-                  >
-                    <span>🎁 Share with friends: Earn up to 500 bonus credits</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </Link>
+              {/* Trust Details & Referral Link */}
+              <div className="flex flex-col gap-1.5 pl-1">
+                <span className="flex items-center gap-1.5 text-sm font-semibold text-slate-600">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  50 Free Credits · No Credit Card Required
+                </span>
+                <Link
+                  href="#referral-program"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    const el = document.getElementById("referral-program");
+                    if (el) el.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className="text-sm text-indigo-650 hover:text-indigo-850 font-bold flex items-center gap-1 transition-all duration-300 hover:translate-x-0.5 select-none cursor-pointer"
+                >
+                  <span>🎁 Share with friends: Earn up to 500 bonus credits</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+
+              {/* Divider and Platforms Row */}
+              <div className="border-t border-slate-200/80 pt-5 mt-1 flex flex-col sm:flex-row sm:items-center gap-4 pl-1">
+                <span className="text-xs font-bold text-slate-500 select-none tracking-wide shrink-0">
+                  Runs alongside live interviews on:
+                </span>
+                <div className="flex items-center gap-5">
+                  {[
+                    { name: "Google Meet", src: "https://cdn.svgporn.com/logos/google-meet.svg" },
+                    { name: "Zoom", src: "https://cdn.svgporn.com/logos/zoom.svg" },
+                    { name: "Microsoft Teams", src: "https://cdn.svgporn.com/logos/microsoft-teams.svg" }
+                  ].map((plat, i) => (
+                    <img 
+                      key={i} 
+                      src={plat.src} 
+                      alt={plat.name} 
+                      title={plat.name}
+                      className="h-6.5 w-auto object-contain transition-all duration-300 hover:scale-110 filter hover:drop-shadow-2xs cursor-default select-none opacity-85 hover:opacity-100" 
+                    />
+                  ))}
                 </div>
               </div>
             </div>

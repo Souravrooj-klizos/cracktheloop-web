@@ -7,8 +7,8 @@ import { ScrollReveal } from "./ScrollReveal";
 
 const faqs = [
   {
-    q: "Is CrackTheLoop undetectable? Will the interviewer know?",
-    a: "No. CrackTheLoop uses Win32 Display Affinity to make the overlay invisible to screen-sharing software - it will never appear in Zoom, Teams, or Meet recordings. We also use WASAPI system audio loopback instead of virtual audio drivers, so nothing unusual appears in your device list.",
+    q: "How does the desktop HUD overlay work? Is it private?",
+    a: "The desktop HUD overlay runs locally on your computer, sitting side-by-side with your video call. Using local display capturing rules, it ensures a distraction-free environment for you. Your audio and data stay 100% private and are processed locally on your hardware.",
   },
   {
     q: "How fast does AI interview helper respond? What's the latency?",
@@ -28,7 +28,7 @@ const faqs = [
   },
   {
     q: "Does it work on Mac?",
-    a: "The Browser Copilot (web-based prep mode) works on all platforms including Mac and Linux. The native Stealth HUD Overlay - which uses Win32 Display Affinity for screen share invisibility - is currently Windows-only. Mac support for the native client is on our roadmap for Q3 2026.",
+    a: "The Browser Copilot works on all platforms including Mac and Linux. The native Desktop HUD Overlay is currently Windows-only, with macOS support on our roadmap for Q3 2026.",
   },
   {
     q: "Does CrackTheLoop generate full responses or short talking points?",

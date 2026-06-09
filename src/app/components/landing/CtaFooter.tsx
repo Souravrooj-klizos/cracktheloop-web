@@ -27,7 +27,7 @@ export default function CtaFooter() {
     { label: "Web Copilot", href: "/login?mode=signup&plan=Free%20Trial" },
     { label: "Windows Desktop App (.exe)", href: "#platform-picker" },
     { label: "macOS Desktop App (.dmg)", href: "#platform-picker" },
-    { label: "Referral Program (Give 20%, Get 50%)", href: "#referral-program" },
+    { label: "Referral Program (Give 50, Get 50)", href: "#referral-program" },
   ];
 
   const resourcesLegalLinks = [
@@ -66,7 +66,7 @@ export default function CtaFooter() {
                 <span className="text-gradient-coral">Happen This Week.</span>
               </h2>
               <p className="text-(--text-muted) text-base md:text-lg mb-4 max-w-xl mx-auto leading-relaxed">
-                Get 15 free credits the moment you sign up. No credit card. One full mock session included - set up in under 3 minutes.
+                Get 50 free credits the moment you sign up. No credit card. One full mock session included - set up in under 3 minutes.
               </p>
               <div className="flex flex-wrap justify-center gap-4 mb-6">
                 <Link

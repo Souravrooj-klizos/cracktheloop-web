@@ -6,48 +6,48 @@ import { ScrollReveal, StaggerContainer, StaggerItem } from "./ScrollReveal";
 const formats = [
   {
     icon: User,
-    tag: "1-on-1 Technical Round",
-    title: "One Engineer. One Shot.",
-    anxiety: "Blanking out mid-answer. Losing structure. Verbal fillers taking over.",
+    tag: "1-on-1 Interviews",
+    title: "Stay Calm & Structured",
+    anxiety: "Getting nervous, losing your train of thought mid-sentence, or struggling to recall the right projects from your resume when asked.",
     solution:
-      "STAR method AI interview suggestions surface in under 2 seconds. Resume projects mapped to the exact question. Behavioral interview AI keeps you composed and structured.",
+      "The Copilot listens to the interviewer's question and instantly outlines a structured, professional response. It automatically highlights matching projects from your resume so you always speak with confidence.",
     points: [
-      "Behavioral answers structured to STAR in real time",
-      "Surfaces relevant resume projects automatically",
-      "Speech pace alerts keep delivery natural",
+      "Structures answers into a clear Situation-Action-Result format",
+      "Pulls relevant details from your resume in real time",
+      "Monitors your speech pace to keep your delivery natural",
     ],
-    stat: { value: "1.5s", label: "avg. first answer point" },
+    stat: { value: "1.5s", label: "average outline speed" },
   },
   {
     icon: Users,
-    tag: "Multi-Interviewer Panel",
-    title: "Five People. Rapid-Fire Questions.",
+    tag: "Panel Interviews",
+    title: "Handle Rapid-Fire Questions",
     anxiety:
-      "Overwhelm. Losing track of who asked what. Forgetting key technical details under pressure.",
+      "Feeling overwhelmed when multiple interviewers ask questions back-to-back, making it easy to lose track of who asked what.",
     solution:
-      "CrackTheLoop captures each question as it's spoken, structures the answer, and queues context from your resume - so you always have something strong to say.",
+      "The Copilot tracks the conversation across different speakers and generates quick outlines, allowing you to address each panelist's question without missing a beat.",
     points: [
-      "Captures any speaker's question, regardless of who asks",
-      "Fast-switch answer mode for rapid question sequences",
-      "Keeps JD keyword alignment across all answers",
+      "Identifies and tracks questions from multiple interviewers",
+      "Generates fast, scrollable outlines for follow-up questions",
+      "Helps align your answers with the specific job description",
     ],
-    stat: { value: "5×", label: "panelists - zero panic" },
+    stat: { value: "5+", label: "panelists supported" },
     featured: true,
   },
   {
     icon: Bot,
-    tag: "HireVue AI Interview Helper",
-    title: "HireVue. Karat. Byteboard.",
+    tag: "Automated Screeners",
+    title: "Ace Robotic & Timer Tests",
     anxiety:
-      "Unnatural pace, timer anxiety, robotic scoring rubrics, no room to think.",
+      "Struggling with rigid timers, robotic scoring systems (like HireVue or Karat), and pre-recorded questions that give you no room to think.",
     solution:
-      "Captures system audio from any video platform or AI screener. Generates AI interview suggestions matched to the rubric's scoring format - behavioral, competency, or technical.",
+      "The Copilot analyzes the system audio and provides helpful bullet points tailored to the exact rubrics and scoring patterns used by AI grading bots.",
     points: [
-      "Works with any AI video screener via system audio capture",
-      "Suggestions aligned to rubric scoring criteria",
-      "Handles pre-recorded and live bot question formats",
+      "Compatible with HireVue, Karat, and Byteboard",
+      "Tailors suggestions to match automated scoring criteria",
+      "Supports pre-recorded and live video test formats",
     ],
-    stat: { value: "100%", label: "AI screener compatible" },
+    stat: { value: "100%", label: "screener platform coverage" },
   },
 ];
 
@@ -70,11 +70,11 @@ export default function UseCases() {
               className="text-3xl md:text-4xl font-extrabold tracking-tight text-(--text-primary)"
               style={{ fontFamily: "var(--font-display)" }}
             >
-              AI Interview Helper for Every Format{" "}
-              <span className="text-gradient-coral">- Live &amp; Undetectable</span>
+              Real-Time Interview Guidance{" "}
+              <span className="text-gradient-coral">for Any Format</span>
             </h2>
             <p className="text-(--text-muted) text-base mt-3 max-w-xl mx-auto leading-relaxed">
-              Whether it&apos;s a single recruiter, a five-person panel, or a HireVue AI screener - CrackTheLoop generates real-time AI interview guidance for every format, completely undetectable.
+              From 1-on-1 technical discussions and rapid-fire panel interviews to automated AI video screeners—get instant, on-screen memory cues and structured outlines to communicate with absolute clarity.
             </p>
           </div>
         </ScrollReveal>
@@ -92,21 +92,21 @@ export default function UseCases() {
               <StaggerItem key={i}>
                 <div
                   className={`group relative rounded-[12px] p-6 md:p-7 flex flex-col gap-5 overflow-hidden h-full transition-all duration-300 hover:-translate-y-1.5 cursor-default ${isFeatured
-                      ? "bg-(--accent-soft) border-2 border-(--accent)/30 shadow-md"
+                      ? "bg-white border-2 border-(--accent) shadow-md"
                       : "bg-white/70 border border-(--border-light) shadow-xs hover:shadow-md hover:border-(--accent)/20"
                     }`}
                 >
                   {/* Glow for featured */}
                   {isFeatured && (
-                    <div className="absolute -right-16 -top-16 w-56 h-56 rounded-full bg-(--accent)/10 blur-3xl pointer-events-none" />
+                    <div className="absolute -right-16 -top-16 w-56 h-56 rounded-full bg-(--accent)/5 blur-3xl pointer-events-none" />
                   )}
 
                   {/* Tag + Stat */}
                   <div className="flex items-center justify-between flex-wrap gap-2">
                     <span
                       className={`text-[10px] font-mono font-bold tracking-wider uppercase px-2.5 py-1 rounded-full border ${isFeatured
-                          ? "bg-white/80 text-(--accent) border-(--accent)/20"
-                          : "bg-(--accent-soft) text-(--accent) border-(--accent)/20"
+                          ? "bg-(--accent-soft) text-(--accent) border-(--accent)/20"
+                          : "bg-slate-100 text-slate-500 border-slate-200"
                         }`}
                     >
                       {fmt.tag}
@@ -124,9 +124,9 @@ export default function UseCases() {
                   {/* Icon + Title */}
                   <div className="flex items-center gap-3">
                     <div
-                      className={`w-11 h-11 rounded-[8px] flex items-center justify-center shrink-0 ${isFeatured
-                          ? "bg-white/80 text-(--accent)"
-                          : "bg-(--accent-soft) text-(--accent)"
+                      className={`w-11 h-11 rounded-[8px] flex items-center justify-center shrink-0 border ${isFeatured
+                          ? "bg-(--accent-soft) text-(--accent) border-(--accent)/15"
+                          : "bg-slate-50 text-slate-500 border-slate-200/50"
                         }`}
                     >
                       <Icon className="w-5 h-5" />
@@ -137,26 +137,21 @@ export default function UseCases() {
                   </div>
 
                   {/* Anxiety block */}
-                  <div className="rounded-[8px] bg-red-50 border border-red-100 px-4 py-3">
-                    <span className="text-[10px] font-mono font-bold uppercase text-red-400 tracking-wider block mb-1">
-                      Candidate Anxiety
+                  <div className="rounded-[8px] bg-slate-50/50 border border-slate-200/40 px-4 py-3">
+                    <span className="text-[10px] font-mono font-bold uppercase text-red-500/80 tracking-wider block mb-1">
+                      The Challenge
                     </span>
-                    <p className="text-sm text-red-700 leading-relaxed font-medium">
+                    <p className="text-sm text-slate-600 leading-relaxed font-medium">
                       {fmt.anxiety}
                     </p>
                   </div>
 
                   {/* Solution block */}
-                  <div
-                    className={`rounded-[8px] px-4 py-3 border ${isFeatured
-                        ? "bg-white/70 border-white/80"
-                        : "bg-(--accent-soft) border-(--accent)/15"
-                      }`}
-                  >
+                  <div className="rounded-[8px] bg-(--accent-soft) border border-(--accent)/15 px-4 py-3">
                     <span className="text-[10px] font-mono font-bold uppercase text-(--accent) tracking-wider block mb-1">
-                      How CrackTheLoop Helps
+                      How Copilot Helps
                     </span>
-                    <p className="text-sm text-(--text-secondary) leading-relaxed">
+                    <p className="text-sm text-slate-700 leading-relaxed">
                       {fmt.solution}
                     </p>
                   </div>
