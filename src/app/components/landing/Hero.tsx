@@ -8,9 +8,13 @@ import Link from "next/link";
 
 const companyList = [
   { name: "Google", src: "/images/landing-logo-google.webp" },
+  { name: "Razorpay", src: "https://upload.wikimedia.org/wikipedia/commons/8/89/Razorpay_logo.svg" },
   { name: "Microsoft", src: "/images/landing-logo-microsoft.webp" },
+  { name: "Zoho", src: "https://upload.wikimedia.org/wikipedia/commons/f/f2/ZOHO.svg" },
   { name: "Amazon", src: "/images/landing-logo-amazon.webp" },
+  { name: "Zomato", src: "https://upload.wikimedia.org/wikipedia/commons/b/bd/Zomato_Logo.svg" },
   { name: "Meta", src: "/images/landing-logo-meta.webp" },
+  { name: "Paytm", src: "https://upload.wikimedia.org/wikipedia/commons/2/24/Paytm_Logo_%28standalone%29.svg" },
   { name: "Tesla", src: "/images/landing-logo-tesla.webp" },
   { name: "Apple", src: "https://cdn.svgporn.com/logos/apple.svg", showText: true, textClass: "font-semibold tracking-tight text-slate-800 text-sm md:text-base ml-1.5" },
   { name: "Stripe", src: "https://cdn.svgporn.com/logos/stripe.svg" },
@@ -160,10 +164,6 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
           >
-            <div className="flex items-center gap-2 text-xs font-semibold text-emerald-600 uppercase tracking-wider select-none mb-2">
-              <Terminal className="w-4 h-4 text-emerald-600" />
-              <span>AI Live Interview Copilot - Real-Time Guidance · Free Beta</span>
-            </div>
 
             <h1
               className="font-bold tracking-tight text-slate-900 text-4xl md:text-5xl lg:text-5xl leading-[1]"
@@ -184,10 +184,10 @@ export default function Hero() {
                   <ArrowRight className="w-4 h-4" />
                 </Link>
 
-                <div className="flex flex-col gap-1 pl-1">
+                <div className="flex flex-col gap-1.5 pl-1">
                   <span className="flex items-center gap-1.5 text-sm font-semibold text-slate-600">
                     <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                    No Credit Card Required · Free Beta Onboarding
+                    50 Free Credits Loaded Instantly · No Credit Card Required
                   </span>
                   <Link
                     href="#referral-program"
@@ -196,9 +196,9 @@ export default function Hero() {
                       const el = document.getElementById("referral-program");
                       if (el) el.scrollIntoView({ behavior: "smooth" });
                     }}
-                    className="text-sm text-indigo-650 hover:text-indigo-850 font-bold flex items-center gap-0.5 transition-all duration-300 hover:translate-x-0.5 select-none"
+                    className="text-sm text-indigo-650 hover:text-indigo-850 font-bold flex items-center gap-1 transition-all duration-300 hover:translate-x-0.5 select-none cursor-pointer"
                   >
-                    <span>🎁 Give 20%, Get 50% credits</span>
+                    <span>🎁 Share with friends: Earn up to 500 bonus credits</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>

@@ -24,7 +24,7 @@ const faqs = [
   },
   {
     q: "How does CrackTheLoop pricing work? What's a credit?",
-    a: "1 credit = 1 minute of active live session time. 300 credits = 5 hours of copilot usage. Credits only run during an active session - not while you’re in setup, reviewing answers, or idle. The free tier includes 15 credits (a full 15-minute practice session).",
+    a: "1 credit = 1 minute of active live session time. Credits only run during an active session - not while you’re in setup, reviewing answers, or idle. The free tier includes 50 credits (evaluate the platform first).",
   },
   {
     q: "Does it work on Mac?",
@@ -40,7 +40,7 @@ const faqs = [
   },
   {
     q: "What's the best free AI interview helper?",
-    a: "CrackTheLoop is the best free AI interview helper, offering 15 credits of free usage (a full 15-minute practice session) to try all features. You get real-time audio transcribing, resume-aware answers, and live guidance during practice rounds without entering a credit card.",
+    a: "CrackTheLoop is the best free AI interview helper, offering 50 credits of free usage (evaluate the platform first) to try all features. You get real-time audio transcribing, resume-aware answers, and live guidance during practice rounds without entering a credit card.",
   },
   {
     q: "How is CrackTheLoop different from Final Round AI?",

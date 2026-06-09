@@ -38,7 +38,7 @@ const comparisonPoints = [
     feature: "Works free with no credit card required",
     generic: false,
     cracktheloop: true,
-    detail: "Free tier includes 15 credits - a full 15-minute AI interview session, no card needed.",
+    detail: "Free tier includes 50 credits - evaluate the platform first, no card needed.",
   },
   {
     feature: "Generates AI interview suggestions during the live call",
@@ -166,7 +166,7 @@ export default function Comparison() {
               <h3 className="text-xl md:text-2xl font-extrabold text-(--text-primary) leading-snug mb-1"
                 style={{ fontFamily: "var(--font-display)" }}>
                 Your next job pays $10,000+ per month.<br />
-                <span className="text-gradient-coral">Investing $39 to secure it is a 256× return.</span>
+                <span className="text-gradient-coral">Investing $19.99 to secure it is a 500× return.</span>
               </h3>
               <p className="text-sm text-(--text-muted) mt-2 max-w-md leading-relaxed">
                 Compare the real cost of alternatives. CrackTheLoop isn&apos;t an expense - it&apos;s the most efficient interview investment you can make.
@@ -178,7 +178,7 @@ export default function Comparison() {
                   { label: "Human Mock Interviewer", cost: "$150–$300 / hour", muted: true },
                   { label: "Interview Prep Course", cost: "$1,000–$5,000", muted: true },
                   { label: "Career Coach (6 weeks)", cost: "$3,000+", muted: true },
-                  { label: "CrackTheLoop Pro Pass", cost: "$39 / month", highlight: true },
+                  { label: "CrackTheLoop Pro Pass", cost: "$19.99 / one-time", highlight: true },
                 ].map((row, i) => (
                   <div key={i} className={`flex items-center justify-between px-4 py-3 border-b border-(--border-light) last:border-0 ${row.highlight ? "bg-(--accent-soft) border-l-2 border-l-(--accent)" : "bg-white"
                     }`}>

@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Pricing & Plans - CrackTheLoop",
   description:
-    "Choose the CrackTheLoop plan that fits your interview timeline. Start free with 15 credits, then upgrade to Starter ($9.99/mo, 300 credits) or Pro ($19.99/mo, 1000 credits). No hidden fees - pay only for active session time.",
+    "Choose the CrackTheLoop plan that fits your interview timeline. Start free with 50 credits, then upgrade to Starter Pass ($4.99, 100 credits) or Pro Pass ($19.99, 500 credits). No hidden fees - pay only for active session time.",
   alternates: {
     canonical: "https://cracktheloop.com/pricing",
   },
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Pricing & Plans - CrackTheLoop AI Interview Copilot",
     description:
-      "Start free. Upgrade when you're ready. 15 free credits, then Starter at $9.99/mo or Pro at $19.99/mo. Only pay for active interview session time.",
+      "Start free. Upgrade when you're ready. 50 free credits, then Starter Pass at $4.99 or Pro Pass at $19.99. Only pay for active interview session time.",
     url: "https://cracktheloop.com/pricing",
     siteName: "CrackTheLoop",
     type: "website",
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Pricing & Plans - CrackTheLoop",
     description:
-      "15 free credits to start. Then Starter $9.99/mo or Pro $19.99/mo. 1 credit = 1 minute of live AI interview session.",
+      "50 free credits to start. Then Starter Pass at $4.99 or Pro Pass at $19.99. 1 credit = 1 minute of live AI interview session.",
     images: ["/og-image.png"],
   },
 };

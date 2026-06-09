@@ -19,8 +19,42 @@ import Link from "next/link";
 export default function PricingPage() {
   const router = useRouter();
   const [plans, setPlans] = useState<any[]>([]);
-  const [trialCredits, setTrialCredits] = useState(15);
+  const [trialCredits, setTrialCredits] = useState(50);
   const [trialExpiryDays, setTrialExpiryDays] = useState(-1);
+  const [currency, setCurrency] = useState("USD");
+
+  useEffect(() => {
+    // Detect country location using FreeIPAPI
+    fetch("https://freeipapi.com/api/json")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.countryCode === "IN" || data.country === "India") {
+          setCurrency("INR");
+        } else {
+          runTimezoneFallback();
+        }
+      })
+      .catch((err) => {
+        console.warn("FreeIPAPI failed, running fallback timezone detection:", err);
+        runTimezoneFallback();
+      });
+
+    function runTimezoneFallback() {
+      try {
+        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        const isIndiaTz = tz === "Asia/Kolkata" || tz === "Asia/Calcutta";
+        const isIndiaLocale = navigator.language?.includes("IN") || navigator.languages?.some(l => l.includes("IN"));
+        
+        if (isIndiaTz || isIndiaLocale) {
+          setCurrency("INR");
+        } else {
+          setCurrency("USD");
+        }
+      } catch (e) {
+        setCurrency("USD");
+      }
+    }
+  }, []);
 
   useEffect(() => {
     fetch("/api/plans")
@@ -29,7 +63,7 @@ export default function PricingPage() {
         if (data.success) {
           if (data.plans) setPlans(data.plans);
           if (data.settings) {
-            setTrialCredits(data.settings.trial_base_credits ?? 15);
+            setTrialCredits(data.settings.trial_base_credits ?? 50);
             setTrialExpiryDays(data.settings.trial_expiry_days ?? data.settings.trial_expiration_days ?? -1);
           }
         }
@@ -55,11 +89,11 @@ export default function PricingPage() {
   
   // Handle plan purchase selection by routing to secure auth-protected /select-plan
   function handlePlanSelect(planName: string) {
-    router.push(`/select-plan?plan=${encodeURIComponent(planName)}`);
+    router.push(`/select-plan?plan=${encodeURIComponent(planName)}&currency=${currency}`);
   }
 
   return (
-    <div className="min-h-screen bg-(--bg-mist) text-(--text-primary) flex flex-col pt-20">
+    <div className="min-h-screen bg-(--bg-mist) text-(--text-primary) flex flex-col pt-30">
 
       {/* Background orbs */}
       <div className="orb orb-peach w-[600px] h-[600px] -top-40 left-1/4 animate-float-orb opacity-40 pointer-events-none" />
@@ -70,10 +104,6 @@ export default function PricingPage() {
 
       {/* Page Title */}
       <section className="w-full max-w-7xl mx-auto px-6 pt-12 text-center flex flex-col items-center gap-4 relative z-20 select-none">
-        <div className="inline-flex items-center gap-2 bg-(--accent-soft) border border-(--accent)/20 px-4 py-1.5 rounded-full text-xs font-semibold text-(--accent)">
-          <Sparkles className="w-3.5 h-3.5 animate-pulse" />
-          Instant Billing Activation & Client Keys
-        </div>
         <h1 className="text-4xl md:text-5xl font-black tracking-tight leading-tight text-slate-800" style={{ fontFamily: "var(--font-display)" }}>
           Flexible Plans for <span className="text-gradient-coral">Unlimited Access</span>
         </h1>
@@ -93,6 +123,26 @@ export default function PricingPage() {
             {plans.map((plan) => {
               const isPro = plan.name.toLowerCase().includes("pro");
               const isFree = plan.price === 0 || plan.name.toLowerCase().includes("free");
+              
+              // Localized price mappings
+              let displayPrice = plan.price;
+              let priceSymbol = "$";
+              
+              if (currency === "INR") {
+                priceSymbol = "₹";
+                if (!isFree) {
+                  if (plan.name.toLowerCase().includes("starter")) {
+                    displayPrice = 399;
+                  } else if (plan.name.toLowerCase().includes("pro")) {
+                    displayPrice = 1499;
+                  } else {
+                    // Fallback conversion (approx 85 INR per USD)
+                    displayPrice = Math.round(plan.price * 85);
+                  }
+                } else {
+                  displayPrice = 0;
+                }
+              }
               
               return (
                 <div 
@@ -126,7 +176,7 @@ export default function PricingPage() {
                     </p>
                     
                     <div className="flex items-baseline gap-1 mt-6">
-                      <span className="text-4xl font-extrabold text-slate-800">${plan.price}</span>
+                      <span className="text-4xl font-extrabold text-slate-800">{priceSymbol}{displayPrice}</span>
                       <span className="text-xs text-(--text-muted)">
                         {isFree 
                           ? (trialExpiryDays > 0 ? `/ ${trialExpiryDays} days` : '/ one-time') 
@@ -175,7 +225,7 @@ export default function PricingPage() {
               <Gift className="w-5 h-5 text-(--accent) animate-bounce" />
               Referral Rewards Program
             </h2>
-             <p className="text-xs text-(--text-muted) leading-relaxed max-w-xl font-medium">
+             <p className="text-sm md:text-base text-slate-500 leading-relaxed max-w-xl font-semibold">
               Share CrackTheLoop with friends and colleagues - both of you get 50 free credits upon signup.
             </p>
           </div>
@@ -188,9 +238,9 @@ export default function PricingPage() {
                 <div className="w-8 h-8 rounded-full bg-(--accent-soft) flex items-center justify-center border border-(--accent)/15">
                   <UserPlus className="w-4 h-4 text-(--accent)" />
                 </div>
-                <span className="text-xs font-black text-slate-800 uppercase tracking-widest">You're Invited</span>
+                <span className="text-xs md:text-sm font-black text-slate-800 uppercase tracking-widest">You're Invited</span>
               </div>
-              <p className="text-[11px] text-slate-500 leading-relaxed font-semibold">
+              <p className="text-sm md:text-base text-slate-600 leading-relaxed font-semibold">
                 When you sign up using a friend's referral link, you get <span className="text-(--accent) font-bold">50 free credits</span> instantly on sign-up to start practicing mock interviews.
               </p>
             </div>
@@ -201,28 +251,15 @@ export default function PricingPage() {
                 <div className="w-8 h-8 rounded-full bg-(--accent-soft) flex items-center justify-center border border-(--accent)/15">
                   <Gift className="w-4 h-4 text-(--accent)" />
                 </div>
-                <span className="text-xs font-black text-slate-800 uppercase tracking-widest">You Referred Someone</span>
+                <span className="text-xs md:text-sm font-black text-slate-800 uppercase tracking-widest">You Referred Someone</span>
               </div>
-              <p className="text-[11px] text-slate-500 leading-relaxed font-semibold">
+              <p className="text-sm md:text-base text-slate-600 leading-relaxed font-semibold">
                 When a referred friend signs up and activates their trial, <span className="text-(--accent) font-bold">both of you get 50 free credits</span> instantly.
               </p>
             </div>
 
           </div>
 
-          {/* CTA */}
-          <div className="bg-slate-50 border border-slate-200/80 rounded-[12px] p-5 flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex flex-col gap-1">
-              <p className="text-sm font-black text-slate-800">Get your personal referral link</p>
-              <p className="text-[11px] text-(--text-muted) font-medium">Sign in to your dashboard to access and share your unique invite code.</p>
-            </div>
-            <Link
-              href="/login"
-              className="btn-primary px-6 py-3 !text-xs uppercase tracking-wider cursor-pointer flex items-center gap-2 shrink-0"
-            >
-              Get My Link <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
         </div>
       </section>
 

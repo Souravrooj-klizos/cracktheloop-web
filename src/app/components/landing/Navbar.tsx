@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, useScroll, useSpring } from "framer-motion";
-import { Sparkles, Menu, X, ChevronDown, ArrowRight, Download } from "lucide-react";
+import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion";
+import { Sparkles, Menu, X, ChevronDown, ArrowRight, Download, Gift } from "lucide-react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { WindowsIcon, AppleIcon } from "@/app/components/icons/BrandIcons";
@@ -10,7 +10,27 @@ import { WindowsIcon, AppleIcon } from "@/app/components/icons/BrandIcons";
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [bannerOpen, setBannerOpen] = useState(false);
   const pathname = usePathname();
+
+  function getCookie(name: string): string | null {
+    if (typeof document === "undefined") return null;
+    const matches = document.cookie.match(new RegExp(
+      "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+    ));
+    return matches ? decodeURIComponent(matches[1]) : null;
+  }
+
+  useEffect(() => {
+    if (getCookie("ctl_banner_dismissed") !== "true") {
+      setBannerOpen(true);
+    }
+  }, []);
+
+  const dismissBanner = () => {
+    setBannerOpen(false);
+    document.cookie = "ctl_banner_dismissed=true; path=/; max-age=604800; SameSite=Lax";
+  };
 
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
@@ -49,27 +69,66 @@ export default function Navbar() {
   };
 
   return (
-    <motion.header
-      id="navbar"
-      initial={{ y: -20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
-      className={`fixed top-4 left-4 right-4 z-50 transition-[background-color,border-color,box-shadow] duration-300 border max-w-7xl mx-auto ${
-        mobileOpen
-          ? "rounded-3xl bg-white border-slate-200 shadow-xl"
-          : scrolled 
-            ? "rounded-full bg-white/95 backdrop-blur-md border-slate-200/80 shadow-md shadow-slate-100/40" 
-            : "rounded-full bg-white/70 backdrop-blur-md border-slate-200/40 shadow-xs"
-      }`}
-    >
-      <div className="px-6 py-2.5 md:py-3 flex justify-between items-center w-full">
+    <>
+      <AnimatePresence>
+        {bannerOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -48 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -48 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="fixed top-0 left-0 right-0 h-12 bg-slate-50/95 border-b border-slate-200/80 z-55 flex items-center justify-between px-4 sm:px-6 select-none shadow-xs"
+          >
+            <div className="flex-1 flex items-center justify-center gap-2 sm:gap-3 text-xs md:text-sm font-semibold text-slate-800">
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <Gift className="w-4 h-4 text-[#E8503A] shrink-0" />
+                <span className="hidden sm:inline font-medium text-slate-600">
+                  <strong>Launch Offer:</strong> First 100 signups get <strong className="text-slate-900">50 free credits</strong> + <strong className="text-slate-900">20% purchase bonus</strong> on referral. Only <strong className="text-[#E8503A] font-extrabold">18 spots left</strong> today!
+                </span>
+                <span className="inline sm:hidden font-medium text-slate-650">
+                  <strong>First 100:</strong> Get <strong className="text-slate-900">50 free credits</strong>! (<strong className="text-[#E8503A] font-extrabold">18 left</strong>)
+                </span>
+              </div>
+              <Link
+                href="/login?mode=signup&plan=Free%20Trial"
+                className="relative inline-flex items-center gap-1 bg-slate-900 text-white hover:bg-slate-800 hover:scale-105 active:scale-95 text-[10px] md:text-xs font-bold px-3 py-1 rounded-full shadow-md transition-all duration-200 group/btn border border-slate-900 whitespace-nowrap ml-1 cursor-pointer"
+              >
+                Claim Credits
+                <ArrowRight className="w-3 h-3 transition-transform duration-200 group-hover/btn:translate-x-0.5" />
+              </Link>
+            </div>
+            <button
+              onClick={dismissBanner}
+              className="text-slate-400 hover:text-slate-700 transition cursor-pointer p-1 rounded-full hover:bg-slate-200/60 ml-2"
+              aria-label="Dismiss banner"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <motion.header
+        id="navbar"
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1, top: bannerOpen ? "64px" : "16px" }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+        className={`fixed left-4 right-4 z-50 transition-[background-color,border-color,box-shadow,top] duration-300 border max-w-7xl mx-auto ${
+          mobileOpen
+            ? "rounded-3xl bg-white border-slate-200 shadow-xl"
+            : scrolled 
+              ? "rounded-full bg-white/95 backdrop-blur-md border-slate-200/80 shadow-md shadow-slate-100/40" 
+              : "rounded-full bg-white/70 backdrop-blur-md border-slate-200/40 shadow-xs"
+        }`}
+      >
+      <div className="px-6 py-2 md:py-1 flex justify-between items-center w-full">
         <Link
           href="/"
           className="flex items-center gap-2.5 hover:opacity-90 transition cursor-pointer select-none"
         >
           <img
             src="/logo.png"
-            className="h-10 w-auto select-none object-contain"
+            className="h-8 w-auto select-none object-contain"
             alt="CrackTheLoop Logo Icon"
           />
           <span className="font-bold tracking-tight text-xl md:text-2xl text-(--text-primary)" style={{ fontFamily: "var(--font-display)" }}>
@@ -276,6 +335,7 @@ export default function Navbar() {
         />
       </div>
     </motion.header>
+    </>
   );
 }
 
