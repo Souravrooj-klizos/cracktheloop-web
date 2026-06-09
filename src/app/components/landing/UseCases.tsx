@@ -92,21 +92,21 @@ export default function UseCases() {
               <StaggerItem key={i}>
                 <div
                   className={`group relative rounded-[12px] p-6 md:p-7 flex flex-col gap-5 overflow-hidden h-full transition-all duration-300 hover:-translate-y-1.5 cursor-default ${isFeatured
-                      ? "bg-(--accent-soft) border-2 border-(--accent)/30 shadow-md"
+                      ? "bg-white border-2 border-(--accent) shadow-md"
                       : "bg-white/70 border border-(--border-light) shadow-xs hover:shadow-md hover:border-(--accent)/20"
                     }`}
                 >
                   {/* Glow for featured */}
                   {isFeatured && (
-                    <div className="absolute -right-16 -top-16 w-56 h-56 rounded-full bg-(--accent)/10 blur-3xl pointer-events-none" />
+                    <div className="absolute -right-16 -top-16 w-56 h-56 rounded-full bg-(--accent)/5 blur-3xl pointer-events-none" />
                   )}
 
                   {/* Tag + Stat */}
                   <div className="flex items-center justify-between flex-wrap gap-2">
                     <span
                       className={`text-[10px] font-mono font-bold tracking-wider uppercase px-2.5 py-1 rounded-full border ${isFeatured
-                          ? "bg-white/80 text-(--accent) border-(--accent)/20"
-                          : "bg-(--accent-soft) text-(--accent) border-(--accent)/20"
+                          ? "bg-(--accent-soft) text-(--accent) border-(--accent)/20"
+                          : "bg-slate-100 text-slate-500 border-slate-200"
                         }`}
                     >
                       {fmt.tag}
@@ -124,9 +124,9 @@ export default function UseCases() {
                   {/* Icon + Title */}
                   <div className="flex items-center gap-3">
                     <div
-                      className={`w-11 h-11 rounded-[8px] flex items-center justify-center shrink-0 ${isFeatured
-                          ? "bg-white/80 text-(--accent)"
-                          : "bg-(--accent-soft) text-(--accent)"
+                      className={`w-11 h-11 rounded-[8px] flex items-center justify-center shrink-0 border ${isFeatured
+                          ? "bg-(--accent-soft) text-(--accent) border-(--accent)/15"
+                          : "bg-slate-50 text-slate-500 border-slate-200/50"
                         }`}
                     >
                       <Icon className="w-5 h-5" />
@@ -137,26 +137,21 @@ export default function UseCases() {
                   </div>
 
                   {/* Anxiety block */}
-                  <div className="rounded-[8px] bg-red-50 border border-red-100 px-4 py-3">
-                    <span className="text-[10px] font-mono font-bold uppercase text-red-400 tracking-wider block mb-1">
+                  <div className="rounded-[8px] bg-slate-50/50 border border-slate-200/40 px-4 py-3">
+                    <span className="text-[10px] font-mono font-bold uppercase text-red-500/80 tracking-wider block mb-1">
                       The Challenge
                     </span>
-                    <p className="text-sm text-red-700 leading-relaxed font-medium">
+                    <p className="text-sm text-slate-600 leading-relaxed font-medium">
                       {fmt.anxiety}
                     </p>
                   </div>
 
                   {/* Solution block */}
-                  <div
-                    className={`rounded-[8px] px-4 py-3 border ${isFeatured
-                        ? "bg-white/70 border-white/80"
-                        : "bg-(--accent-soft) border-(--accent)/15"
-                      }`}
-                  >
+                  <div className="rounded-[8px] bg-(--accent-soft) border border-(--accent)/15 px-4 py-3">
                     <span className="text-[10px] font-mono font-bold uppercase text-(--accent) tracking-wider block mb-1">
                       How Copilot Helps
                     </span>
-                    <p className="text-sm text-(--text-secondary) leading-relaxed">
+                    <p className="text-sm text-slate-700 leading-relaxed">
                       {fmt.solution}
                     </p>
                   </div>

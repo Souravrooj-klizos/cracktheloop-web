@@ -36,7 +36,6 @@ const companyList = [
   { name: "LinkedIn", src: "https://cdn.svgporn.com/logos/linkedin-icon.svg", showText: true, textClass: "font-bold tracking-tight text-[#0A66C2] text-sm md:text-base ml-1" },
   { name: "Oracle", src: "https://cdn.svgporn.com/logos/oracle.svg" },
   { name: "Slack", src: "https://cdn.svgporn.com/logos/slack.svg" },
-  { name: "Zoom", src: "https://cdn.svgporn.com/logos/zoom.svg" },
   { name: "Adobe", src: "https://cdn.svgporn.com/logos/adobe.svg" },
   { name: "GitHub", src: "https://cdn.svgporn.com/logos/github-icon.svg", showText: true, textClass: "font-bold tracking-tight text-slate-800 text-sm md:text-base ml-1" },
   { name: "Figma", src: "https://cdn.svgporn.com/logos/figma.svg", showText: true, textClass: "font-bold tracking-tight text-slate-800 text-sm md:text-base ml-1.5" }
@@ -177,31 +176,55 @@ export default function Hero() {
             </p>
 
             <div className="flex flex-col gap-4 mt-2">
-              {/* Buttons Row */}
+              {/* Action + Compatibility Row */}
               <div className="flex flex-wrap items-center gap-6">
-                <Link href="/login?mode=signup&plan=Free%20Trial" className="btn-primary-glow cursor-pointer !py-4 !px-8">
+                <Link href="/login?mode=signup&plan=Free%20Trial" className="btn-primary-glow cursor-pointer !py-4 !px-8 shrink-0">
                   Try Live Interview Copilot
                   <ArrowRight className="w-4 h-4" />
                 </Link>
 
-                <div className="flex flex-col gap-1.5 pl-1">
-                  <span className="flex items-center gap-1.5 text-sm font-semibold text-slate-600">
-                    <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                    50 Free Credits Loaded Instantly · No Credit Card Required
+                {/* Compatibility Highlights */}
+                <div className="flex flex-col gap-1.5 select-none">
+                  <span className="text-[10px] font-mono font-black uppercase tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-slate-600 to-slate-400 select-none flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+                    Compatible with online interviews
                   </span>
-                  <Link
-                    href="#referral-program"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      const el = document.getElementById("referral-program");
-                      if (el) el.scrollIntoView({ behavior: "smooth" });
-                    }}
-                    className="text-sm text-indigo-650 hover:text-indigo-850 font-bold flex items-center gap-1 transition-all duration-300 hover:translate-x-0.5 select-none cursor-pointer"
-                  >
-                    <span>🎁 Share with friends: Earn up to 500 bonus credits</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </Link>
+                  <div className="flex items-center gap-4.5 pl-0.5">
+                    {[
+                      { name: "Google Meet", src: "https://cdn.svgporn.com/logos/google-meet.svg" },
+                      { name: "Zoom", src: "https://cdn.svgporn.com/logos/zoom-icon.svg" },
+                      { name: "Microsoft Teams", src: "https://cdn.svgporn.com/logos/microsoft-teams.svg" }
+                    ].map((plat, i) => (
+                      <img 
+                        key={i} 
+                        src={plat.src} 
+                        alt={plat.name} 
+                        title={plat.name}
+                        className="w-6 h-6 object-contain transition-all duration-300 hover:scale-115 filter hover:drop-shadow-xs cursor-default select-none opacity-85 hover:opacity-100" 
+                      />
+                    ))}
+                  </div>
                 </div>
+              </div>
+
+              {/* Trust Details & Referral Link */}
+              <div className="flex flex-col gap-1.5 pl-1 mt-1">
+                <span className="flex items-center gap-1.5 text-sm font-semibold text-slate-600">
+                  <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                  50 Free Credits Loaded Instantly · No Credit Card Required
+                </span>
+                <Link
+                  href="#referral-program"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    const el = document.getElementById("referral-program");
+                    if (el) el.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className="text-sm text-indigo-650 hover:text-indigo-850 font-bold flex items-center gap-1 transition-all duration-300 hover:translate-x-0.5 select-none cursor-pointer"
+                >
+                  <span>🎁 Share with friends: Earn up to 500 bonus credits</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
               </div>
             </div>
 
