@@ -47,6 +47,10 @@ const PRICE_TO_TIER: Record<string, string> = {
   "price_1TeCnyEkHwm1l3fZV45CSLvV": "starter",
   "price_1TeCpEEkHwm1l3fZej0zzJhb": "pro",
   "price_1TeCpaEkHwm1l3fZj9f7Gh31": "elite",
+  "price_1TgO9FLpVCAm43ah8vQKQWOg": "starter",
+  "price_1TgQxGLpVCAm43ahnYrNotgE": "starter",
+  "price_1TgO9nLpVCAm43ahHiFpXn5o": "pro",
+  "price_1TgQxGLpVCAm43ahl7CIJiRd": "pro",
 };
 
 function normalizeTier(raw?: string): string {
@@ -750,7 +754,7 @@ function DashboardHomeContent() {
               Referral Rewards Invite
             </h3>
             <p className="text-[11px] text-slate-500 leading-normal font-semibold">
-              Share link with colleagues - both of you earn bonus credits on paid subscriptions.
+              Share code - both get 50 free credits on trial activation, plus up to 50% bonus on plan purchases.
             </p>
 
             {refCode ? (

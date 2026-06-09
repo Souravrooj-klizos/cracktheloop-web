@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Sora, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import SmoothScrolling from "@/app/components/SmoothScrolling";
+import CookieConsent from "@/app/components/landing/CookieConsent";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -181,19 +182,19 @@ const softwareApplicationSchema = {
       name: "Free Trial",
       price: "0.00",
       priceCurrency: "USD",
-      description: "15 free credits - a full 15-minute live practice session",
+      description: "50 free credits - evaluate the platform first",
     },
     {
       "@type": "Offer",
-      name: "Starter Plan",
-      price: "9.99",
+      name: "Starter Pass",
+      price: "4.99",
       priceCurrency: "USD",
-      priceSpecification: {
-        "@type": "UnitPriceSpecification",
-        price: "9.99",
-        priceCurrency: "USD",
-        billingDuration: "P1M",
-      },
+    },
+    {
+      "@type": "Offer",
+      name: "Pro Pass",
+      price: "19.99",
+      priceCurrency: "USD",
     },
   ],
   aggregateRating: {
@@ -346,7 +347,7 @@ const faqSchema = {
       name: "How does CrackTheLoop pricing work? What's a credit?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "1 credit = 1 minute of active live session time. 300 credits = 5 hours of copilot usage. Credits only run during an active session - not while you’re in setup, reviewing answers, or idle. The free tier includes 15 credits (a full 15-minute practice session).",
+        text: "1 credit = 1 minute of active live session time. Credits only run during an active session - not while you’re in setup, reviewing answers, or idle. The free tier includes 50 credits (evaluate the platform first, no card required).",
       },
     },
     {
@@ -378,7 +379,7 @@ const faqSchema = {
       name: "What's the best free AI interview helper?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "CrackTheLoop is the best free AI interview helper, offering 15 credits of free usage (a full 15-minute practice session) to try all features. You get real-time audio transcribing, resume-aware answers, and live guidance during practice rounds without entering a credit card.",
+        text: "CrackTheLoop is the best free AI interview helper, offering 50 credits of free usage (evaluate the platform first) to try all features. You get real-time audio transcribing, resume-aware answers, and live guidance during practice rounds without entering a credit card.",
       },
     },
     {
@@ -442,6 +443,7 @@ export default function RootLayout({
         <SmoothScrolling>
           {children}
         </SmoothScrolling>
+        <CookieConsent />
       </body>
     </html>
   );

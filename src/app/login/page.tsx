@@ -112,8 +112,31 @@ function LoginContent() {
 
   async function handlePasswordAuth(e: React.FormEvent) {
     e.preventDefault();
-    setLoading(true);
     setMessage("");
+
+    // Custom Validation
+    if (mode === "signup" && !name.trim()) {
+      setMessage("Please enter your name.");
+      return;
+    }
+    if (!email.trim()) {
+      setMessage("Please enter your email address.");
+      return;
+    }
+    if (!email.includes("@") || !email.includes(".")) {
+      setMessage("Please enter a valid email address.");
+      return;
+    }
+    if (!password) {
+      setMessage("Please enter a password.");
+      return;
+    }
+    if (password.length < 6) {
+      setMessage("Password must be at least 6 characters.");
+      return;
+    }
+
+    setLoading(true);
 
     try {
       const res = await fetch("/api/auth/login", {
@@ -189,7 +212,7 @@ function LoginContent() {
             <p className="text-slate-500 text-xs leading-relaxed font-semibold mt-1">
               {mode === "signin" 
                 ? "Enter your credentials to authorize and launch your copilot dashboard." 
-                : "Get started with 15 free credits to use during your live sessions. Zero risk, 100% free."}
+                : "Get started with 50 free credits to use during your live sessions. Zero risk, 100% free."}
             </p>
           </div>
 
@@ -213,7 +236,7 @@ function LoginContent() {
                     Live AI Response Copilot Onboarding Pass
                   </span>
                   <span className="text-sm font-black text-slate-800 tracking-tight">
-                    15 FREE LIVE CREDITS
+                    50 FREE LIVE CREDITS
                   </span>
                 </div>
                 <div className="text-[8.5px] text-slate-500 font-bold uppercase tracking-wide">
@@ -240,7 +263,7 @@ function LoginContent() {
             </div>
           )}
 
-          <form onSubmit={handlePasswordAuth} className="flex flex-col gap-4">
+          <form onSubmit={handlePasswordAuth} noValidate className="flex flex-col gap-4">
             <div className="flex flex-col gap-3">
               
               {/* Full Name (Sign Up only) */}
@@ -252,7 +275,6 @@ function LoginContent() {
                   <div className="relative">
                     <input
                       type="text"
-                      required
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder="John Doe"
@@ -280,7 +302,6 @@ function LoginContent() {
                 <div className="relative">
                   <input
                     type="email"
-                    required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="developer@example.com"
@@ -307,8 +328,6 @@ function LoginContent() {
                 <div className="relative">
                   <input
                     type="password"
-                    required
-                    minLength={6}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
@@ -357,7 +376,7 @@ function LoginContent() {
 
               <button
                 type="submit"
-                disabled={loading || !email.includes("@") || password.length < 6 || (mode === "signup" && !name.trim())}
+                disabled={loading}
                 className="btn-primary-glow w-full mt-3 !py-3.5 !px-6 justify-center !rounded-xl font-bold text-xs text-white uppercase tracking-widest cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1.5 shadow-md shadow-(--accent)/10 hover:shadow-(--accent)/20 transition-all"
               >
                 {loading ? (
@@ -367,7 +386,7 @@ function LoginContent() {
                   </>
                 ) : (
                   <>
-                    <span>{mode === "signup" ? "Claim 15 Credits & Enter" : "Authorize & Launch HUD"}</span>
+                    <span>{mode === "signup" ? "Claim 50 Credits & Enter" : "Authorize & Launch HUD"}</span>
                     <ArrowRight className="w-4 h-4" />
                   </>
                 )}

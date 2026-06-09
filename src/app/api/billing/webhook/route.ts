@@ -17,6 +17,10 @@ const PLAN_MAP: Record<string, { tier: string; credits: number }> = {
   "price_1TeCnyEkHwm1l3fZV45CSLvV": { tier: "starter", credits: 100 },
   "price_1TeCpEEkHwm1l3fZej0zzJhb": { tier: "pro", credits: 300 },
   "price_1TeCpaEkHwm1l3fZj9f7Gh31": { tier: "elite", credits: 1000 },
+  "price_1TgO9FLpVCAm43ah8vQKQWOg": { tier: "starter", credits: 100 },
+  "price_1TgQxGLpVCAm43ahnYrNotgE": { tier: "starter", credits: 100 },
+  "price_1TgO9nLpVCAm43ahHiFpXn5o": { tier: "pro", credits: 500 },
+  "price_1TgQxGLpVCAm43ahl7CIJiRd": { tier: "pro", credits: 500 },
 };
 
 // Referral multipliers (from plans.md)

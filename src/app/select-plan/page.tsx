@@ -75,7 +75,16 @@ function SelectPlanContent() {
           throw new Error(`Plan "${planName}" is not currently available or active.`);
         }
 
-        const priceId = dbPlan.price_id;
+        let priceId = dbPlan.price_id;
+        const isINR = searchParams.get("currency") === "INR";
+        if (isINR) {
+          // Map default USD Price IDs to their corresponding Stripe INR Price IDs
+          const INR_PRICE_IDS: Record<string, string> = {
+            "price_1TgO9FLpVCAm43ah8vQKQWOg": "price_1TgQxGLpVCAm43ahnYrNotgE", // Starter Pass INR Price ID
+            "price_1TgO9nLpVCAm43ahHiFpXn5o": "price_1TgQxGLpVCAm43ahl7CIJiRd", // Pro Pass INR Price ID
+          };
+          priceId = INR_PRICE_IDS[dbPlan.price_id] || dbPlan.price_id;
+        }
 
         setStatusText(`Preparing your secure checkout session for ${dbPlan.name}...`);
         

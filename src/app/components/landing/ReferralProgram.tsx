@@ -71,11 +71,11 @@ export default function ReferralProgram() {
                   </div>
                   <div>
                     <span className="text-[9px] font-bold tracking-wider text-(--accent) uppercase font-mono">Invited Guest</span>
-                    <h3 className="text-base font-bold text-(--text-primary) leading-tight" style={{ fontFamily: "var(--font-display)" }}>Your Friend Receives</h3>
+                    <h3 className="text-lg font-bold text-(--text-primary) leading-tight" style={{ fontFamily: "var(--font-display)" }}>Your Friend Receives</h3>
                   </div>
                 </div>
 
-                <p className="text-xs text-(--text-muted) leading-relaxed font-medium">
+                <p className="text-sm md:text-base text-slate-600 leading-relaxed font-semibold">
                   When someone registers using your invitation link, they get <span className="text-(--accent) font-bold">50 free credits</span> instantly on sign-up to start practicing mock interviews.
                 </p>
               </div>
@@ -90,11 +90,11 @@ export default function ReferralProgram() {
                   </div>
                   <div>
                     <span className="text-[9px] font-bold tracking-wider text-(--accent) uppercase font-mono">Referrer Reward</span>
-                    <h3 className="text-base font-bold text-(--text-primary) leading-tight" style={{ fontFamily: "var(--font-display)" }}>You Earn Instantly</h3>
+                    <h3 className="text-lg font-bold text-(--text-primary) leading-tight" style={{ fontFamily: "var(--font-display)" }}>You Earn Instantly</h3>
                   </div>
                 </div>
 
-                <p className="text-xs text-(--text-muted) leading-relaxed font-medium">
+                <p className="text-sm md:text-base text-slate-600 leading-relaxed font-semibold">
                   Every time a referred colleague signs up and activates their trial, you instantly receive <span className="text-(--accent) font-bold">+50 free credits</span> loaded into your account.
                 </p>
               </div>
@@ -105,8 +105,8 @@ export default function ReferralProgram() {
 
         {/* 3 Step Visual Flow */}
         <ScrollReveal>
-          <div className="max-w-7xl mx-auto mb-6">
-            <div className="bg-white/70 backdrop-blur-md border border-(--border-light) rounded-[12px] p-5 md:p-6 shadow-xs">
+          <div className="max-w-7xl mx-auto">
+            <div className="bg-white/70 backdrop-blur-md border border-(--border-light) rounded-[12px] p-6 md:p-8 shadow-xs">
               <h3 className="text-center font-bold text-xs tracking-widest text-(--text-muted) uppercase mb-6 font-mono">
                 Three Steps To Unlimited Fuel
               </h3>
@@ -125,35 +125,13 @@ export default function ReferralProgram() {
                           {step.id}
                         </span>
                       </div>
-                      <h4 className="text-sm font-bold text-(--text-primary) mb-2">{step.title}</h4>
-                      <p className="text-xs text-(--text-muted) leading-relaxed max-w-[240px] font-medium">{step.desc}</p>
+                      <h4 className="text-sm md:text-base font-bold text-(--text-primary) mb-2">{step.title}</h4>
+                      <p className="text-xs md:text-sm text-(--text-muted) leading-relaxed max-w-[240px] font-medium">{step.desc}</p>
                     </div>
                   );
                 })}
               </div>
             </div>
-          </div>
-        </ScrollReveal>
-
-        {/* Call to Action Bar */}
-        <ScrollReveal>
-          <div className="bg-white/80 backdrop-blur-md border border-(--border-light) rounded-[12px] p-5 md:p-6 flex flex-col md:flex-row items-center justify-between gap-6 max-w-7xl mx-auto shadow-xs">
-            <div className="flex flex-col gap-1 text-center md:text-left">
-              <h3 className="text-base font-bold text-(--text-primary) flex items-center justify-center md:justify-start gap-2" style={{ fontFamily: "var(--font-display)" }}>
-                <Sparkles className="w-4 h-4 text-(--accent) animate-pulse" />
-                Start Inviting Candidates Today
-              </h3>
-              <p className="text-xs text-(--text-muted) leading-relaxed font-medium">
-                Every successful referral adds free interview credits directly to your active loop profile.
-              </p>
-            </div>
-
-            <Link
-              href="/login?redirect=/dashboard/referrals"
-              className="btn-primary w-full md:w-auto text-center justify-center cursor-pointer !text-xs uppercase tracking-wider !py-3.5 !px-6"
-            >
-              Get My Invite Link <ArrowRight className="w-4 h-4 ml-1.5 inline-block" />
-            </Link>
           </div>
         </ScrollReveal>
 
