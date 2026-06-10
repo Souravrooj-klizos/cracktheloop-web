@@ -3,31 +3,22 @@
 import { useState, useEffect, useRef } from "react";
 import {
   Shield,
-  ArrowLeft,
   Settings,
   Volume2,
   Mic,
   Maximize2,
   Layers,
-  Trash2,
-  Upload,
-  ChevronDown,
-  Check,
-  Play,
-  Square,
   Lock,
   Unlock,
-  Sparkles,
   Home,
   History,
   LogOut,
   User,
-  Save,
   Loader2,
   Briefcase,
   FileText,
   UploadCloud,
-  Mail
+  Mail,
 } from "lucide-react";
 import Link from "next/link";
 import mammoth from "mammoth";
@@ -46,9 +37,13 @@ interface ITranscriptTurn {
 export default function CopilotPage() {
   function getCookie(name: string): string | null {
     if (typeof document === "undefined") return null;
-    const matches = document.cookie.match(new RegExp(
-      "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-    ));
+    const matches = document.cookie.match(
+      new RegExp(
+        "(?:^|; )" +
+          name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1") +
+          "=([^;]*)",
+      ),
+    );
     return matches ? decodeURIComponent(matches[1]) : null;
   }
 
@@ -77,8 +72,12 @@ export default function CopilotPage() {
   const [resumeFileName, setResumeFileName] = useState("");
 
   // Key Validation States
-  const [deepgramKeyStatus, setDeepgramKeyStatus] = useState<'idle' | 'verified' | 'failed'>('idle');
-  const [llmProviderStatus, setLlmProviderStatus] = useState<'idle' | 'verified' | 'failed'>('idle');
+  const [deepgramKeyStatus, setDeepgramKeyStatus] = useState<
+    "idle" | "verified" | "failed"
+  >("idle");
+  const [llmProviderStatus, setLlmProviderStatus] = useState<
+    "idle" | "verified" | "failed"
+  >("idle");
 
   // App States
   const [isOverlayMode, setIsOverlayMode] = useState(false);
@@ -112,11 +111,15 @@ export default function CopilotPage() {
   const speechStartRef = useRef<number | null>(null);
   const activeRequestIdRef = useRef<number>(0);
   const voiceBufferRef = useRef("");
-  const voiceDebounceTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const voiceSegmentTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const voiceDebounceTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
+  const voiceSegmentTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
 
   const lastPromptRef = useRef("");
-  const lastRequestTypeRef = useRef<'normal' | 'screen_capture'>('normal');
+  const lastRequestTypeRef = useRef<"normal" | "screen_capture">("normal");
 
   // Draggable HUD coordinates
   const [hudPosition, setHudPosition] = useState({ x: 20, y: 20 });
@@ -128,7 +131,11 @@ export default function CopilotPage() {
   const [showHistoryDrawer, setShowHistoryDrawer] = useState(false);
 
   // Auth User state
-  const [user, setUser] = useState<{ email: string; credits: number; is_subscribed: boolean } | null>(null);
+  const [user, setUser] = useState<{
+    email: string;
+    credits: number;
+    is_subscribed: boolean;
+  } | null>(null);
   const [token, setToken] = useState<string | null>(null);
 
   const historyRef = useRef(history);
@@ -159,21 +166,32 @@ export default function CopilotPage() {
 
   useEffect(() => {
     const handleBeforeUnload = () => {
-      if (historyRef.current.length > 0 && historyRef.current.length !== lastSavedHistoryLengthRef.current && tokenRef.current) {
-        const totalTime = sessionStartRef.current ? Math.round((Date.now() - sessionStartRef.current) / 1000) : 0;
-        const totalSttOnTime = Math.round(accumulatedSttTimeRef.current + (sttStartRef.current ? (Date.now() - sttStartRef.current) / 1000 : 0));
-        
+      if (
+        historyRef.current.length > 0 &&
+        historyRef.current.length !== lastSavedHistoryLengthRef.current &&
+        tokenRef.current
+      ) {
+        const totalTime = sessionStartRef.current
+          ? Math.round((Date.now() - sessionStartRef.current) / 1000)
+          : 0;
+        const totalSttOnTime = Math.round(
+          accumulatedSttTimeRef.current +
+            (sttStartRef.current
+              ? (Date.now() - sttStartRef.current) / 1000
+              : 0),
+        );
+
         const body = JSON.stringify({
           role: interviewRoleRef.current,
           company: "General Interview Session",
-          transcript: historyRef.current.map(t => ({
+          transcript: historyRef.current.map((t) => ({
             sender: t.sender,
             text: t.text,
-            timestamp: t.timestamp
+            timestamp: t.timestamp,
           })),
           sessionId: sessionIdRef.current,
           totalTime,
-          totalSttOnTime
+          totalSttOnTime,
         });
 
         lastSavedHistoryLengthRef.current = historyRef.current.length;
@@ -182,11 +200,11 @@ export default function CopilotPage() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${tokenRef.current}`
+            Authorization: `Bearer ${tokenRef.current}`,
           },
           body,
-          keepalive: true
-        }).catch(err => console.error("Keepalive auto-save failed:", err));
+          keepalive: true,
+        }).catch((err) => console.error("Keepalive auto-save failed:", err));
       }
     };
 
@@ -199,7 +217,7 @@ export default function CopilotPage() {
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
   const [signupName, setSignupName] = useState("");
-  const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin');
+  const [authMode, setAuthMode] = useState<"signin" | "signup">("signin");
   const [loadingLogin, setLoadingLogin] = useState(false);
 
   // Load configuration from cookies
@@ -221,33 +239,33 @@ export default function CopilotPage() {
   useEffect(() => {
     if (token) {
       fetch("/api/auth/me", {
-        headers: { "Authorization": `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       })
-        .then(res => res.json())
-        .then(data => {
+        .then((res) => res.json())
+        .then((data) => {
           if (data.config?.deepgram_api_key) {
             setDeepgramKey(data.config.deepgram_api_key);
-            setDeepgramKeyStatus('verified');
+            setDeepgramKeyStatus("verified");
             setLlmKey("server");
-            setLlmProviderStatus('verified');
+            setLlmProviderStatus("verified");
             setActiveLlmProvider("openai");
           } else {
             setDeepgramKey("");
-            setDeepgramKeyStatus('idle');
+            setDeepgramKeyStatus("idle");
             setLlmKey("");
-            setLlmProviderStatus('idle');
+            setLlmProviderStatus("idle");
           }
           if (data.user) {
             setUser(data.user);
             setCookie("ctl_user", JSON.stringify(data.user));
           }
         })
-        .catch(() => { });
+        .catch(() => {});
     } else {
       setDeepgramKey("");
-      setDeepgramKeyStatus('idle');
+      setDeepgramKeyStatus("idle");
       setLlmKey("");
-      setLlmProviderStatus('idle');
+      setLlmProviderStatus("idle");
     }
   }, [token]);
 
@@ -290,7 +308,9 @@ export default function CopilotPage() {
         for (let i = 1; i <= pdf.numPages; i++) {
           const page = await pdf.getPage(i);
           const textContent = await page.getTextContent();
-          const pageText = textContent.items.map((item: any) => item.str).join(" ");
+          const pageText = textContent.items
+            .map((item: any) => item.str)
+            .join(" ");
           text += pageText + "\n";
         }
         extractedText = text;
@@ -307,7 +327,11 @@ export default function CopilotPage() {
   }
 
   // Linear downsampler to 16kHz
-  function downsample(input: Float32Array, fromSampleRate: number, toSampleRate: number): Float32Array {
+  function downsample(
+    input: Float32Array,
+    fromSampleRate: number,
+    toSampleRate: number,
+  ): Float32Array {
     if (fromSampleRate === toSampleRate) {
       return input;
     }
@@ -327,7 +351,7 @@ export default function CopilotPage() {
     const view = new DataView(buffer);
     for (let i = 0; i < input.length; i++) {
       const s = Math.max(-1, Math.min(1, input[i]));
-      view.setInt16(i * 2, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
+      view.setInt16(i * 2, s < 0 ? s * 0x8000 : s * 0x7fff, true);
     }
     return buffer;
   }
@@ -350,9 +374,11 @@ export default function CopilotPage() {
     }
     sttStartRef.current = Date.now();
 
-    const newSessionId = typeof window !== 'undefined' && window.crypto && window.crypto.randomUUID
-      ? window.crypto.randomUUID()
-      : Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    const newSessionId =
+      typeof window !== "undefined" && window.crypto && window.crypto.randomUUID
+        ? window.crypto.randomUUID()
+        : Math.random().toString(36).substring(2, 15) +
+          Math.random().toString(36).substring(2, 15);
     setSessionId(newSessionId);
 
     setStatus("Initializing audio context...");
@@ -363,7 +389,9 @@ export default function CopilotPage() {
     voiceBufferRef.current = "";
 
     try {
-      const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const audioCtx = new (
+        window.AudioContext || (window as any).webkitAudioContext
+      )();
       audioContextRef.current = audioCtx;
 
       let micStream: MediaStream | null = null;
@@ -380,23 +408,34 @@ export default function CopilotPage() {
         try {
           systemStream = await navigator.mediaDevices.getDisplayMedia({
             video: { width: 1, height: 1 }, // Request minimal video to pass browser constraints
-            audio: true
+            audio: true,
           });
           systemStreamRef.current = systemStream;
         } catch (err) {
-          console.warn("System capture cancelled or blocked. Proceeding with microphone only.", err);
+          console.warn(
+            "System capture cancelled or blocked. Proceeding with microphone only.",
+            err,
+          );
           setCaptureSystem(false);
         }
       }
 
       const micHasAudio = micStream && micStream.getAudioTracks().length > 0;
-      const systemHasAudio = systemStream && systemStream.getAudioTracks().length > 0;
+      const systemHasAudio =
+        systemStream && systemStream.getAudioTracks().length > 0;
 
       if (!micHasAudio && !systemHasAudio) {
-        if (captureSystem && (!systemStream || systemStream.getAudioTracks().length === 0)) {
-          throw new Error("No audio tracks captured. When sharing screen/tab, you MUST check the 'Share audio' box in the browser prompt.");
+        if (
+          captureSystem &&
+          (!systemStream || systemStream.getAudioTracks().length === 0)
+        ) {
+          throw new Error(
+            "No audio tracks captured. When sharing screen/tab, you MUST check the 'Share audio' box in the browser prompt.",
+          );
         }
-        throw new Error("No active audio capture sources found (check microphone permissions).");
+        throw new Error(
+          "No active audio capture sources found (check microphone permissions).",
+        );
       }
 
       // Create Web Audio Node Graph
@@ -440,7 +479,8 @@ export default function CopilotPage() {
       }
 
       // Connect WebSocket to Deepgram with channels=2 and multichannel=true
-      const dgUrl = "wss://api.deepgram.com/v1/listen?model=nova-3&encoding=linear16&sample_rate=16000&channels=2&multichannel=true&interim_results=true&punctuate=true&endpointing=300";
+      const dgUrl =
+        "wss://api.deepgram.com/v1/listen?model=nova-3&encoding=linear16&sample_rate=16000&channels=2&multichannel=true&interim_results=true&punctuate=true&endpointing=300";
       console.log("[STT] Connecting to Deepgram Multichannel WebSocket...");
       const ws = new WebSocket(dgUrl, ["token", deepgramKey.trim()]);
       wsRef.current = ws;
@@ -472,7 +512,9 @@ export default function CopilotPage() {
 
           // channel_index[0]: 0 = candidate (Mic), 1 = interviewer (System loopback)
           const channelIndex = json.channel_index ? json.channel_index[0] : 0;
-          console.log(`[STT EVENT] Ch ${channelIndex}: "${cleanText}" | is_final: ${is_final}`);
+          console.log(
+            `[STT EVENT] Ch ${channelIndex}: "${cleanText}" | is_final: ${is_final}`,
+          );
 
           if (voiceDebounceTimeoutRef.current) {
             clearTimeout(voiceDebounceTimeoutRef.current);
@@ -495,7 +537,7 @@ export default function CopilotPage() {
             // Add turn to conversational history log
             setHistory((prev) => [
               ...prev,
-              { sender: senderName, text: cleanText, timestamp: new Date() }
+              { sender: senderName, text: cleanText, timestamp: new Date() },
             ]);
 
             // ONLY trigger LLM if speaker is the Interviewer (Channel 1)
@@ -505,22 +547,25 @@ export default function CopilotPage() {
               const isLikelyQuestion =
                 fullQuery.endsWith("?") ||
                 wordCount >= 4 ||
-                (fullQuery.length >= 15 && (
-                  fullQuery.toLowerCase().includes("describe") ||
-                  fullQuery.toLowerCase().includes("explain") ||
-                  fullQuery.toLowerCase().includes("tell me") ||
-                  fullQuery.toLowerCase().includes("how") ||
-                  fullQuery.toLowerCase().includes("what") ||
-                  fullQuery.toLowerCase().includes("why")
-                ));
+                (fullQuery.length >= 15 &&
+                  (fullQuery.toLowerCase().includes("describe") ||
+                    fullQuery.toLowerCase().includes("explain") ||
+                    fullQuery.toLowerCase().includes("tell me") ||
+                    fullQuery.toLowerCase().includes("how") ||
+                    fullQuery.toLowerCase().includes("what") ||
+                    fullQuery.toLowerCase().includes("why")));
 
               if (isLikelyQuestion) {
                 triggerLLM(fullQuery);
               } else {
-                console.log(`[STT INTERVIEWER] Ignored non-question turn: "${fullQuery}"`);
+                console.log(
+                  `[STT INTERVIEWER] Ignored non-question turn: "${fullQuery}"`,
+                );
               }
             } else {
-              console.log("[STT CANDIDATE] Candidate voice transcript recorded silently. Skipping LLM call.");
+              console.log(
+                "[STT CANDIDATE] Candidate voice transcript recorded silently. Skipping LLM call.",
+              );
             }
           } else {
             const label = channelIndex === 0 ? "You: " : "Interviewer: ";
@@ -545,8 +590,8 @@ export default function CopilotPage() {
         // Interleave downsampled channels for 2-channel linear16 PCM
         const interleaved = new Float32Array(resampledLeft.length * 2);
         for (let i = 0; i < resampledLeft.length; i++) {
-          interleaved[i * 2] = resampledLeft[i];          // Left channel = Candidate Mic
-          interleaved[i * 2 + 1] = resampledRight[i];      // Right channel = Interviewer Speaker
+          interleaved[i * 2] = resampledLeft[i]; // Left channel = Candidate Mic
+          interleaved[i * 2 + 1] = resampledRight[i]; // Right channel = Interviewer Speaker
         }
 
         const pcmBytes = convertFloat32To16BitPCM(interleaved);
@@ -554,7 +599,6 @@ export default function CopilotPage() {
       };
 
       startWaveformRender(analyser);
-
     } catch (err: any) {
       console.error("[CAPTURE ERROR]", err);
       setStatus(`Capture Error: ${err.message || err}`);
@@ -567,7 +611,8 @@ export default function CopilotPage() {
     console.log("[CAPTURE] Stopping audio engine...");
 
     if (sttStartRef.current) {
-      accumulatedSttTimeRef.current += (Date.now() - sttStartRef.current) / 1000;
+      accumulatedSttTimeRef.current +=
+        (Date.now() - sttStartRef.current) / 1000;
       sttStartRef.current = null;
     }
 
@@ -590,7 +635,10 @@ export default function CopilotPage() {
     }
 
     if (wsRef.current) {
-      if (wsRef.current.readyState === WebSocket.OPEN || wsRef.current.readyState === WebSocket.CONNECTING) {
+      if (
+        wsRef.current.readyState === WebSocket.OPEN ||
+        wsRef.current.readyState === WebSocket.CONNECTING
+      ) {
         wsRef.current.close();
       }
       wsRef.current = null;
@@ -619,19 +667,21 @@ export default function CopilotPage() {
   // Trigger stateless CORS proxy completion stream
   async function triggerLLM(
     promptText: string,
-    requestType: 'normal' | 'screen_capture' | 'regeneration' = 'normal',
-    previousAnswer?: string
+    requestType: "normal" | "screen_capture" | "regeneration" = "normal",
+    previousAnswer?: string,
   ) {
     const authHeaderToken = getCookie("ctl_token");
     if (!authHeaderToken) {
       setStatus("Error: Authentication Required");
-      alert("Please log in to authorize Copilot completions and credit checks.");
+      alert(
+        "Please log in to authorize Copilot completions and credit checks.",
+      );
       return;
     }
 
     if (requestType !== "regeneration") {
       lastPromptRef.current = promptText;
-      lastRequestTypeRef.current = requestType as 'normal' | 'screen_capture';
+      lastRequestTypeRef.current = requestType as "normal" | "screen_capture";
     }
 
     setAnswer("");
@@ -646,7 +696,7 @@ export default function CopilotPage() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${authHeaderToken}`,
+          Authorization: `Bearer ${authHeaderToken}`,
         },
         body: JSON.stringify({
           provider: activeLlmProvider,
@@ -655,7 +705,7 @@ export default function CopilotPage() {
           role: interviewRole,
           jobDescription: jobDescription || null,
           candidateResume: candidateResume || null,
-          history: history.map(h => ({ sender: h.sender, text: h.text })),
+          history: history.map((h) => ({ sender: h.sender, text: h.text })),
           sessionId: sessionId || null,
           requestType: requestType,
           previousAnswer: previousAnswer || null,
@@ -678,7 +728,9 @@ export default function CopilotPage() {
 
       while (true) {
         if (activeRequestIdRef.current !== currentRequestId) {
-          console.log(`[LLM] Aborted older completion stream ${currentRequestId}`);
+          console.log(
+            `[LLM] Aborted older completion stream ${currentRequestId}`,
+          );
           break;
         }
 
@@ -743,16 +795,23 @@ export default function CopilotPage() {
             const nextHistory = [...prev];
             for (let i = nextHistory.length - 1; i >= 0; i--) {
               if (nextHistory[i].sender === "copilot") {
-                nextHistory[i] = { ...nextHistory[i], text: finalAnswer, timestamp: new Date() };
+                nextHistory[i] = {
+                  ...nextHistory[i],
+                  text: finalAnswer,
+                  timestamp: new Date(),
+                };
                 return nextHistory;
               }
             }
-            return [...nextHistory, { sender: "copilot", text: finalAnswer, timestamp: new Date() }];
+            return [
+              ...nextHistory,
+              { sender: "copilot", text: finalAnswer, timestamp: new Date() },
+            ];
           });
         } else {
           setHistory((prev) => [
             ...prev,
-            { sender: "copilot", text: finalAnswer, timestamp: new Date() }
+            { sender: "copilot", text: finalAnswer, timestamp: new Date() },
           ]);
         }
 
@@ -870,14 +929,14 @@ export default function CopilotPage() {
     if (isLocked) return;
     dragStartRef.current = {
       x: e.clientX - hudPosition.x,
-      y: e.clientY - hudPosition.y
+      y: e.clientY - hudPosition.y,
     };
 
     const handleMouseMove = (event: MouseEvent) => {
       if (!dragStartRef.current) return;
       setHudPosition({
         x: event.clientX - dragStartRef.current.x,
-        y: event.clientY - dragStartRef.current.y
+        y: event.clientY - dragStartRef.current.y,
       });
     };
 
@@ -927,7 +986,10 @@ export default function CopilotPage() {
   }
 
   async function saveInterviewSession() {
-    if (historyRef.current.length === 0 || historyRef.current.length === lastSavedHistoryLengthRef.current) {
+    if (
+      historyRef.current.length === 0 ||
+      historyRef.current.length === lastSavedHistoryLengthRef.current
+    ) {
       return;
     }
 
@@ -936,8 +998,13 @@ export default function CopilotPage() {
       return;
     }
 
-    const totalTime = sessionStartRef.current ? Math.round((Date.now() - sessionStartRef.current) / 1000) : 0;
-    const totalSttOnTime = Math.round(accumulatedSttTimeRef.current + (sttStartRef.current ? (Date.now() - sttStartRef.current) / 1000 : 0));
+    const totalTime = sessionStartRef.current
+      ? Math.round((Date.now() - sessionStartRef.current) / 1000)
+      : 0;
+    const totalSttOnTime = Math.round(
+      accumulatedSttTimeRef.current +
+        (sttStartRef.current ? (Date.now() - sttStartRef.current) / 1000 : 0),
+    );
 
     lastSavedHistoryLengthRef.current = historyRef.current.length;
     setStatus("Saving session...");
@@ -946,31 +1013,32 @@ export default function CopilotPage() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${savedToken}`
+          Authorization: `Bearer ${savedToken}`,
         },
         body: JSON.stringify({
           role: interviewRoleRef.current,
           company: "General Interview Session",
-          transcript: historyRef.current.map(t => ({
+          transcript: historyRef.current.map((t) => ({
             sender: t.sender,
             text: t.text,
-            timestamp: t.timestamp
+            timestamp: t.timestamp,
           })),
           sessionId: sessionIdRef.current,
           totalTime,
-          totalSttOnTime
-        })
+          totalSttOnTime,
+        }),
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || data.error || "Failed to save session");
+      if (!res.ok)
+        throw new Error(data.message || data.error || "Failed to save session");
 
       setStatus("Session Saved");
 
       // Fetch fresh profile to get exact remaining credits
       try {
         const profileRes = await fetch("/api/auth/me", {
-          headers: { "Authorization": `Bearer ${savedToken}` }
+          headers: { Authorization: `Bearer ${savedToken}` },
         });
         if (profileRes.ok) {
           const profileData = await profileRes.json();
@@ -985,14 +1053,14 @@ export default function CopilotPage() {
       }
 
       setTimeout(() => {
-        setStatus(prev => prev === "Session Saved" ? "" : prev);
+        setStatus((prev) => (prev === "Session Saved" ? "" : prev));
       }, 3000);
     } catch (err: any) {
       console.error(err);
       lastSavedHistoryLengthRef.current = 0;
       setStatus("Save Error");
       setTimeout(() => {
-        setStatus(prev => prev === "Save Error" ? "" : prev);
+        setStatus((prev) => (prev === "Save Error" ? "" : prev));
       }, 3500);
     }
   }
@@ -1007,17 +1075,22 @@ export default function CopilotPage() {
           email: loginEmail,
           password: loginPassword,
           name: authMode === "signup" ? signupName : undefined,
-        })
+        }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || data.error || "Authentication failed");
+      if (!res.ok)
+        throw new Error(data.message || data.error || "Authentication failed");
 
       setCookie("ctl_token", data.token);
       setCookie("ctl_user", JSON.stringify(data.user));
       setToken(data.token);
       setUser(data.user);
       setShowLoginModal(false);
-      alert(authMode === "signup" ? "Account created and logged in!" : "Signed in successfully!");
+      alert(
+        authMode === "signup"
+          ? "Account created and logged in!"
+          : "Signed in successfully!",
+      );
     } catch (err: any) {
       alert(err.message);
     } finally {
@@ -1039,44 +1112,61 @@ export default function CopilotPage() {
     switch (provider) {
       case "openai":
         return (
-          <svg className={`${size} text-emerald-400`} viewBox="0 0 24 24" fill="currentColor">
+          <svg
+            className={`${size} text-emerald-400`}
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
             <path d="M21.73 10.24c.08-.26.12-.54.12-.82 0-.9-.55-1.72-1.37-2.07-.15-.06-.32-.1-.48-.12.03-.23.04-.47.02-.7-.07-.94-.85-1.7-1.79-1.77-.18-.01-.36.01-.54.04-.15-.43-.45-.8-.85-1.04a2.38 2.38 0 00-2.65.18c-.14.1-.26.22-.36.35-.35-.22-.76-.34-1.18-.34-.97 0-1.83.63-2.12 1.55-.17-.06-.35-.1-.53-.12A2.398 2.398 0 008.2 6.55c-.01.18.01.36.04.53-.43.15-.8.45-1.04.85a2.38 2.38 0 00.18 2.65c.1.14.22.26.35.36-.22.35-.34.76-.34 1.18 0 .97.63 1.83 1.55 2.12-.06.17-.1.35-.12.53a2.398 2.398 0 001.13 2.18c.18.01.36-.01.53-.04.15.43.45.8.85 1.04a2.38 2.38 0 002.65-.18c.14-.1.26-.22.36-.35.35.22.76.34 1.18.34.97 0 1.83-.63 2.12-1.55.17.06.35.1.53.12a2.398 2.398 0 002.18-1.13c.01-.18-.01-.36-.04-.53.43-.15.8-.45 1.04-.85a2.38 2.38 0 00-.18-2.65c-.09-.14-.21-.26-.34-.36.21-.35.33-.76.33-1.18zm-8.83 8.35c-.2-.04-.39-.12-.55-.25l-4.48-2.59c-.43-.25-.6-.79-.35-1.22.15-.26.41-.42.7-.45l3.29-.12.01-.01c.21.05.44.02.63-.09l4.57-2.64c.43-.25.98-.1 1.23.33.17.3.15.68-.06.96L14.7 17.51c-.26.4-.73.61-1.2.53c-.2.03-.4.01-.6-.05zm-3.13-2.18c-.1-.17-.15-.36-.15-.56V10.6c0-.5.33-.94.81-1.07.28-.08.57-.02.8.14l2.84 1.64c.2.11.33.32.33.55v5.27c0 .5-.33.94-.81 1.07-.28.08-.57.02-.8-.14l-2.84-1.64c-.11-.2-.17-.4-.2-.61z" />
           </svg>
         );
       case "anthropic":
         return (
-          <svg className={`${size} text-amber-500`} viewBox="0 0 24 24" fill="currentColor">
+          <svg
+            className={`${size} text-amber-500`}
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
             <path d="M12 2L2 22h4l2.5-5.5h7L18 22h4L12 2zm-2.5 12L12 7.8l2.5 6.2h-5z" />
           </svg>
         );
       case "gemini":
         return (
-          <svg className={`${size} text-blue-500`} viewBox="0 0 24 24" fill="currentColor">
+          <svg
+            className={`${size} text-blue-500`}
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
             <path d="M12 2l2.5 7.5L22 12l-7.5 2.5L12 22l-2.5-7.5L2 12l7.5-2.5L12 2z" />
           </svg>
         );
       case "groq":
         return (
-          <svg className={`${size} text-teal-400`} viewBox="0 0 24 24" fill="currentColor">
+          <svg
+            className={`${size} text-teal-400`}
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 1.93-.72 3.68-1.9 5.03z" />
           </svg>
         );
       case "xai":
         return (
-          <svg className={`${size} text-slate-300`} viewBox="0 0 24 24" fill="currentColor">
+          <svg
+            className={`${size} text-slate-300`}
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
             <path d="M18.9 3h-2.24L12 9.54 7.34 3H5.1L10.9 11.2 5 21h2.24L12 14.46l4.66 6.54h2.24L13.1 12.8 18.9 3z" />
           </svg>
         );
       default:
-        return (
-          <Settings className={`${size} text-slate-400`} />
-        );
+        return <Settings className={`${size} text-slate-400`} />;
     }
   };
 
   return (
     <div className="w-screen h-screen flex flex-col justify-center items-center bg-(--bg-mist) p-2 relative overflow-hidden select-none">
-
       {/* Background Radial Glows */}
       <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] rounded-full bg-(--accent)/3 blur-[120px] pointer-events-none select-none"></div>
       <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-indigo-500/3 blur-[120px] pointer-events-none select-none"></div>
@@ -1088,18 +1178,23 @@ export default function CopilotPage() {
           style={{
             transform: `translate(${hudPosition.x}px, ${hudPosition.y}px)`,
             background: `rgba(255, 255, 255, ${opacity})`,
-            zIndex: 100
+            zIndex: 100,
           }}
-          className={`absolute top-0 left-0 w-[800px] h-[520px] rounded-[24px] p-5 flex flex-col gap-4 animate-fade-in text-slate-800 transition-all duration-300 shadow-2xl backdrop-blur-md ${isLocked
+          className={`absolute top-0 left-0 w-200 h-130 rounded-3xl p-5 flex flex-col gap-4 animate-fade-in text-slate-800 transition-all duration-300 shadow-2xl backdrop-blur-md ${
+            isLocked
               ? "border border-(--border-light) pointer-events-none"
               : `border-2 border-dashed ${
-                  activeLlmProvider === "openai" ? "border-emerald-500/40" :
-                  activeLlmProvider === "anthropic" ? "border-amber-500/40" :
-                  activeLlmProvider === "gemini" ? "border-blue-500/40" :
-                  activeLlmProvider === "groq" ? "border-teal-500/40" :
-                  "border-slate-300"
+                  activeLlmProvider === "openai"
+                    ? "border-emerald-500/40"
+                    : activeLlmProvider === "anthropic"
+                      ? "border-amber-500/40"
+                      : activeLlmProvider === "gemini"
+                        ? "border-blue-500/40"
+                        : activeLlmProvider === "groq"
+                          ? "border-teal-500/40"
+                          : "border-slate-300"
                 } pointer-events-auto`
-            }`}
+          }`}
         >
           {/* HUD Drag Header */}
           <div
@@ -1107,12 +1202,19 @@ export default function CopilotPage() {
             className={`flex justify-between items-center border-b border-slate-100 pb-3 select-none z-30 ${isLocked ? "cursor-default" : "cursor-move"}`}
           >
             <div className="flex items-center gap-2">
-              <span className={`w-2.5 h-2.5 rounded-full ${activeLlmProvider === "openai" ? "bg-emerald-500 shadow-[0_0_10px_rgba(16,163,127,0.3)]" :
-                  activeLlmProvider === "anthropic" ? "bg-amber-500 shadow-[0_0_10px_rgba(217,119,6,0.3)]" :
-                    activeLlmProvider === "gemini" ? "bg-blue-500 shadow-[0_0_10px_rgba(37,99,235,0.3)]" :
-                      activeLlmProvider === "groq" ? "bg-teal-500 shadow-[0_0_10px_rgba(20,184,166,0.3)]" :
-                        "bg-slate-400"
-                }`}></span>
+              <span
+                className={`w-2.5 h-2.5 rounded-full ${
+                  activeLlmProvider === "openai"
+                    ? "bg-emerald-500 shadow-[0_0_10px_rgba(16,163,127,0.3)]"
+                    : activeLlmProvider === "anthropic"
+                      ? "bg-amber-500 shadow-[0_0_10px_rgba(217,119,6,0.3)]"
+                      : activeLlmProvider === "gemini"
+                        ? "bg-blue-500 shadow-[0_0_10px_rgba(37,99,235,0.3)]"
+                        : activeLlmProvider === "groq"
+                          ? "bg-teal-500 shadow-[0_0_10px_rgba(20,184,166,0.3)]"
+                          : "bg-slate-400"
+                }`}
+              ></span>
               <span className="text-[10px] font-black tracking-widest uppercase select-none text-(--accent)">
                 WEB HUD OVERLAY
               </span>
@@ -1120,14 +1222,14 @@ export default function CopilotPage() {
 
             {/* Custom Control Actions */}
             <div className="flex items-center gap-2 pointer-events-auto">
-
               {!isLocked && (
                 <button
                   onClick={handleToggleCapture}
-                  className={`text-[11px] px-2 py-1 rounded-lg font-black transition active:scale-95 cursor-pointer flex items-center gap-1 border ${isCapturing
+                  className={`text-[11px] px-2 py-1 rounded-lg font-black transition active:scale-95 cursor-pointer flex items-center gap-1 border ${
+                    isCapturing
                       ? "bg-rose-50 hover:bg-rose-100 text-rose-600 border-rose-200"
                       : "bg-sky-50 hover:bg-sky-100 text-sky-700 border-sky-200"
-                    }`}
+                  }`}
                 >
                   {isCapturing ? "⏹ Stop" : "▶ Start"}
                 </button>
@@ -1137,15 +1239,21 @@ export default function CopilotPage() {
                 <div className="flex items-center gap-1 bg-slate-50 border border-slate-200 px-1.5 py-0.5 rounded-lg text-[10px]">
                   <button
                     onClick={handleToggleMic}
-                    className={`px-1.5 py-0.5 rounded transition cursor-pointer font-bold ${captureMic ? "bg-sky-50 text-sky-700 border border-sky-200" : "text-slate-400 font-medium"
-                      }`}
+                    className={`px-1.5 py-0.5 rounded transition cursor-pointer font-bold ${
+                      captureMic
+                        ? "bg-sky-50 text-sky-700 border border-sky-200"
+                        : "text-slate-400 font-medium"
+                    }`}
                   >
                     🎤 {captureMic ? "ON" : "OFF"}
                   </button>
                   <button
                     onClick={handleToggleSystem}
-                    className={`px-1.5 py-0.5 rounded transition cursor-pointer font-bold ${captureSystem ? "bg-emerald-50 text-emerald-700 border border-emerald-200" : "text-slate-400 font-medium"
-                      }`}
+                    className={`px-1.5 py-0.5 rounded transition cursor-pointer font-bold ${
+                      captureSystem
+                        ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                        : "text-slate-400 font-medium"
+                    }`}
                   >
                     🔊 {captureSystem ? "ON" : "OFF"}
                   </button>
@@ -1164,7 +1272,9 @@ export default function CopilotPage() {
                     onChange={(e) => setOpacity(parseFloat(e.target.value))}
                     className="w-14 h-1 bg-slate-200 accent-(--accent) rounded-lg cursor-pointer"
                   />
-                  <span className="text-slate-600 font-bold w-5 text-right">{Math.round(opacity * 100)}%</span>
+                  <span className="text-slate-600 font-bold w-5 text-right">
+                    {Math.round(opacity * 100)}%
+                  </span>
                 </div>
               )}
 
@@ -1230,14 +1340,18 @@ export default function CopilotPage() {
               <span className="w-1.5 h-1.5 rounded-full bg-sky-500 animate-pulse"></span>
               Live Audio Transcription Feed
             </span>
-            <div className="text-[14px] text-slate-800 bg-slate-50/80 p-3.5 rounded-2xl border border-slate-200 h-[90px] overflow-y-auto leading-relaxed scrollbar-thin shadow-inner select-text pointer-events-auto">
+            <div className="text-[14px] text-slate-800 bg-slate-50/80 p-3.5 rounded-2xl border border-slate-200 h-22.5 overflow-y-auto leading-relaxed scrollbar-thin shadow-inner select-text pointer-events-auto">
               {transcript || interimTranscript ? (
                 <p className="font-medium select-text">
                   {transcript}
-                  <span className="text-(--accent) font-bold italic">{interimTranscript ? ` ${interimTranscript}...` : ""}</span>
+                  <span className="text-(--accent) font-bold italic">
+                    {interimTranscript ? ` ${interimTranscript}...` : ""}
+                  </span>
                 </p>
               ) : (
-                <span className="text-slate-400 italic text-xs select-none">Waiting for live conversation speech stream...</span>
+                <span className="text-slate-400 italic text-xs select-none">
+                  Waiting for live conversation speech stream...
+                </span>
               )}
             </div>
           </div>
@@ -1246,12 +1360,19 @@ export default function CopilotPage() {
           <div className="flex flex-col gap-1.5 flex-1 min-h-0 z-10">
             <div className="flex justify-between items-center px-1">
               <span className="text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 text-slate-800">
-                <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${activeLlmProvider === "openai" ? "bg-emerald-500" :
-                    activeLlmProvider === "anthropic" ? "bg-amber-500" :
-                      activeLlmProvider === "gemini" ? "bg-blue-500" :
-                        activeLlmProvider === "groq" ? "bg-teal-500" :
-                          "bg-slate-400"
-                  }`}></span>
+                <span
+                  className={`w-1.5 h-1.5 rounded-full animate-pulse ${
+                    activeLlmProvider === "openai"
+                      ? "bg-emerald-500"
+                      : activeLlmProvider === "anthropic"
+                        ? "bg-amber-500"
+                        : activeLlmProvider === "gemini"
+                          ? "bg-blue-500"
+                          : activeLlmProvider === "groq"
+                            ? "bg-teal-500"
+                            : "bg-slate-400"
+                  }`}
+                ></span>
                 AI Copilot Guidance
               </span>
               <div className="flex items-center gap-2 select-none pointer-events-auto">
@@ -1271,28 +1392,44 @@ export default function CopilotPage() {
                 )}
               </div>
             </div>
-            <div className={`flex-1 text-[16px] p-5 rounded-2xl border overflow-y-auto font-semibold leading-relaxed scrollbar-thin select-text pointer-events-auto ${
-              activeLlmProvider === "openai" ? "bg-emerald-50/15 border-emerald-200 text-emerald-950" :
-              activeLlmProvider === "anthropic" ? "bg-amber-50/15 border-amber-200 text-amber-950" :
-              activeLlmProvider === "gemini" ? "bg-blue-50/15 border-blue-200 text-blue-950" :
-              activeLlmProvider === "groq" ? "bg-teal-50/15 border-teal-200 text-teal-950" :
-              "bg-slate-50 border-slate-200 text-slate-800"
-            }`}>
+            <div
+              className={`flex-1 text-[16px] p-5 rounded-2xl border overflow-y-auto font-semibold leading-relaxed scrollbar-thin select-text pointer-events-auto ${
+                activeLlmProvider === "openai"
+                  ? "bg-emerald-50/15 border-emerald-200 text-emerald-950"
+                  : activeLlmProvider === "anthropic"
+                    ? "bg-amber-50/15 border-amber-200 text-amber-950"
+                    : activeLlmProvider === "gemini"
+                      ? "bg-blue-50/15 border-blue-200 text-blue-950"
+                      : activeLlmProvider === "groq"
+                        ? "bg-teal-50/15 border-teal-200 text-teal-950"
+                        : "bg-slate-50 border-slate-200 text-slate-800"
+              }`}
+            >
               {answer ? (
                 <div className="whitespace-pre-wrap leading-relaxed select-text font-bold text-slate-800 animate-fade-in pointer-events-auto">
                   {answer}
                   {status === "Streaming Copilot..." && (
-                    <span className={`inline-block w-2.5 h-4.5 ml-1.5 animate-pulse align-middle ${activeLlmProvider === "openai" ? "bg-emerald-500" :
-                        activeLlmProvider === "anthropic" ? "bg-amber-500" :
-                          activeLlmProvider === "gemini" ? "bg-blue-500" :
-                            activeLlmProvider === "groq" ? "bg-teal-500" :
-                              "bg-slate-400"
-                      }`}></span>
+                    <span
+                      className={`inline-block w-2.5 h-4.5 ml-1.5 animate-pulse align-middle ${
+                        activeLlmProvider === "openai"
+                          ? "bg-emerald-500"
+                          : activeLlmProvider === "anthropic"
+                            ? "bg-amber-500"
+                            : activeLlmProvider === "gemini"
+                              ? "bg-blue-500"
+                              : activeLlmProvider === "groq"
+                                ? "bg-teal-500"
+                                : "bg-slate-400"
+                      }`}
+                    ></span>
                   )}
                 </div>
               ) : (
                 <div className="h-full flex justify-center items-center select-none">
-                  <span className="text-slate-400 italic text-sm">Awaiting interview questions to generate real-time feedback...</span>
+                  <span className="text-slate-400 italic text-sm">
+                    Awaiting interview questions to generate real-time
+                    feedback...
+                  </span>
                 </div>
               )}
             </div>
@@ -1305,7 +1442,9 @@ export default function CopilotPage() {
               Direct Browser Tab Streaming Affinity Protected
             </span>
             {status && (
-              <span className="font-extrabold uppercase tracking-widest text-slate-500 bg-slate-50 border border-slate-200 px-2.5 py-0.5 rounded">{status}</span>
+              <span className="font-extrabold uppercase tracking-widest text-slate-500 bg-slate-50 border border-slate-200 px-2.5 py-0.5 rounded">
+                {status}
+              </span>
             )}
           </div>
         </div>
@@ -1315,26 +1454,44 @@ export default function CopilotPage() {
       {!isOverlayMode && (
         <div
           style={{ background: `rgba(255, 255, 255, ${opacity})` }}
-          className={`glass-light w-[780px] h-[670px] rounded-3xl p-7 flex flex-col justify-between text-slate-800 border-2 relative overflow-hidden shadow-2xl animate-fade-in backdrop-blur-md transition-all duration-300 ${
-            activeLlmProvider === "openai" ? "border-emerald-500/20 shadow-emerald-500/5" :
-            activeLlmProvider === "anthropic" ? "border-amber-500/20 shadow-amber-500/5" :
-            activeLlmProvider === "gemini" ? "border-blue-500/20 shadow-blue-500/5" :
-            "border-teal-500/20 shadow-teal-500/5"
+          className={`glass-light w-195 h-167.5 rounded-3xl p-7 flex flex-col justify-between text-slate-800 border-2 relative overflow-hidden shadow-2xl animate-fade-in backdrop-blur-md transition-all duration-300 ${
+            activeLlmProvider === "openai"
+              ? "border-emerald-500/20 shadow-emerald-500/5"
+              : activeLlmProvider === "anthropic"
+                ? "border-amber-500/20 shadow-amber-500/5"
+                : activeLlmProvider === "gemini"
+                  ? "border-blue-500/20 shadow-blue-500/5"
+                  : "border-teal-500/20 shadow-teal-500/5"
           }`}
         >
           {/* Subtle glowing orbs */}
-          <div className="absolute top-0 right-0 w-[220px] h-[220px] bg-(--accent)/3 rounded-full blur-[90px] pointer-events-none"></div>
-          <div className="absolute bottom-0 left-0 w-[220px] h-[220px] bg-indigo-500/3 rounded-full blur-[90px] pointer-events-none"></div>
+          <div className="absolute top-0 right-0 w-55 h-55 bg-(--accent)/3 rounded-full blur-[90px] pointer-events-none"></div>
+          <div className="absolute bottom-0 left-0 w-55 h-55 bg-indigo-500/3 rounded-full blur-[90px] pointer-events-none"></div>
 
           {/* Header */}
           <div className="flex justify-between items-center relative z-10 select-none">
-            <Link href="/" className="flex items-center gap-3 hover:opacity-95 transition cursor-pointer">
-              <img src="/logo.png" className="h-11 w-auto select-none object-contain" alt="Logo" />
+            <Link
+              href="/"
+              className="flex items-center gap-3 hover:opacity-95 transition cursor-pointer"
+            >
+              <img
+                src="/logo.png"
+                className="h-11 w-auto select-none object-contain"
+                alt="Logo"
+              />
               <div>
                 <h1 className="text-2xl font-black tracking-tight text-slate-800 flex items-center gap-2">
-                  Crack<span className="text-gradient-coral font-black">TheLoop</span> <span className="text-[10px] font-bold bg-(--accent-soft) text-(--accent) border border-(--accent)/15 px-2 py-0.5 rounded-md tracking-widest uppercase">WEB v2.0</span>
+                  Crack
+                  <span className="text-gradient-coral font-black">
+                    TheLoop
+                  </span>{" "}
+                  <span className="text-[10px] font-bold bg-(--accent-soft) text-(--accent) border border-(--accent)/15 px-2 py-0.5 rounded-md tracking-widest uppercase">
+                    WEB v2.0
+                  </span>
                 </h1>
-                <p className="text-xs text-slate-400 mt-0.5 font-semibold">Anti-Share Stealth Browser Audio Copilot</p>
+                <p className="text-xs text-slate-400 mt-0.5 font-semibold">
+                  Anti-Share Stealth Browser Audio Copilot
+                </p>
               </div>
             </Link>
 
@@ -1342,7 +1499,9 @@ export default function CopilotPage() {
             <div className="flex items-center gap-2 relative z-20">
               {user ? (
                 <div className="flex items-center gap-3 bg-slate-50 border border-slate-200 pl-3.5 pr-1.5 py-1 rounded-full text-xs font-bold shadow-xs">
-                  <span className="text-slate-600 font-bold truncate max-w-[120px]">{user.email}</span>
+                  <span className="text-slate-600 font-bold truncate max-w-30">
+                    {user.email}
+                  </span>
                   <span className="bg-sky-50 border border-sky-100 text-sky-700 px-2 py-0.5 rounded-full text-[10px]">
                     {user.credits} credits
                   </span>
@@ -1372,8 +1531,12 @@ export default function CopilotPage() {
 
               {status && (
                 <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 px-4 py-2 rounded-full text-xs font-bold shadow-xs">
-                  <span className={`w-2.5 h-2.5 rounded-full ${isCapturing ? "bg-emerald-500 animate-pulse shadow-[0_0_8px_#10a37f]" : "bg-slate-200"}`}></span>
-                  <span className="text-slate-700 font-bold uppercase tracking-wider">{status}</span>
+                  <span
+                    className={`w-2.5 h-2.5 rounded-full ${isCapturing ? "bg-emerald-500 animate-pulse shadow-[0_0_8px_#10a37f]" : "bg-slate-200"}`}
+                  ></span>
+                  <span className="text-slate-700 font-bold uppercase tracking-wider">
+                    {status}
+                  </span>
                 </div>
               )}
               <Link
@@ -1395,7 +1558,9 @@ export default function CopilotPage() {
           {/* Credits Warning Banner */}
           {user && (user.credits || 0) < 10 && (
             <div className="bg-rose-50 border border-rose-200 px-4 py-3.5 rounded-2xl relative z-10 text-xs text-rose-600 font-bold text-center">
-              ⚠️ Insufficient Fuel: You need at least 10 credits to run the AI Copilot. Your current balance is {user.credits} credits. Please purchase a plan or refill on the account dashboard.
+              ⚠️ Insufficient Fuel: You need at least 10 credits to run the AI
+              Copilot. Your current balance is {user.credits} credits. Please
+              purchase a plan or refill on the account dashboard.
             </div>
           )}
 
@@ -1428,8 +1593,11 @@ export default function CopilotPage() {
                       value={interviewRole}
                       onChange={(e) => setInterviewRole(e.target.value)}
                       placeholder="e.g. Senior Frontend Engineer"
-                      className={`w-full bg-slate-50/60 border ${!interviewRole.trim() ? "border-rose-500/30 shadow-[0_0_8px_rgba(244,63,94,0.05)]" : "border-slate-200"
-                        } px-3.5 py-2 pl-10 rounded-xl text-xs focus:outline-none focus:border-(--accent) focus:bg-white focus:ring-4 focus:ring-(--accent)/5 transition-all duration-300 placeholder-slate-400 text-slate-800 font-semibold`}
+                      className={`w-full bg-slate-50/60 border ${
+                        !interviewRole.trim()
+                          ? "border-rose-500/30 shadow-[0_0_8px_rgba(244,63,94,0.05)]"
+                          : "border-slate-200"
+                      } px-3.5 py-2 pl-10 rounded-xl text-xs focus:outline-none focus:border-(--accent) focus:bg-white focus:ring-4 focus:ring-(--accent)/5 transition-all duration-300 placeholder-slate-400 text-slate-800 font-semibold`}
                     />
                     <Briefcase className="w-4 h-4 text-slate-400 absolute left-3.5 top-2.5" />
                   </div>
@@ -1440,38 +1608,57 @@ export default function CopilotPage() {
                     AI Copilot Model Engine
                   </label>
                   <div className="grid grid-cols-4 gap-1.5">
-                    {(["openai", "anthropic", "gemini", "groq"] as const).map((prov) => {
-                      const isSelected = activeLlmProvider === prov;
-                      const details = {
-                        openai: { label: "GPT-4o", desc: "Balanced", logo: "🟢" },
-                        anthropic: { label: "Claude", desc: "Coding", logo: "🟠" },
-                        gemini: { label: "Gemini", desc: "Context", logo: "🔵" },
-                        groq: { label: "Llama", desc: "Latency", logo: "⚡" },
-                      }[prov];
-                      
-                      return (
-                        <button
-                          key={prov}
-                          type="button"
-                          onClick={() => {
-                            setActiveLlmProvider(prov);
-                            setLlmKey("server");
-                            setLlmProviderStatus("verified");
-                          }}
-                          className={`py-1.5 px-1 rounded-xl border text-center flex flex-col items-center justify-between transition-all duration-300 cursor-pointer ${
-                            isSelected
-                              ? prov === "openai" ? "bg-emerald-50/50 border-emerald-500 shadow-xs scale-102" :
-                                prov === "anthropic" ? "bg-amber-50/50 border-amber-500 shadow-xs scale-102" :
-                                prov === "gemini" ? "bg-blue-50/50 border-blue-500 shadow-xs scale-102" :
-                                "bg-teal-50/50 border-teal-500 shadow-xs scale-102"
-                              : "bg-slate-50/50 border-slate-200/80 hover:bg-slate-50 hover:border-slate-350"
-                          }`}
-                        >
-                          <span className="text-xs">{details.logo}</span>
-                          <span className="text-[9px] font-black text-slate-800 tracking-tight leading-none mt-1">{details.label}</span>
-                        </button>
-                      );
-                    })}
+                    {(["openai", "anthropic", "gemini", "groq"] as const).map(
+                      (prov) => {
+                        const isSelected = activeLlmProvider === prov;
+                        const details = {
+                          openai: {
+                            label: "GPT-4o",
+                            desc: "Balanced",
+                            logo: "🟢",
+                          },
+                          anthropic: {
+                            label: "Claude",
+                            desc: "Coding",
+                            logo: "🟠",
+                          },
+                          gemini: {
+                            label: "Gemini",
+                            desc: "Context",
+                            logo: "🔵",
+                          },
+                          groq: { label: "Llama", desc: "Latency", logo: "⚡" },
+                        }[prov];
+
+                        return (
+                          <button
+                            key={prov}
+                            type="button"
+                            onClick={() => {
+                              setActiveLlmProvider(prov);
+                              setLlmKey("server");
+                              setLlmProviderStatus("verified");
+                            }}
+                            className={`py-1.5 px-1 rounded-xl border text-center flex flex-col items-center justify-between transition-all duration-300 cursor-pointer ${
+                              isSelected
+                                ? prov === "openai"
+                                  ? "bg-emerald-50/50 border-emerald-500 shadow-xs scale-102"
+                                  : prov === "anthropic"
+                                    ? "bg-amber-50/50 border-amber-500 shadow-xs scale-102"
+                                    : prov === "gemini"
+                                      ? "bg-blue-50/50 border-blue-500 shadow-xs scale-102"
+                                      : "bg-teal-50/50 border-teal-500 shadow-xs scale-102"
+                                : "bg-slate-50/50 border-slate-200/80 hover:bg-slate-50 hover:border-slate-350"
+                            }`}
+                          >
+                            <span className="text-xs">{details.logo}</span>
+                            <span className="text-[9px] font-black text-slate-800 tracking-tight leading-none mt-1">
+                              {details.label}
+                            </span>
+                          </button>
+                        );
+                      },
+                    )}
                   </div>
                 </div>
               </div>
@@ -1487,7 +1674,7 @@ export default function CopilotPage() {
                     value={jobDescription}
                     onChange={(e) => setJobDescription(e.target.value)}
                     placeholder="Paste target job details, requirements, or tech stack..."
-                    className="w-full bg-slate-50/60 border border-slate-200 rounded-xl p-3.5 pl-10 text-xs placeholder-slate-400 scrollbar-thin h-[55px] min-h-[55px] max-h-[55px] focus:outline-none focus:border-(--accent) focus:bg-white focus:ring-4 focus:ring-(--accent)/5 transition-all duration-300 text-slate-800 font-semibold"
+                    className="w-full bg-slate-50/60 border border-slate-200 rounded-xl p-3.5 pl-10 text-xs placeholder-slate-400 scrollbar-thin h-13.75 min-h-13.75 max-h-13.75 focus:outline-none focus:border-(--accent) focus:bg-white focus:ring-4 focus:ring-(--accent)/5 transition-all duration-300 text-slate-800 font-semibold"
                   />
                   <FileText className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
                 </div>
@@ -1499,10 +1686,12 @@ export default function CopilotPage() {
                   Resume File (Optional)
                 </label>
                 {!resumeFileName ? (
-                  <label className="flex flex-col items-center justify-center border border-dashed border-slate-200 hover:border-(--accent) hover:bg-(--accent-soft)/10 bg-slate-50/60 rounded-xl p-2 cursor-pointer select-none transition-all duration-300 group h-[52px] shadow-xs">
+                  <label className="flex flex-col items-center justify-center border border-dashed border-slate-200 hover:border-(--accent) hover:bg-(--accent-soft)/10 bg-slate-50/60 rounded-xl p-2 cursor-pointer select-none transition-all duration-300 group h-13 shadow-xs">
                     <div className="flex items-center gap-2">
                       <UploadCloud className="w-4.5 h-4.5 text-slate-400 group-hover:text-(--accent) transition duration-300" />
-                      <span className="text-[9px] text-slate-500 font-black uppercase tracking-wider group-hover:text-slate-700 transition">Upload Resume PDF or DOCX</span>
+                      <span className="text-[9px] text-slate-500 font-black uppercase tracking-wider group-hover:text-slate-700 transition">
+                        Upload Resume PDF or DOCX
+                      </span>
                     </div>
                     <input
                       type="file"
@@ -1512,12 +1701,16 @@ export default function CopilotPage() {
                     />
                   </label>
                 ) : (
-                  <div className="flex justify-between items-center bg-emerald-50/50 border border-emerald-200 px-4 py-1.5 rounded-xl text-xs text-emerald-800 font-bold shadow-xs animate-fade-in relative overflow-hidden group h-[52px]">
+                  <div className="flex justify-between items-center bg-emerald-50/50 border border-emerald-200 px-4 py-1.5 rounded-xl text-xs text-emerald-800 font-bold shadow-xs animate-fade-in relative overflow-hidden group h-13">
                     <div className="flex items-center gap-2.5 relative z-10">
                       <FileText className="w-5 h-5 text-emerald-600" />
                       <div className="flex flex-col">
-                        <span className="text-[10px] text-slate-700 font-extrabold truncate w-[260px]">{resumeFileName}</span>
-                        <span className="text-[8px] text-emerald-700 font-bold uppercase tracking-widest mt-0.5">Extraction Active</span>
+                        <span className="text-[10px] text-slate-700 font-extrabold truncate w-65">
+                          {resumeFileName}
+                        </span>
+                        <span className="text-[8px] text-emerald-700 font-bold uppercase tracking-widest mt-0.5">
+                          Extraction Active
+                        </span>
                       </div>
                     </div>
                     <button
@@ -1544,7 +1737,12 @@ export default function CopilotPage() {
 
             {/* Visual Waveform Canvas */}
             <div className="flex-1 h-9 bg-slate-950/90 rounded-xl overflow-hidden border border-slate-900 shadow-inner shrink min-w-0">
-              <canvas ref={canvasRef} width="320" height="36" className="w-full h-full opacity-85" />
+              <canvas
+                ref={canvasRef}
+                width="320"
+                height="36"
+                className="w-full h-full opacity-85"
+              />
             </div>
 
             <div className="flex items-center gap-2 shrink-0">
@@ -1552,10 +1750,11 @@ export default function CopilotPage() {
               <button
                 type="button"
                 onClick={handleToggleMic}
-                className={`flex items-center gap-1.5 px-3 py-2 rounded-xl font-bold text-[10px] uppercase tracking-wider transition border cursor-pointer ${captureMic
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-xl font-bold text-[10px] uppercase tracking-wider transition border cursor-pointer ${
+                  captureMic
                     ? "bg-sky-50 text-sky-700 border-sky-200 hover:bg-sky-100/80 shadow-xs"
                     : "bg-slate-50 text-slate-400 border-slate-200 hover:bg-slate-100"
-                  }`}
+                }`}
               >
                 <Mic className="w-3.5 h-3.5" />
                 {captureMic ? "Mic ON" : "Mic Muted"}
@@ -1565,10 +1764,11 @@ export default function CopilotPage() {
               <button
                 type="button"
                 onClick={handleToggleSystem}
-                className={`flex items-center gap-1.5 px-3 py-2 rounded-xl font-bold text-[10px] uppercase tracking-wider transition border cursor-pointer ${captureSystem
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-xl font-bold text-[10px] uppercase tracking-wider transition border cursor-pointer ${
+                  captureSystem
                     ? "bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100/80 shadow-xs"
                     : "bg-slate-50 text-slate-400 border-slate-200 hover:bg-slate-100"
-                  }`}
+                }`}
                 title="Captures shared Chrome/Edge tab audio"
               >
                 <Volume2 className="w-3.5 h-3.5" />
@@ -1581,17 +1781,28 @@ export default function CopilotPage() {
           <div className="flex gap-4 relative z-10">
             <button
               onClick={handleToggleOverlay}
-              disabled={!interviewRole.trim() || !deepgramKey.trim() || !llmKey.trim() || !token}
-              className={`w-full py-3.5 bg-gradient-to-r ${
-                activeLlmProvider === "openai" ? "from-emerald-600 to-teal-650 shadow-emerald-600/10" :
-                activeLlmProvider === "anthropic" ? "from-amber-600 to-orange-650 shadow-orange-600/10" :
-                activeLlmProvider === "gemini" ? "from-blue-600 to-indigo-650 shadow-indigo-600/10" :
-                activeLlmProvider === "groq" ? "from-teal-600 to-cyan-650 shadow-teal-600/10" :
-                "from-slate-600 to-slate-700"
+              disabled={
+                !interviewRole.trim() ||
+                !deepgramKey.trim() ||
+                !llmKey.trim() ||
+                !token
+              }
+              className={`w-full py-3.5 bg-linear-to-r ${
+                activeLlmProvider === "openai"
+                  ? "from-emerald-600 to-teal-650 shadow-emerald-600/10"
+                  : activeLlmProvider === "anthropic"
+                    ? "from-amber-600 to-orange-650 shadow-orange-600/10"
+                    : activeLlmProvider === "gemini"
+                      ? "from-blue-600 to-indigo-650 shadow-indigo-600/10"
+                      : activeLlmProvider === "groq"
+                        ? "from-teal-600 to-cyan-650 shadow-teal-600/10"
+                        : "from-slate-600 to-slate-700"
               } hover:brightness-110 text-white rounded-xl font-black text-xs transition active:scale-98 flex justify-center items-center gap-2 cursor-pointer shadow-lg tracking-widest uppercase disabled:opacity-50 disabled:cursor-not-allowed`}
             >
               <Maximize2 className="w-4 h-4" />
-              {!token ? "Sign In Required to Launch Overlay" : "Launch Web Stealth Overlay"}
+              {!token
+                ? "Sign In Required to Launch Overlay"
+                : "Launch Web Stealth Overlay"}
             </button>
           </div>
 
@@ -1601,14 +1812,16 @@ export default function CopilotPage() {
               <Shield className="w-4 h-4 text-emerald-600" />
               Web Audio Sandbox: EXCLUSIVE
             </span>
-            <span className="font-bold tracking-wider text-slate-500">SECURE CLIENT SESSIONS</span>
+            <span className="font-bold tracking-wider text-slate-500">
+              SECURE CLIENT SESSIONS
+            </span>
           </div>
         </div>
       )}
 
       {/* History Slide Drawer Panel */}
       {showHistoryDrawer && (
-        <div className="fixed top-0 right-0 w-[350px] h-full bg-white/98 border-l border-slate-200 shadow-2xl z-[150] p-5 flex flex-col gap-4 animate-slide-in text-slate-800 backdrop-blur-md">
+        <div className="fixed top-0 right-0 w-87.5 h-full bg-white/98 border-l border-slate-200 shadow-2xl z-150 p-5 flex flex-col gap-4 animate-slide-in text-slate-800 backdrop-blur-md">
           <div className="flex justify-between items-center border-b border-slate-100 pb-3">
             <h3 className="font-black flex items-center gap-2 text-xs text-(--accent) uppercase tracking-widest">
               <History className="w-4 h-4" />
@@ -1623,21 +1836,34 @@ export default function CopilotPage() {
           </div>
           <div className="flex-1 overflow-y-auto flex flex-col gap-3.5 pr-1 scrollbar-thin">
             {history.length === 0 ? (
-              <p className="text-slate-400 italic text-xs text-center mt-10">No conversation history yet.</p>
+              <p className="text-slate-400 italic text-xs text-center mt-10">
+                No conversation history yet.
+              </p>
             ) : (
               history.map((turn, index) => (
                 <div key={index} className="flex flex-col gap-1">
                   <div className="flex justify-between items-center">
-                    <span className={`text-[9px] font-black uppercase tracking-wider ${turn.sender === "interviewer" ? "text-sky-600" :
-                        turn.sender === "candidate" ? "text-purple-600" :
-                          "text-emerald-600"
-                      }`}>
-                      {turn.sender === "interviewer" ? "🗣️ Interviewer" :
-                        turn.sender === "candidate" ? "🎙️ You" :
-                          "🤖 Copilot"}
+                    <span
+                      className={`text-[9px] font-black uppercase tracking-wider ${
+                        turn.sender === "interviewer"
+                          ? "text-sky-600"
+                          : turn.sender === "candidate"
+                            ? "text-purple-600"
+                            : "text-emerald-600"
+                      }`}
+                    >
+                      {turn.sender === "interviewer"
+                        ? "🗣️ Interviewer"
+                        : turn.sender === "candidate"
+                          ? "🎙️ You"
+                          : "🤖 Copilot"}
                     </span>
                     <span className="text-[8px] text-slate-500 font-semibold">
-                      {new Date(turn.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                      {new Date(turn.timestamp).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        second: "2-digit",
+                      })}
                     </span>
                   </div>
                   <p className="text-xs text-slate-700 bg-slate-50 px-3 py-2 rounded-xl border border-slate-200/50 leading-relaxed font-medium select-text">
@@ -1648,9 +1874,10 @@ export default function CopilotPage() {
             )}
           </div>
         </div>
-      )}      {showLoginModal && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md flex justify-center items-center z-[200] p-6 animate-fade-in">
-          <div className="w-[380px] glass-card-light p-8 flex flex-col gap-6 shadow-2xl relative text-slate-850">
+      )}
+      {showLoginModal && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md flex justify-center items-center z-200 p-6 animate-fade-in">
+          <div className="w-95 glass-card-light p-8 flex flex-col gap-6 shadow-2xl relative text-slate-850">
             <button
               onClick={() => setShowLoginModal(false)}
               className="text-slate-400 hover:text-slate-800 transition cursor-pointer font-bold absolute top-4 right-4"
@@ -1670,16 +1897,22 @@ export default function CopilotPage() {
                 <button
                   type="button"
                   onClick={() => setAuthMode("signin")}
-                  className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all duration-300 cursor-pointer ${authMode === "signin" ? "bg-white border border-slate-250 text-slate-800 shadow-xs" : "text-slate-500 hover:text-slate-800"
-                    }`}
+                  className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all duration-300 cursor-pointer ${
+                    authMode === "signin"
+                      ? "bg-white border border-slate-250 text-slate-800 shadow-xs"
+                      : "text-slate-500 hover:text-slate-800"
+                  }`}
                 >
                   Sign In
                 </button>
                 <button
                   type="button"
                   onClick={() => setAuthMode("signup")}
-                  className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all duration-300 cursor-pointer ${authMode === "signup" ? "bg-white border border-slate-250 text-slate-800 shadow-xs" : "text-slate-500 hover:text-slate-800"
-                    }`}
+                  className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all duration-300 cursor-pointer ${
+                    authMode === "signup"
+                      ? "bg-white border border-slate-250 text-slate-800 shadow-xs"
+                      : "text-slate-500 hover:text-slate-800"
+                  }`}
                 >
                   Sign Up
                 </button>
@@ -1689,7 +1922,9 @@ export default function CopilotPage() {
             <div className="flex flex-col gap-4">
               {authMode === "signup" && (
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[10px] text-slate-400 font-black uppercase tracking-widest pl-1">Full Name</label>
+                  <label className="text-[10px] text-slate-400 font-black uppercase tracking-widest pl-1">
+                    Full Name
+                  </label>
                   <div className="relative">
                     <input
                       type="text"
@@ -1703,7 +1938,9 @@ export default function CopilotPage() {
                 </div>
               )}
               <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] text-slate-400 font-black uppercase tracking-widest pl-1">Email Address</label>
+                <label className="text-[10px] text-slate-400 font-black uppercase tracking-widest pl-1">
+                  Email Address
+                </label>
                 <div className="relative">
                   <input
                     type="email"
@@ -1716,7 +1953,9 @@ export default function CopilotPage() {
                 </div>
               </div>
               <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] text-slate-400 font-black uppercase tracking-widest pl-1">Password</label>
+                <label className="text-[10px] text-slate-400 font-black uppercase tracking-widest pl-1">
+                  Password
+                </label>
                 <div className="relative">
                   <input
                     type="password"
@@ -1730,10 +1969,21 @@ export default function CopilotPage() {
               </div>
               <button
                 onClick={handlePasswordAuth}
-                disabled={loadingLogin || !loginEmail.includes("@") || loginPassword.length < 6 || (authMode === "signup" && !signupName.trim())}
-                className="btn-primary-glow w-full !py-3.5 justify-center !rounded-xl font-bold text-xs text-white uppercase tracking-widest cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1.5"
+                disabled={
+                  loadingLogin ||
+                  !loginEmail.includes("@") ||
+                  loginPassword.length < 6 ||
+                  (authMode === "signup" && !signupName.trim())
+                }
+                className="btn-primary-glow w-full py-3.5! rounded-xl! font-bold text-xs text-white uppercase tracking-widest cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1.5"
               >
-                {loadingLogin ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : authMode === "signup" ? "Register & Enter" : "Access Copilot"}
+                {loadingLogin ? (
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                ) : authMode === "signup" ? (
+                  "Register & Enter"
+                ) : (
+                  "Access Copilot"
+                )}
               </button>
             </div>
           </div>

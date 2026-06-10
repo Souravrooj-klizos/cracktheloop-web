@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   Shield,
   Sparkles,
@@ -16,7 +16,6 @@ import {
   BrainCircuit,
   EyeOff,
   Wifi,
-  ArrowRight,
   Check,
   Mic,
   Activity,
@@ -160,7 +159,12 @@ function PipelineDiagram() {
     }, 800);
   }
 
-  useEffect(() => () => { if (intervalRef.current) clearInterval(intervalRef.current); }, []);
+  useEffect(
+    () => () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    },
+    [],
+  );
 
   const node = activeNode !== null ? PIPELINE_NODES[activeNode] : null;
 
@@ -174,7 +178,10 @@ function PipelineDiagram() {
           const isPast = activeNode !== null && i < activeNode;
 
           return (
-            <div key={n.id} className="flex flex-col md:flex-row items-center gap-0 flex-1 w-full md:w-auto">
+            <div
+              key={n.id}
+              className="flex flex-col md:flex-row items-center gap-0 flex-1 w-full md:w-auto"
+            >
               {/* Node Button */}
               <button
                 onClick={() => setActiveNode(activeNode === i ? null : i)}
@@ -182,15 +189,21 @@ function PipelineDiagram() {
                 style={{ minWidth: 90 }}
               >
                 <div
-                  className="w-[72px] h-[72px] rounded-xl flex items-center justify-center relative transition-all duration-300 bg-white border border-(--border-light) shadow-xs group-hover:scale-105 group-hover:shadow-md group-hover:border-slate-350"
+                  className="w-18 h-18 rounded-xl flex items-center justify-center relative transition-all duration-300 bg-white border border-(--border-light) shadow-xs group-hover:scale-105 group-hover:shadow-md group-hover:border-slate-350"
                   style={{
                     background: isActive
                       ? `radial-gradient(circle at 50% 50%, ${n.glow}, transparent 70%)`
                       : isPast
                         ? `${n.color}12`
                         : "#ffffff",
-                    borderColor: isActive ? n.color : isPast ? n.color + "70" : "var(--border-light)",
-                    boxShadow: isActive ? `0 0 20px 2px ${n.glow}, 0 4px 12px rgba(15,23,42,0.03)` : undefined,
+                    borderColor: isActive
+                      ? n.color
+                      : isPast
+                        ? n.color + "70"
+                        : "var(--border-light)",
+                    boxShadow: isActive
+                      ? `0 0 20px 2px ${n.glow}, 0 4px 12px rgba(15,23,42,0.03)`
+                      : undefined,
                     transform: isActive ? "scale(1.06)" : undefined,
                   }}
                 >
@@ -216,11 +229,21 @@ function PipelineDiagram() {
                 <div className="flex flex-col items-center gap-0.5 select-none">
                   <span
                     className="text-[10px] font-bold text-center leading-tight transition-colors duration-300 group-hover:text-slate-900"
-                    style={{ color: isActive ? n.color : isPast ? n.color + "d5" : "#475569", maxWidth: 82 }}
+                    style={{
+                      color: isActive
+                        ? n.color
+                        : isPast
+                          ? n.color + "d5"
+                          : "#475569",
+                      maxWidth: 82,
+                    }}
                   >
                     {n.label}
                   </span>
-                  <span className="text-[8.5px] text-slate-400 font-medium text-center leading-tight" style={{ maxWidth: 82 }}>
+                  <span
+                    className="text-[8.5px] text-slate-400 font-medium text-center leading-tight"
+                    style={{ maxWidth: 82 }}
+                  >
                     {n.sublabel}
                   </span>
                 </div>
@@ -233,7 +256,7 @@ function PipelineDiagram() {
                     className="h-px flex-1 transition-all duration-500 relative overflow-hidden bg-slate-200"
                     style={{
                       background:
-                        (activeNode !== null && i < activeNode)
+                        activeNode !== null && i < activeNode
                           ? `linear-gradient(90deg, ${PIPELINE_NODES[i].color}80, ${PIPELINE_NODES[i + 1].color}80)`
                           : "#e2e8f0",
                     }}
@@ -241,14 +264,25 @@ function PipelineDiagram() {
                     {activeNode === i && (
                       <span
                         className="absolute top-0 left-0 h-px w-8 animate-[slide_0.6s_linear_infinite]"
-                        style={{ background: `linear-gradient(90deg, transparent, ${n.color}, transparent)` }}
+                        style={{
+                          background: `linear-gradient(90deg, transparent, ${n.color}, transparent)`,
+                        }}
                       />
                     )}
                   </div>
-                  <svg width="8" height="8" viewBox="0 0 8 8" className="shrink-0 ml-0.5">
+                  <svg
+                    width="8"
+                    height="8"
+                    viewBox="0 0 8 8"
+                    className="shrink-0 ml-0.5"
+                  >
                     <path
                       d="M0 4 L8 4 M5 1 L8 4 L5 7"
-                      stroke={activeNode !== null && i < activeNode ? PIPELINE_NODES[i + 1].color + "90" : "#cbd5e1"}
+                      stroke={
+                        activeNode !== null && i < activeNode
+                          ? PIPELINE_NODES[i + 1].color + "90"
+                          : "#cbd5e1"
+                      }
                       strokeWidth="1.5"
                       fill="none"
                       strokeLinecap="round"
@@ -264,7 +298,7 @@ function PipelineDiagram() {
 
       {/* Detail Panel */}
       <div
-        className="rounded-xl border p-5 min-h-[88px] transition-all duration-500 flex items-start gap-4 shadow-xs"
+        className="rounded-xl border p-5 min-h-22 transition-all duration-500 flex items-start gap-4 shadow-xs"
         style={{
           borderColor: node ? node.color + "40" : "rgba(15,23,42,0.08)",
           background: node
@@ -280,17 +314,29 @@ function PipelineDiagram() {
               className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0 bg-white shadow-2xs border border-slate-200/50"
               style={{ border: `1px solid ${node.color}25` }}
             >
-              <node.icon className="w-5 h-5 animate-pulse" style={{ color: node.color }} />
+              <node.icon
+                className="w-5 h-5 animate-pulse"
+                style={{ color: node.color }}
+              />
             </div>
             <div>
-              <p className="text-sm font-bold text-slate-800 mb-0.5">{node.label}</p>
-              <p className="text-slate-500 text-xs leading-relaxed font-medium">{node.detail}</p>
+              <p className="text-sm font-bold text-slate-800 mb-0.5">
+                {node.label}
+              </p>
+              <p className="text-slate-500 text-xs leading-relaxed font-medium">
+                {node.detail}
+              </p>
             </div>
           </>
         ) : (
           <div className="flex items-center gap-2">
-            <span className="w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center text-[10px] text-slate-400 font-bold shrink-0">i</span>
-            <p className="text-slate-400 text-xs italic">Click any pipeline node to inspect its role, or press &ldquo;Run Pipeline Animation&rdquo; to watch the flow.</p>
+            <span className="w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center text-[10px] text-slate-400 font-bold shrink-0">
+              i
+            </span>
+            <p className="text-slate-400 text-xs italic">
+              Click any pipeline node to inspect its role, or press &ldquo;Run
+              Pipeline Animation&rdquo; to watch the flow.
+            </p>
           </div>
         )}
       </div>
@@ -301,16 +347,22 @@ function PipelineDiagram() {
           onClick={startAnimation}
           disabled={running}
           id="run-pipeline-btn"
-          className={`flex items-center gap-2 px-8 py-3.5 rounded-full font-bold text-sm transition-all duration-300 active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer ${running
+          className={`flex items-center gap-2 px-8 py-3.5 rounded-full font-bold text-sm transition-all duration-300 active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer ${
+            running
               ? "bg-slate-500 text-white cursor-not-allowed"
               : "btn-primary-glow text-white"
-            }`}
+          }`}
           style={running ? { background: "#64748b" } : undefined}
         >
           {running ? (
-            <><RefreshCw className="w-4 h-4 animate-spin" /> Streaming pipeline...</>
+            <>
+              <RefreshCw className="w-4 h-4 animate-spin" /> Streaming
+              pipeline...
+            </>
           ) : (
-            <><Zap className="w-4 h-4" /> Run Pipeline Animation</>
+            <>
+              <Zap className="w-4 h-4" /> Run Pipeline Animation
+            </>
           )}
         </button>
       </div>
@@ -335,14 +387,14 @@ function LatencyBar() {
     <div className="flex flex-col gap-3">
       <div className="flex h-5 rounded-lg overflow-hidden w-full border border-slate-200 relative shadow-2xs">
         {/* Gloss overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-transparent to-black/5 pointer-events-none" />
+        <div className="absolute inset-0 bg-linear-to-b from-white/20 via-transparent to-black/5 pointer-events-none" />
         {LATENCY_SEGMENTS.map((seg, i) => (
           <div
             key={i}
             className="h-full flex items-center justify-center text-[8px] font-bold text-white transition-all"
             style={{
               width: `${(seg.ms / TOTAL_MS) * 100}%`,
-              background: `linear-gradient(180deg, ${seg.color}dd, ${seg.color})`
+              background: `linear-gradient(180deg, ${seg.color}dd, ${seg.color})`,
             }}
             title={`${seg.label}: ${seg.ms}ms`}
           />
@@ -351,14 +403,21 @@ function LatencyBar() {
       <div className="flex flex-wrap gap-x-5 gap-y-1.5 select-none">
         {LATENCY_SEGMENTS.map((seg, i) => (
           <div key={i} className="flex items-center gap-1.5 text-[10px]">
-            <span className="w-2.5 h-2.5 rounded-xs shrink-0" style={{ background: seg.color }} />
+            <span
+              className="w-2.5 h-2.5 rounded-xs shrink-0"
+              style={{ background: seg.color }}
+            />
             <span className="text-slate-500 font-semibold">{seg.label}</span>
-            <span className="font-bold" style={{ color: seg.color }}>{seg.ms}ms</span>
+            <span className="font-bold" style={{ color: seg.color }}>
+              {seg.ms}ms
+            </span>
           </div>
         ))}
         <div className="flex items-center gap-1.5 text-[10px] sm:ml-auto">
           <span className="text-slate-400 font-bold">Total:</span>
-          <span className="font-black text-slate-800 text-xs">{TOTAL_MS}ms</span>
+          <span className="font-black text-slate-800 text-xs">
+            {TOTAL_MS}ms
+          </span>
           <span className="text-emerald-600 font-bold ml-1 flex items-center gap-1">
             <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
             ✓ sub-second response
@@ -391,18 +450,24 @@ const sampleAnswers: Record<string, string> = {
    PAGE COMPONENT
    ───────────────────────────────────────────── */
 export default function DemoPage() {
-  const [simState, setSimState] = useState<"idle" | "listening" | "answering" | "done">("idle");
+  const [simState, setSimState] = useState<
+    "idle" | "listening" | "answering" | "done"
+  >("idle");
   const [simQuestion, setSimQuestion] = useState("");
   const [simAnswer, setSimAnswer] = useState("");
   const [simLogs, setSimLogs] = useState<string[]>([]);
   const logsRef = useRef<HTMLDivElement>(null);
 
   function addLog(message: string) {
-    setSimLogs((prev) => [...prev, `[${new Date().toLocaleTimeString()}] ${message}`]);
+    setSimLogs((prev) => [
+      ...prev,
+      `[${new Date().toLocaleTimeString()}] ${message}`,
+    ]);
   }
 
   useEffect(() => {
-    if (logsRef.current) logsRef.current.scrollTop = logsRef.current.scrollHeight;
+    if (logsRef.current)
+      logsRef.current.scrollTop = logsRef.current.scrollHeight;
   }, [simLogs]);
 
   function startSimulation(question: string) {
@@ -438,7 +503,12 @@ export default function DemoPage() {
         } else {
           setSimAnswer(fullAnswer.substring(0, currentLength));
           if (currentLength % 24 === 0) {
-            addLog("SSE token chunk: " + JSON.stringify(fullAnswer.substring(currentLength - 24, currentLength)));
+            addLog(
+              "SSE token chunk: " +
+                JSON.stringify(
+                  fullAnswer.substring(currentLength - 24, currentLength),
+                ),
+            );
           }
         }
       }, 50);
@@ -447,25 +517,27 @@ export default function DemoPage() {
 
   return (
     <div className="hero-gradient-mesh relative min-h-screen flex flex-col pt-28 pb-8 overflow-hidden text-(--text-primary)">
-
       {/* Subtle grid pattern overlay */}
       <div
         className="absolute inset-0 opacity-[0.03] pointer-events-none"
         style={{
           backgroundImage: `linear-gradient(rgba(15,23,42,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(15,23,42,0.4) 1px, transparent 1px)`,
-          backgroundSize: '60px 60px',
+          backgroundSize: "60px 60px",
         }}
       />
 
       {/* Floating Orbs with parallax */}
       <Parallax speed={0.2} className="absolute -top-20 -right-40">
-        <div className="orb orb-peach w-[600px] h-[600px] animate-float-orb opacity-40 pointer-events-none" />
+        <div className="orb orb-peach w-150 h-150 animate-float-orb opacity-40 pointer-events-none" />
       </Parallax>
       <Parallax speed={0.4} className="absolute top-1/3 -left-40">
-        <div className="orb orb-slate w-[400px] h-[400px] animate-float-orb-slow opacity-40 pointer-events-none" />
+        <div className="orb orb-slate w-100 h-100 animate-float-orb-slow opacity-40 pointer-events-none" />
       </Parallax>
       <Parallax speed={0.15} className="absolute -bottom-20 right-1/4">
-        <div className="orb orb-frost w-[350px] h-[350px] animate-float-orb opacity-40 pointer-events-none" style={{ animationDelay: "5s" }} />
+        <div
+          className="orb orb-frost w-87.5 h-87.5 animate-float-orb opacity-40 pointer-events-none"
+          style={{ animationDelay: "5s" }}
+        />
       </Parallax>
 
       {/* Global Navigation Header */}
@@ -483,11 +555,18 @@ export default function DemoPage() {
             <Sparkles className="w-3.5 h-3.5 animate-pulse" />
             Interactive Live Pipeline Demo
           </div>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight text-slate-900" id="demo-main-heading" style={{ fontFamily: "var(--font-display)" }}>
-            Watch the <span className="text-gradient-coral">Real-Time Overlay</span> Pipeline
+          <h1
+            className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight text-slate-900"
+            id="demo-main-heading"
+            style={{ fontFamily: "var(--font-display)" }}
+          >
+            Watch the{" "}
+            <span className="text-gradient-coral">Real-Time Overlay</span>{" "}
+            Pipeline
           </h1>
           <p className="text-(--text-muted) text-base md:text-lg max-w-2xl leading-relaxed font-medium">
-            Explore the full WASAPI → Deepgram → LLM → HUD pipeline architecture, then run an interactive simulation below.
+            Explore the full WASAPI → Deepgram → LLM → HUD pipeline
+            architecture, then run an interactive simulation below.
           </p>
         </motion.div>
       </section>
@@ -495,15 +574,26 @@ export default function DemoPage() {
       {/* ── Pipeline Diagram Card ── */}
       <section className="w-full max-w-5xl mx-auto px-6 pt-12 relative z-20">
         <ScrollReveal>
-          <div className="bg-white/80 border border-(--border-light) backdrop-blur-md rounded-xl p-5 md:p-7 flex flex-col gap-6 shadow-md" id="pipeline-diagram-card">
-
+          <div
+            className="bg-white/80 border border-(--border-light) backdrop-blur-md rounded-xl p-5 md:p-7 flex flex-col gap-6 shadow-md"
+            id="pipeline-diagram-card"
+          >
             <div className="flex justify-between items-center border-b border-slate-100 pb-3 select-none">
               <div>
-                <h2 className="text-base md:text-lg font-bold text-slate-900" style={{ fontFamily: "var(--font-display)" }}>Desktop Client Architecture</h2>
-                <p className="text-xs text-slate-500 mt-0.5">Click a node to inspect • Press &ldquo;Run Pipeline Animation&rdquo; to watch the data flow</p>
+                <h2
+                  className="text-base md:text-lg font-bold text-slate-900"
+                  style={{ fontFamily: "var(--font-display)" }}
+                >
+                  Desktop Client Architecture
+                </h2>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Click a node to inspect • Press &ldquo;Run Pipeline
+                  Animation&rdquo; to watch the data flow
+                </p>
               </div>
               <div className="hidden sm:flex items-center gap-1.5 bg-emerald-50 border border-emerald-200 px-3.5 py-1.5 rounded-full text-[10px] font-bold text-emerald-700 uppercase tracking-wider">
-                <Shield className="w-3 h-3 text-emerald-600" /> Win32 Stealth Active
+                <Shield className="w-3 h-3 text-emerald-600" /> Win32 Stealth
+                Active
               </div>
             </div>
 
@@ -513,11 +603,12 @@ export default function DemoPage() {
             <div className="border-t border-slate-100 pt-5 flex flex-col gap-3">
               <div className="flex items-center gap-2 select-none mb-0.5">
                 <Zap className="w-4 h-4 text-amber-500" />
-                <span className="text-[10px] font-mono font-bold text-slate-500 uppercase tracking-widest">End-to-End Latency Breakdown</span>
+                <span className="text-[10px] font-mono font-bold text-slate-500 uppercase tracking-widest">
+                  End-to-End Latency Breakdown
+                </span>
               </div>
               <LatencyBar />
             </div>
-
           </div>
         </ScrollReveal>
       </section>
@@ -525,31 +616,51 @@ export default function DemoPage() {
       {/* ── Live Simulator Sandbox ── */}
       <section className="w-full max-w-5xl mx-auto px-6 pt-10 relative z-20">
         <ScrollReveal>
-          <div className="bg-white/80 border border-(--border-light) backdrop-blur-md rounded-xl p-5 md:p-7 flex flex-col gap-6 shadow-md" id="demo-simulator-container">
-
+          <div
+            className="bg-white/80 border border-(--border-light) backdrop-blur-md rounded-xl p-5 md:p-7 flex flex-col gap-6 shadow-md"
+            id="demo-simulator-container"
+          >
             <div className="flex justify-between items-center border-b border-slate-100 pb-3 select-none">
               <div>
-                <h2 className="text-base md:text-lg font-bold text-slate-900" style={{ fontFamily: "var(--font-display)" }}>Live Simulator Dashboard</h2>
-                <p className="text-xs text-slate-500 mt-0.5">Click a question below to run the streaming pipeline simulation</p>
+                <h2
+                  className="text-base md:text-lg font-bold text-slate-900"
+                  style={{ fontFamily: "var(--font-display)" }}
+                >
+                  Live Simulator Dashboard
+                </h2>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Click a question below to run the streaming pipeline
+                  simulation
+                </p>
               </div>
               <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 px-3.5 py-1.5 rounded-full text-xs">
-                <span className={`w-2 h-2 rounded-full ${simState === "listening" || simState === "answering" ? "bg-emerald-500 animate-ping" : "bg-slate-400"}`} />
-                <span className="capitalize text-slate-700 font-bold uppercase tracking-wider text-[10px] font-mono">Status: {simState}</span>
+                <span
+                  className={`w-2 h-2 rounded-full ${simState === "listening" || simState === "answering" ? "bg-emerald-500 animate-ping" : "bg-slate-400"}`}
+                />
+                <span className="capitalize text-slate-700 font-bold tracking-wider text-[10px] font-mono">
+                  Status: {simState}
+                </span>
               </div>
             </div>
 
             {/* Questions Selection grid */}
             <div className="flex flex-col gap-2.5 select-none">
-              <span className="text-[10px] text-slate-400 uppercase tracking-widest font-extrabold font-mono">Choose a sample question:</span>
+              <span className="text-[10px] text-slate-400 uppercase tracking-widest font-extrabold font-mono">
+                Choose a sample question:
+              </span>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 {sampleQuestions.map((q, idx) => (
                   <button
                     key={idx}
                     onClick={() => startSimulation(q)}
-                    disabled={simState === "listening" || simState === "answering"}
+                    disabled={
+                      simState === "listening" || simState === "answering"
+                    }
                     className="p-3.5 bg-white/60 hover:bg-white border border-slate-200/60 hover:border-(--accent)/35 hover:shadow-xs rounded-xl text-left text-xs transition cursor-pointer disabled:opacity-50 text-slate-700 font-semibold flex items-start gap-2 group"
                   >
-                    <span className="text-(--accent) font-bold group-hover:translate-x-0.5 transition-transform">→</span>
+                    <span className="text-(--accent) font-bold group-hover:translate-x-0.5 transition-transform">
+                      →
+                    </span>
                     <span>{q}</span>
                   </button>
                 ))}
@@ -561,17 +672,25 @@ export default function DemoPage() {
               {/* Left Box: Speech-to-Text Input */}
               <div className="flex flex-col gap-2">
                 <span className="text-[10px] text-slate-500 uppercase tracking-widest font-mono font-bold flex items-center gap-1.5 select-none">
-                  <Volume2 className="w-4 h-4 text-sky-600" /> WASAPI Loopback (STT Input)
+                  <Volume2 className="w-4 h-4 text-sky-600" /> WASAPI Loopback
+                  (STT Input)
                 </span>
-                <div className="bg-slate-50/50 border border-slate-200/85 rounded-xl p-4 min-h-[160px] text-sm leading-relaxed text-slate-700 select-text backdrop-blur-xs">
-                  {simState === "idle" && <span className="text-slate-400 italic select-none">Select a question to trigger transcription...</span>}
+                <div className="bg-slate-50/50 border border-slate-200/85 rounded-xl p-4 min-h-40 text-sm leading-relaxed text-slate-700 select-text backdrop-blur-xs">
+                  {simState === "idle" && (
+                    <span className="text-slate-400 italic select-none">
+                      Select a question to trigger transcription...
+                    </span>
+                  )}
                   {simState === "listening" && (
                     <span className="text-sky-600 font-bold animate-pulse select-none flex items-center gap-2">
-                      <RefreshCw className="w-4 h-4 animate-spin text-sky-500" /> Capturing: {simQuestion}
+                      <RefreshCw className="w-4 h-4 animate-spin text-sky-500" />{" "}
+                      Capturing: {simQuestion}
                     </span>
                   )}
                   {(simState === "answering" || simState === "done") && (
-                    <span className="text-emerald-700 font-semibold">{simQuestion}</span>
+                    <span className="text-emerald-700 font-semibold">
+                      {simQuestion}
+                    </span>
                   )}
                 </div>
               </div>
@@ -579,18 +698,29 @@ export default function DemoPage() {
               {/* Right Box: Floating Overlay HUD */}
               <div className="flex flex-col gap-2">
                 <span className="text-[10px] text-slate-500 uppercase tracking-widest font-mono font-bold flex items-center gap-1.5 select-none">
-                  <Terminal className="w-4 h-4 text-emerald-600" /> Zoom-Invisible HUD Overlay
+                  <Terminal className="w-4 h-4 text-emerald-600" />{" "}
+                  Zoom-Invisible HUD Overlay
                 </span>
-                <div className="bg-slate-950/95 border border-slate-800/80 rounded-xl p-4 min-h-[160px] text-xs leading-relaxed relative overflow-hidden shadow-inner select-text">
+                <div className="bg-slate-950/95 border border-slate-800/80 rounded-xl p-4 min-h-40 text-xs leading-relaxed relative overflow-hidden shadow-inner select-text">
                   <div className="absolute top-0 right-0 px-2 py-0.5 bg-emerald-500/10 text-[9px] text-emerald-400 font-bold uppercase rounded-bl-lg select-none">
                     Overlay HUD View
                   </div>
-                  {simState === "idle" && <span className="text-slate-650 italic select-none">Awaiting audio capture stream...</span>}
-                  {simState === "listening" && <span className="text-slate-500 italic animate-pulse select-none">Routing to LLM...</span>}
+                  {simState === "idle" && (
+                    <span className="text-slate-650 italic select-none">
+                      Awaiting audio capture stream...
+                    </span>
+                  )}
+                  {simState === "listening" && (
+                    <span className="text-slate-500 italic animate-pulse select-none">
+                      Routing to LLM...
+                    </span>
+                  )}
                   {(simState === "answering" || simState === "done") && (
                     <div className="text-emerald-100 whitespace-pre-line font-mono font-bold leading-relaxed text-[11px] p-1">
                       {simAnswer}
-                      {simState === "answering" && <span className="w-1.5 h-3.5 bg-emerald-400 inline-block ml-0.5 animate-pulse shadow-[0_0_8px_#34d399]" />}
+                      {simState === "answering" && (
+                        <span className="w-1.5 h-3.5 bg-emerald-400 inline-block ml-0.5 animate-pulse shadow-[0_0_8px_#34d399]" />
+                      )}
                     </div>
                   )}
                 </div>
@@ -600,25 +730,29 @@ export default function DemoPage() {
             {/* Real-time Logger Terminal */}
             <div className="flex flex-col gap-2 mt-2">
               <span className="text-[10px] text-slate-500 uppercase tracking-widest font-mono font-bold flex items-center gap-1.5 select-none">
-                <Cpu className="w-4 h-4 text-indigo-500" /> Real-Time Pipeline Logs
+                <Cpu className="w-4 h-4 text-indigo-500" /> Real-Time Pipeline
+                Logs
               </span>
               <div
                 ref={logsRef}
-                className="bg-slate-950/95 border border-slate-900/90 rounded-xl p-4 h-[180px] overflow-y-auto font-mono text-[11px] text-slate-400 flex flex-col gap-1.5 leading-relaxed select-text shadow-inner"
+                className="bg-slate-950/95 border border-slate-900/90 rounded-xl p-4 h-45 overflow-y-auto font-mono text-[11px] text-slate-400 flex flex-col gap-1.5 leading-relaxed select-text shadow-inner"
               >
                 {simLogs.length === 0 ? (
-                  <span className="text-slate-650 italic select-none">Awaiting simulator activation to print logs...</span>
+                  <span className="text-slate-650 italic select-none">
+                    Awaiting simulator activation to print logs...
+                  </span>
                 ) : (
                   simLogs.map((log, idx) => (
                     <div key={idx} className="flex gap-2">
-                      <span className="text-sky-400 font-bold">ctl-pipeline:</span>
+                      <span className="text-sky-400 font-bold">
+                        ctl-pipeline:
+                      </span>
                       <span>{log}</span>
                     </div>
                   ))
                 )}
               </div>
             </div>
-
           </div>
         </ScrollReveal>
       </section>
@@ -631,9 +765,15 @@ export default function DemoPage() {
             <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-(--accent)/5 rounded-full blur-3xl pointer-events-none" />
             <div className="absolute -left-20 -top-20 w-80 h-80 bg-sky-500/5 rounded-full blur-3xl pointer-events-none" />
 
-            <h4 className="text-2xl md:text-3xl font-extrabold text-slate-900" style={{ fontFamily: "var(--font-display)" }}>Unlock Full Production Capabilities</h4>
+            <h4
+              className="text-2xl md:text-3xl font-extrabold text-slate-900"
+              style={{ fontFamily: "var(--font-display)" }}
+            >
+              Unlock Full Production Capabilities
+            </h4>
             <p className="text-(--text-muted) text-sm max-w-md leading-relaxed font-medium">
-              Deploy the live copilot straight inside your browser or grab our native Windows desktop client installer.
+              Deploy the live copilot straight inside your browser or grab our
+              native Windows desktop client installer.
             </p>
             <div className="flex flex-wrap justify-center gap-4 relative z-10 mt-2">
               <Link
@@ -672,7 +812,6 @@ export default function DemoPage() {
       </section>
       {/* Global CTA Footer */}
       <CtaFooter />
-
     </div>
   );
 }

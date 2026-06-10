@@ -61,8 +61,11 @@ export default function Faq({ faqList }: FaqProps = {}) {
   const activeFaqs = faqList || faqs;
 
   return (
-    <section id="faq" className="section-mist relative py-20 md:py-24 overflow-hidden">
-      <div className="orb orb-slate w-[350px] h-[350px] -bottom-20 -right-20 animate-float-orb-slow" />
+    <section
+      id="faq"
+      className="section-mist relative py-20 md:py-24 overflow-hidden"
+    >
+      <div className="orb orb-slate w-87.5 h-87.5 -bottom-20 -right-20 animate-float-orb-slow" />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10 w-full">
         <ScrollReveal>
@@ -75,7 +78,8 @@ export default function Faq({ faqList }: FaqProps = {}) {
               <span className="text-gradient-coral">Before You Buy</span>
             </h2>
             <p className="text-(--text-muted) text-base mt-3 max-w-xl mx-auto">
-              Detection, privacy, speed, and platform questions - answered directly.
+              Detection, privacy, speed, and platform questions - answered
+              directly.
             </p>
           </div>
         </ScrollReveal>
@@ -99,8 +103,9 @@ export default function Faq({ faqList }: FaqProps = {}) {
                       transition={{ duration: 0.25 }}
                     >
                       <ChevronDown
-                        className={`w-4 h-4 shrink-0 transition-colors ${isOpen ? "text-(--accent)" : "text-(--text-muted)"
-                          }`}
+                        className={`w-4 h-4 shrink-0 transition-colors ${
+                          isOpen ? "text-(--accent)" : "text-(--text-muted)"
+                        }`}
                       />
                     </motion.div>
                   </button>
@@ -110,7 +115,10 @@ export default function Faq({ faqList }: FaqProps = {}) {
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: "auto", opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+                        transition={{
+                          duration: 0.3,
+                          ease: [0.25, 0.46, 0.45, 0.94],
+                        }}
                         className="overflow-hidden"
                       >
                         <div className="pb-5 text-(--text-muted) text-sm leading-relaxed pr-8">
