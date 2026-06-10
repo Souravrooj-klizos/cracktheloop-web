@@ -8,7 +8,8 @@ const formats = [
     icon: User,
     tag: "1-on-1 Interviews",
     title: "Stay Calm & Structured",
-    anxiety: "Getting nervous, losing your train of thought mid-sentence, or struggling to recall the right projects from your resume when asked.",
+    anxiety:
+      "Getting nervous, losing your train of thought mid-sentence, or struggling to recall the right projects from your resume when asked.",
     solution:
       "The Copilot listens to the interviewer's question and instantly outlines a structured, professional response. It automatically highlights matching projects from your resume so you always speak with confidence.",
     points: [
@@ -59,8 +60,8 @@ export default function UseCases() {
       id="use-cases"
       className="section-mist relative py-20 md:py-24 overflow-hidden"
     >
-      <div className="orb orb-peach w-[500px] h-[500px] top-1/4 -right-40 animate-float-orb opacity-40" />
-      <div className="orb orb-frost w-[400px] h-[400px] bottom-0 -left-20 animate-float-orb opacity-30" />
+      <div className="orb orb-peach w-125 h-125 top-1/4 -right-40 animate-float-orb opacity-40" />
+      <div className="orb orb-frost w-100 h-100 bottom-0 -left-20 animate-float-orb opacity-30" />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10 w-full">
         {/* Header */}
@@ -74,7 +75,9 @@ export default function UseCases() {
               <span className="text-gradient-coral">for Any Format</span>
             </h2>
             <p className="text-(--text-muted) text-base mt-3 max-w-xl mx-auto leading-relaxed">
-              From 1-on-1 technical discussions and rapid-fire panel interviews to automated AI video screeners—get instant, on-screen memory cues and structured outlines to communicate with absolute clarity.
+              From 1-on-1 technical discussions and rapid-fire panel interviews
+              to automated AI video screeners—get instant, on-screen memory cues
+              and structured outlines to communicate with absolute clarity.
             </p>
           </div>
         </ScrollReveal>
@@ -91,10 +94,11 @@ export default function UseCases() {
             return (
               <StaggerItem key={i}>
                 <div
-                  className={`group relative rounded-[12px] p-6 md:p-7 flex flex-col gap-5 overflow-hidden h-full transition-all duration-300 hover:-translate-y-1.5 cursor-default ${isFeatured
+                  className={`group relative rounded-xl p-6 md:p-7 flex flex-col gap-5 overflow-hidden h-full transition-all duration-300 hover:-translate-y-1.5 cursor-default ${
+                    isFeatured
                       ? "bg-white border-2 border-(--accent) shadow-md"
                       : "bg-white/70 border border-(--border-light) shadow-xs hover:shadow-md hover:border-(--accent)/20"
-                    }`}
+                  }`}
                 >
                   {/* Glow for featured */}
                   {isFeatured && (
@@ -104,10 +108,11 @@ export default function UseCases() {
                   {/* Tag + Stat */}
                   <div className="flex items-center justify-between flex-wrap gap-2">
                     <span
-                      className={`text-[10px] font-mono font-bold tracking-wider uppercase px-2.5 py-1 rounded-full border ${isFeatured
+                      className={`text-[10px] font-mono font-bold tracking-wider uppercase px-2.5 py-1 rounded-full border ${
+                        isFeatured
                           ? "bg-(--accent-soft) text-(--accent) border-(--accent)/20"
                           : "bg-slate-100 text-slate-500 border-slate-200"
-                        }`}
+                      }`}
                     >
                       {fmt.tag}
                     </span>
@@ -124,10 +129,11 @@ export default function UseCases() {
                   {/* Icon + Title */}
                   <div className="flex items-center gap-3">
                     <div
-                      className={`w-11 h-11 rounded-[8px] flex items-center justify-center shrink-0 border ${isFeatured
+                      className={`w-11 h-11 rounded-lg flex items-center justify-center shrink-0 border ${
+                        isFeatured
                           ? "bg-(--accent-soft) text-(--accent) border-(--accent)/15"
                           : "bg-slate-50 text-slate-500 border-slate-200/50"
-                        }`}
+                      }`}
                     >
                       <Icon className="w-5 h-5" />
                     </div>
@@ -137,7 +143,7 @@ export default function UseCases() {
                   </div>
 
                   {/* Anxiety block */}
-                  <div className="rounded-[8px] bg-slate-50/50 border border-slate-200/40 px-4 py-3">
+                  <div className="rounded-lg bg-slate-50/50 border border-slate-200/40 px-4 py-3">
                     <span className="text-[10px] font-mono font-bold uppercase text-red-500/80 tracking-wider block mb-1">
                       The Challenge
                     </span>
@@ -147,7 +153,7 @@ export default function UseCases() {
                   </div>
 
                   {/* Solution block */}
-                  <div className="rounded-[8px] bg-(--accent-soft) border border-(--accent)/15 px-4 py-3">
+                  <div className="rounded-lg bg-(--accent-soft) border border-(--accent)/15 px-4 py-3">
                     <span className="text-[10px] font-mono font-bold uppercase text-(--accent) tracking-wider block mb-1">
                       How Copilot Helps
                     </span>
@@ -159,7 +165,10 @@ export default function UseCases() {
                   {/* Feature points */}
                   <ul className="flex flex-col gap-2 pt-2 border-t border-(--border-light) mt-auto">
                     {fmt.points.map((pt, j) => (
-                      <li key={j} className="flex items-start gap-2 text-xs text-(--text-secondary) font-medium">
+                      <li
+                        key={j}
+                        className="flex items-start gap-2 text-xs text-(--text-secondary) font-medium"
+                      >
                         <CheckCircle2 className="w-3.5 h-3.5 text-(--accent) shrink-0 mt-0.5" />
                         {pt}
                       </li>
@@ -181,7 +190,8 @@ export default function UseCases() {
             <div className="hidden sm:block w-px h-4 bg-(--border-light)" />
             <div className="flex items-center gap-2 text-sm font-medium text-(--text-secondary)">
               <ShieldCheck className="w-4 h-4 text-(--accent) shrink-0" />
-              100% invisible to screen share &mdash; Win32 Display Affinity protected
+              100% invisible to screen share &mdash; Win32 Display Affinity
+              protected
             </div>
           </div>
         </ScrollReveal>

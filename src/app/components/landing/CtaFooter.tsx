@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, Shield, Users, Sparkles, Star } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { ScrollReveal } from "./ScrollReveal";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
@@ -36,19 +36,22 @@ export default function CtaFooter() {
   ];
 
   return (
-    <section id="cta-footer" className="relative flex flex-col justify-between overflow-hidden">
+    <section
+      id="cta-footer"
+      className="relative flex flex-col justify-between overflow-hidden"
+    >
       {/* CTA Block - Light Theme */}
       <div className="section-mist relative overflow-hidden">
         {/* Background orbs */}
-        <div className="orb orb-peach w-[600px] h-[600px] -top-40 left-1/4 animate-float-orb" />
-        <div className="orb orb-slate w-[400px] h-[400px] bottom-0 -right-20 animate-float-orb-slow" />
+        <div className="orb orb-peach w-150 h-150 -top-40 left-1/4 animate-float-orb" />
+        <div className="orb orb-slate w-100 h-100 bottom-0 -right-20 animate-float-orb-slow" />
 
         {/* Subtle grid pattern */}
         <div
           className="absolute inset-0 opacity-[0.03] pointer-events-none"
           style={{
             backgroundImage: `linear-gradient(rgba(15,23,42,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(15,23,42,0.4) 1px, transparent 1px)`,
-            backgroundSize: '60px 60px',
+            backgroundSize: "60px 60px",
           }}
         />
 
@@ -63,19 +66,20 @@ export default function CtaFooter() {
                 <span className="text-gradient-coral">Happen This Week.</span>
               </h2>
               <p className="text-(--text-muted) text-base md:text-lg mb-4 max-w-xl mx-auto leading-relaxed">
-                Get 50 free credits the moment you sign up. No credit card. One full mock session included - set up in under 3 minutes.
+                Get 50 free credits the moment you sign up. No credit card. One
+                full mock session included - set up in under 3 minutes.
               </p>
               <div className="flex flex-wrap justify-center gap-4 mb-6">
                 <Link
                   href="/login?mode=signup&plan=Free%20Trial"
-                  className="btn-primary-glow cursor-pointer !py-4 !px-8 !rounded-lg !text-base"
+                  className="btn-primary-glow cursor-pointer py-4! px-8! rounded-lg! text-base!"
                 >
                   Try Live Interview Copilot (Free)
                   <ArrowRight className="w-4 h-4" />
                 </Link>
                 <Link
                   href="/demo"
-                  className="btn-ghost-light cursor-pointer bg-white !py-4 !px-8 !rounded-lg !text-base !font-semibold"
+                  className="btn-ghost-light cursor-pointer bg-white py-4! px-8! rounded-lg! text-base! font-semibold!"
                 >
                   Watch Demo First
                 </Link>
@@ -106,12 +110,20 @@ export default function CtaFooter() {
                   className="h-9 w-auto select-none object-contain"
                   alt="CrackTheLoop Logo Icon"
                 />
-                <span className="font-bold tracking-tight text-lg md:text-xl text-(--text-primary)" style={{ fontFamily: "var(--font-display)" }}>
-                  Crack<span className="text-gradient-coral font-black">TheLoop</span>
+                <span
+                  className="font-bold tracking-tight text-lg md:text-xl text-(--text-primary)"
+                  style={{ fontFamily: "var(--font-display)" }}
+                >
+                  Crack
+                  <span className="text-gradient-coral font-black">
+                    TheLoop
+                  </span>
                 </span>
               </Link>
               <p className="text-sm text-(--text-muted) leading-relaxed max-w-xs">
-                CrackTheLoop is the ultimate real-time confidence companion for technical interviews. Tailor answers, transcribe audio live, and stay perfectly aligned with target roles, privately.
+                CrackTheLoop is the ultimate real-time confidence companion for
+                technical interviews. Tailor answers, transcribe audio live, and
+                stay perfectly aligned with target roles, privately.
               </p>
               {/* <div className="flex items-center gap-1.5 text-xs text-emerald-600 font-semibold mt-2">
                 <span className="relative flex h-2 w-2">
@@ -124,7 +136,9 @@ export default function CtaFooter() {
 
             {/* Column 2: Product */}
             <div className="flex flex-col gap-3">
-              <span className="text-xs font-bold text-slate-800 uppercase tracking-widest">Product</span>
+              <span className="text-xs font-bold text-slate-800 uppercase tracking-widest">
+                Product
+              </span>
               <div className="flex flex-col gap-2">
                 {productLinks.map((link) => (
                   <Link
@@ -140,7 +154,9 @@ export default function CtaFooter() {
 
             {/* Column 3: Platforms & Apps */}
             <div className="flex flex-col gap-3">
-              <span className="text-xs font-bold text-slate-800 uppercase tracking-widest">Platforms & Apps</span>
+              <span className="text-xs font-bold text-slate-800 uppercase tracking-widest">
+                Platforms & Apps
+              </span>
               <div className="flex flex-col gap-2">
                 {platformLinks.map((link) => (
                   <Link
@@ -149,7 +165,9 @@ export default function CtaFooter() {
                     onClick={(e) => {
                       if (link.href.startsWith("#") && pathname === "/") {
                         e.preventDefault();
-                        const el = document.getElementById(link.href.substring(1));
+                        const el = document.getElementById(
+                          link.href.substring(1),
+                        );
                         if (el) el.scrollIntoView({ behavior: "smooth" });
                       }
                     }}
@@ -163,7 +181,9 @@ export default function CtaFooter() {
 
             {/* Column 4: Resources & Legal */}
             <div className="flex flex-col gap-3">
-              <span className="text-xs font-bold text-slate-800 uppercase tracking-widest">Resources & Legal</span>
+              <span className="text-xs font-bold text-slate-800 uppercase tracking-widest">
+                Resources & Legal
+              </span>
               <div className="flex flex-col gap-2">
                 {resourcesLegalLinks.map((link) => (
                   <Link
@@ -171,7 +191,10 @@ export default function CtaFooter() {
                     href={getHref(link.href)}
                     onClick={(e) => {
                       const hashIndex = link.href.indexOf("#");
-                      const hash = hashIndex !== -1 ? link.href.substring(hashIndex + 1) : "";
+                      const hash =
+                        hashIndex !== -1
+                          ? link.href.substring(hashIndex + 1)
+                          : "";
                       if (hash && pathname === "/") {
                         e.preventDefault();
                         const el = document.getElementById(hash);

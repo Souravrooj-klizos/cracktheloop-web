@@ -16,21 +16,25 @@ export default function DashboardLayout({
 
   function getCookie(name: string): string | null {
     if (typeof document === "undefined") return null;
-    const matches = document.cookie.match(new RegExp(
-      "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-    ));
+    const matches = document.cookie.match(
+      new RegExp(
+        "(?:^|; )" +
+          name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1") +
+          "=([^;]*)",
+      ),
+    );
     return matches ? decodeURIComponent(matches[1]) : null;
   }
 
   useEffect(() => {
     const savedToken = getCookie("ctl_token");
     const savedUser = getCookie("ctl_user");
-    
+
     if (!savedToken) {
       router.push("/login");
       return;
     }
-    
+
     try {
       setUser(JSON.parse(savedUser || "{}"));
     } catch (e) {
@@ -40,8 +44,10 @@ export default function DashboardLayout({
   }, [router]);
 
   function handleLogout() {
-    document.cookie = "ctl_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax";
-    document.cookie = "ctl_user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax";
+    document.cookie =
+      "ctl_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax";
+    document.cookie =
+      "ctl_user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax";
     router.push("/login");
   }
 

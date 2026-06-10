@@ -14,8 +14,8 @@ const steps = [
     points: [
       "Indexes your tech stack, achievements, and impact metrics.",
       "Categorizes past roles for quick behavioral answer mapping.",
-      "Stays 100% local - never synced to external servers."
-    ]
+      "Stays 100% local - never synced to external servers.",
+    ],
   },
   {
     icon: <FileText className="w-5 h-5" />,
@@ -25,8 +25,8 @@ const steps = [
     points: [
       "Extracts must-have technical skills and keywords.",
       "Identifies behavioral themes: leadership, scale, conflict.",
-      "Cross-references JD against your resume to find perfect overlap."
-    ]
+      "Cross-references JD against your resume to find perfect overlap.",
+    ],
   },
   {
     icon: <Terminal className="w-5 h-5" />,
@@ -36,8 +36,8 @@ const steps = [
     points: [
       "Privacy-first display affinity—keeps your desktop clean and professional.",
       "Captures system audio via local loopback - zero mic interference.",
-      "Low latency stream—delivers answer recommendations to your HUD instantly."
-    ]
+      "Low latency stream—delivers answer recommendations to your HUD instantly.",
+    ],
   },
   {
     icon: <CheckSquare className="w-5 h-5" />,
@@ -47,9 +47,9 @@ const steps = [
     points: [
       "AI interview suggestions generated within 1.5s of question detection.",
       "Surfaces the right resume project at the right moment automatically.",
-      "Speech pace alerts keep you sounding calm, confident, and natural."
-    ]
-  }
+      "Speech pace alerts keep you sounding calm, confident, and natural.",
+    ],
+  },
 ];
 
 export default function HowItWorks() {
@@ -74,7 +74,7 @@ export default function HowItWorks() {
       id="how-it-works"
       className="section-frost relative min-h-screen flex flex-col justify-center py-20 md:py-24 overflow-hidden"
     >
-      <div className="orb orb-frost w-[400px] h-[400px] top-0 right-0 animate-float-orb" />
+      <div className="orb orb-frost w-100 h-100 top-0 right-0 animate-float-orb" />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10 w-full">
         <ScrollReveal>
@@ -84,11 +84,15 @@ export default function HowItWorks() {
               style={{ fontFamily: "var(--font-display)" }}
             >
               How the{" "}
-              <span className="text-gradient-coral">Live AI Interview Copilot</span>{" "}
+              <span className="text-gradient-coral">
+                Live AI Interview Copilot
+              </span>{" "}
               Works - Set Up in 3 Minutes
             </h2>
             <p className="text-(--text-muted) text-base mt-3 max-w-2xl mx-auto">
-              Set up your career target details, test your browser audio, and launch the desktop overlay HUD to receive live structured recommendations as the session begins.
+              Set up your career target details, test your browser audio, and
+              launch the desktop overlay HUD to receive live structured
+              recommendations as the session begins.
             </p>
           </div>
         </ScrollReveal>
@@ -107,12 +111,13 @@ export default function HowItWorks() {
                       setActiveStep(i);
                       setIsPaused(true);
                     }}
-                    className={`text-[11px] font-mono font-bold tracking-wider uppercase transition-all duration-350 px-3 py-1 rounded-full cursor-pointer select-none ${isCurrent
+                    className={`text-[11px] font-mono font-bold tracking-wider uppercase transition-all duration-350 px-3 py-1 rounded-full cursor-pointer select-none ${
+                      isCurrent
                         ? "text-(--accent) bg-(--accent-soft)"
                         : isActive
                           ? "text-(--text-secondary) bg-slate-100 hover:bg-slate-200"
                           : "text-slate-400 bg-transparent hover:text-slate-700 hover:bg-slate-50"
-                      }`}
+                    }`}
                   >
                     Step 0{i + 1}
                   </button>
@@ -124,10 +129,12 @@ export default function HowItWorks() {
           {/* Timeline Line & Circles Row */}
           <div className="relative h-6 flex items-center">
             {/* Connector Line */}
-            <div className="absolute left-[12.5%] right-[12.5%] h-[2px] bg-slate-100 z-0">
+            <div className="absolute left-[12.5%] right-[12.5%] h-0.5 bg-slate-100 z-0">
               <motion.div
                 className="h-full bg-(--accent)"
-                animate={{ width: `${(activeStep / (steps.length - 1)) * 100}%` }}
+                animate={{
+                  width: `${(activeStep / (steps.length - 1)) * 100}%`,
+                }}
                 transition={{ duration: 0.5, ease: "easeInOut" }}
               />
             </div>
@@ -144,12 +151,13 @@ export default function HowItWorks() {
                         setActiveStep(i);
                         setIsPaused(true);
                       }}
-                      className={`w-3.5 h-3.5 rounded-full border-2 transition-all duration-300 bg-white cursor-pointer hover:scale-125 ${isCurrent
+                      className={`w-3.5 h-3.5 rounded-full border-2 transition-all duration-300 bg-white cursor-pointer hover:scale-125 ${
+                        isCurrent
                           ? "border-(--accent) bg-(--accent) scale-125 shadow-xs"
                           : isActive
                             ? "border-(--accent) bg-(--accent)"
                             : "border-slate-200 hover:border-slate-400"
-                        }`}
+                      }`}
                     />
                   </div>
                 );
@@ -173,35 +181,50 @@ export default function HowItWorks() {
                   setActiveStep(i);
                   setIsPaused(true);
                 }}
-                className={`border rounded-[6px] p-6 transition-all duration-500 flex flex-col cursor-pointer justify-between ${isCurrent
+                className={`border rounded-md p-6 transition-all duration-500 flex flex-col cursor-pointer justify-between ${
+                  isCurrent
                     ? "bg-white border-(--accent) shadow-md scale-[1.03] -translate-y-2 z-10"
                     : "bg-white/40 border-(--border-light) opacity-70 hover:opacity-100 hover:bg-white/80 hover:border-slate-350 hover:-translate-y-1 hover:shadow-xs"
-                  }`}
+                }`}
               >
                 <div className="flex flex-col gap-4">
                   {/* Icon Header */}
-                  <div className={`w-10 h-10 rounded-[6px] flex items-center justify-center border transition-all duration-500 ${isCurrent
-                      ? "bg-(--accent) text-white border-(--accent-bright) shadow-sm"
-                      : "bg-slate-50 text-slate-400 border-slate-100"
-                    }`}>
+                  <div
+                    className={`w-10 h-10 rounded-md flex items-center justify-center border transition-all duration-500 ${
+                      isCurrent
+                        ? "bg-(--accent) text-white border-(--accent-bright) shadow-sm"
+                        : "bg-slate-50 text-slate-400 border-slate-100"
+                    }`}
+                  >
                     {step.icon}
                   </div>
 
                   {/* Title & Subtitle */}
                   <div>
-                    <span className={`text-[10px] font-mono font-bold tracking-wider uppercase transition-colors duration-500 ${isCurrent ? "text-(--accent)" : "text-slate-400"
-                      }`}>
+                    <span
+                      className={`text-[10px] font-mono font-bold tracking-wider uppercase transition-colors duration-500 ${
+                        isCurrent ? "text-(--accent)" : "text-slate-400"
+                      }`}
+                    >
                       {step.subtitle}
                     </span>
-                    <h3 className={`text-lg font-extrabold mt-1 transition-colors duration-500 ${isCurrent ? "text-(--text-primary)" : "text-slate-700"
-                      }`}>
+                    <h3
+                      className={`text-lg font-extrabold mt-1 transition-colors duration-500 ${
+                        isCurrent ? "text-(--text-primary)" : "text-slate-700"
+                      }`}
+                    >
                       {step.title}
                     </h3>
                   </div>
 
                   {/* Description Paragraph */}
-                  <p className={`text-sm leading-relaxed transition-colors duration-500 ${isCurrent ? "text-(--text-secondary)" : "text-(--text-muted)"
-                    }`}>
+                  <p
+                    className={`text-sm leading-relaxed transition-colors duration-500 ${
+                      isCurrent
+                        ? "text-(--text-secondary)"
+                        : "text-(--text-muted)"
+                    }`}
+                  >
                     {step.desc}
                   </p>
                 </div>
@@ -210,12 +233,22 @@ export default function HowItWorks() {
                 <ul className="flex flex-col gap-3 mt-6 pt-5 border-t border-slate-100 text-xs text-(--text-secondary) font-medium">
                   {step.points.map((pt, j) => (
                     <li key={j} className="flex items-start gap-2">
-                      <span className={`transition-colors duration-500 shrink-0 ${isCurrent ? "text-(--accent) font-bold" : "text-slate-300"
-                        }`}>
+                      <span
+                        className={`transition-colors duration-500 shrink-0 ${
+                          isCurrent
+                            ? "text-(--accent) font-bold"
+                            : "text-slate-300"
+                        }`}
+                      >
                         ✓
                       </span>
-                      <span className={`leading-snug transition-colors duration-500 ${isCurrent ? "text-(--text-secondary)" : "text-(--text-muted)"
-                        }`}>
+                      <span
+                        className={`leading-snug transition-colors duration-500 ${
+                          isCurrent
+                            ? "text-(--text-secondary)"
+                            : "text-(--text-muted)"
+                        }`}
+                      >
                         {pt}
                       </span>
                     </li>
@@ -229,10 +262,12 @@ export default function HowItWorks() {
         {/* Mobile Vertical Timeline */}
         <div className="md:hidden relative pl-6 flex flex-col gap-8">
           {/* Vertical line */}
-          <div className="absolute top-2 bottom-2 left-[7px] w-[2px] bg-slate-100">
+          <div className="absolute top-2 bottom-2 left-1.75 w-0.5 bg-slate-100">
             <motion.div
               className="w-full bg-(--accent) origin-top h-full"
-              animate={{ height: `${(activeStep / (steps.length - 1)) * 100}%` }}
+              animate={{
+                height: `${(activeStep / (steps.length - 1)) * 100}%`,
+              }}
               transition={{ duration: 0.5, ease: "easeInOut" }}
             />
           </div>
@@ -248,24 +283,31 @@ export default function HowItWorks() {
                     setActiveStep(i);
                     setIsPaused(true);
                   }}
-                  className={`absolute -left-[23px] top-1.5 w-3.5 h-3.5 rounded-full border-2 bg-white transition-all duration-300 cursor-pointer hover:scale-125 ${isCurrent
+                  className={`absolute -left-5.75 top-1.5 w-3.5 h-3.5 rounded-full border-2 bg-white transition-all duration-300 cursor-pointer hover:scale-125 ${
+                    isCurrent
                       ? "border-(--accent) bg-(--accent) scale-110 shadow-xs"
                       : isActive
                         ? "border-(--accent) bg-(--accent)"
                         : "border-slate-200 hover:border-slate-400"
-                    }`}
+                  }`}
                 />
 
                 {/* Badge & Title */}
                 <div className="flex items-center gap-3">
-                  <span className={`text-[10px] font-mono font-bold tracking-wider uppercase px-2 py-0.5 rounded-full ${isCurrent
-                      ? "text-(--accent) bg-(--accent-soft)"
-                      : "text-slate-400 bg-slate-50"
-                    }`}>
+                  <span
+                    className={`text-[10px] font-mono font-bold tracking-wider uppercase px-2 py-0.5 rounded-full ${
+                      isCurrent
+                        ? "text-(--accent) bg-(--accent-soft)"
+                        : "text-slate-400 bg-slate-50"
+                    }`}
+                  >
                     Step 0{i + 1}
                   </span>
-                  <h3 className={`text-sm font-bold transition-colors ${isCurrent ? "text-(--accent)" : "text-(--text-primary)"
-                    }`}>
+                  <h3
+                    className={`text-sm font-bold transition-colors ${
+                      isCurrent ? "text-(--accent)" : "text-(--text-primary)"
+                    }`}
+                  >
                     {step.title}
                   </h3>
                 </div>
@@ -276,10 +318,11 @@ export default function HowItWorks() {
                     setActiveStep(i);
                     setIsPaused(true);
                   }}
-                  className={`border rounded-[8px] p-5 transition-all duration-500 flex flex-col gap-3 cursor-pointer ${isCurrent
+                  className={`border rounded-lg p-5 transition-all duration-500 flex flex-col gap-3 cursor-pointer ${
+                    isCurrent
                       ? "bg-white border-(--accent) shadow-md"
                       : "bg-white/40 border-(--border-light) opacity-70 hover:opacity-100 hover:bg-white/80 hover:border-slate-350"
-                    }`}
+                  }`}
                 >
                   <p className="text-sm text-(--text-secondary) leading-relaxed">
                     {step.desc}
@@ -287,8 +330,11 @@ export default function HowItWorks() {
                   <ul className="flex flex-col gap-2 mt-2 pt-3 border-t border-slate-100 text-xs text-(--text-secondary) font-medium">
                     {step.points.map((pt, j) => (
                       <li key={j} className="flex items-start gap-2">
-                        <span className={`transition-colors duration-500 shrink-0 ${isCurrent ? "text-(--accent)" : "text-slate-400"
-                          }`}>
+                        <span
+                          className={`transition-colors duration-500 shrink-0 ${
+                            isCurrent ? "text-(--accent)" : "text-slate-400"
+                          }`}
+                        >
                           ✓
                         </span>
                         <span className="leading-snug">{pt}</span>
