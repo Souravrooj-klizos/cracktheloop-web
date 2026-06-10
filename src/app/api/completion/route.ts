@@ -3,6 +3,7 @@ import { connectToDatabase } from "@/lib/db";
 import { User } from "@/models/User";
 import { TokenUsage } from "@/models/TokenUsage";
 import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 
 const NEXTAUTH_SECRET = process.env.NEXTAUTH_SECRET || "cracktheloop_secret_auth_key_2026_z8y";
 
@@ -12,7 +13,70 @@ export async function POST(req: NextRequest) {
     const { provider, prompt, apiKey, role, jobDescription, candidateResume, token, history, sessionId, requestType, request_type, previousAnswer } = body;
     const finalRequestType = requestType || request_type || "normal";
 
-    if (!role || !role.trim()) {
+    // Dynamic session configuration lookup
+    let finalRole = role || "";
+    let finalJobDescription = jobDescription || "";
+    let finalCandidateResume = candidateResume || "";
+    let finalLanguage = "english";
+    let finalBehaviorTone = "professional";
+    let finalInstructions = "";
+    let finalAiModel = "gpt-4o-mini"; // default fallback
+
+    await connectToDatabase();
+
+    if (sessionId) {
+      const { InterviewSession } = await import("@/models/InterviewSession");
+      const { Resume } = await import("@/models/Resume");
+      
+      const queryId = mongoose.Types.ObjectId.isValid(sessionId) ? sessionId : null;
+      const session = await InterviewSession.findOne({
+        $or: [
+          { session_id: sessionId },
+          ...(queryId ? [{ _id: queryId }] : [])
+        ]
+      });
+
+      if (session) {
+        if (session.role) finalRole = session.role;
+        if (session.job_description) finalJobDescription = session.job_description;
+        if (session.language) finalLanguage = session.language;
+        if (session.behavior_tone) finalBehaviorTone = session.behavior_tone;
+        if (session.instructions) finalInstructions = session.instructions;
+        if (session.ai_model) finalAiModel = session.ai_model;
+
+        if (session.resume_id) {
+          const resumeDoc = await Resume.findById(session.resume_id);
+          if (resumeDoc) {
+            let resumeText = `Name: ${resumeDoc.personal_details?.name || ""}\n`;
+            resumeText += `Email: ${resumeDoc.personal_details?.email || ""}\n`;
+            resumeText += `Phone: ${resumeDoc.personal_details?.phone || ""}\n`;
+            resumeText += `Location: ${resumeDoc.personal_details?.location || ""}\n\n`;
+            resumeText += `Summary:\n${resumeDoc.summary || ""}\n\n`;
+            
+            resumeText += "Education:\n";
+            (resumeDoc.education || []).forEach((edu: any) => {
+              resumeText += `- ${edu.degree} in ${edu.field_of_study} from ${edu.school} (${edu.start_date} - ${edu.end_date})\n  Description: ${edu.description || ""}\n`;
+            });
+
+            resumeText += "\nWork Experience:\n";
+            (resumeDoc.experience || []).forEach((exp: any) => {
+              resumeText += `- ${exp.position} at ${exp.company} (${exp.start_date} - ${exp.end_date})\n  Location: ${exp.location || ""}\n  Description: ${exp.description || ""}\n`;
+            });
+
+            resumeText += `\nSkills: ${(resumeDoc.skills || []).join(", ")}\n\n`;
+
+            resumeText += "Projects:\n";
+            (resumeDoc.projects || []).forEach((proj: any) => {
+              resumeText += `- ${proj.title}: ${proj.description || ""}\n  Technologies: ${(proj.technologies || []).join(", ")}\n`;
+            });
+
+            finalCandidateResume = resumeText;
+          }
+        }
+      }
+    }
+
+    if (!finalRole || !finalRole.trim()) {
       return NextResponse.json(
         { error: "Interview role is required" },
         { status: 400 }
@@ -61,30 +125,48 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Use server key if available and no client key is provided
-    const serverOpenAIKey = process.env.OPENAI_API_KEY;
-    const useServerKeys = !!serverOpenAIKey && (!apiKey || apiKey.trim() === "" || apiKey === "server");
-    const finalApiKey = useServerKeys ? serverOpenAIKey : apiKey;
+    // Resolve Provider and Model based on finalAiModel
+    let targetProvider = provider ? provider.toLowerCase() : "openai";
+    let targetModel = finalAiModel;
 
-    if (!finalApiKey) {
-      return NextResponse.json({ error: "API Key is required" }, { status: 400 });
+    if (finalAiModel === "llama-3.1-8b-instant") {
+      targetProvider = "groq";
+    } else if (finalAiModel === "gpt-4o-mini" || finalAiModel === "gpt-5.4-mini") {
+      targetProvider = "openai";
     }
 
-    const providerLower = useServerKeys ? "openai" : provider.toLowerCase();
+    // Resolve API key
+    let finalApiKey = apiKey;
+    const isKeyPlaceholder = !apiKey || apiKey.trim() === "" || apiKey === "server" || apiKey === "undefined" || apiKey === "none";
+    const useServerKeys = isKeyPlaceholder;
+
+    if (isKeyPlaceholder) {
+      if (targetProvider === "groq") {
+        finalApiKey = process.env.GROQ_API_KEY || "";
+      } else {
+        finalApiKey = process.env.OPENAI_API_KEY || "";
+      }
+    }
+
+    if (!finalApiKey || finalApiKey.trim() === "") {
+      return NextResponse.json({ error: `API Key for ${targetProvider} is required` }, { status: 400 });
+    }
+
+    const providerLower = targetProvider.toLowerCase();
 
     // Construct dynamic system prompt
-    const roleLower = role.toLowerCase();
+    const roleLower = finalRole.toLowerCase();
     const isSenior = roleLower.includes("senior")
         || roleLower.includes("lead")
         || roleLower.includes("architect")
         || roleLower.includes("principal")
         || roleLower.includes("staff");
 
-    let sysPrompt = `You are the inner mind and immediate technical autopilot of an expert candidate interviewing for the role of: ${role}.
+    let sysPrompt = `You are the inner mind and immediate technical autopilot of an expert candidate interviewing for the role of: ${finalRole}.
 Your goal is to provide the candidate with extremely direct, technically precise, and stealthy real-time guidance.
 
 CORE PERSONA & CONTEXT:
-- Embody a world-class practitioner matching the role of ${role}.
+- Embody a world-class practitioner matching the role of ${finalRole}.
 `;
 
     if (isSenior) {
@@ -109,14 +191,22 @@ KNOWLEDGE BASE INTEGRATION RULES & GUIDELINES:
 - USE NATURAL DETAILS: Reference the actual company names, project names, tools, technologies, and responsibilities provided in the resume and job details. Incorporate them fluidly so the response sounds realistic and highly authentic.
 - NO HALLUCINATION: Under no circumstances should you invent or hallucinate fake company names, project names, proprietary tools, or specific responsibilities that are not explicitly present in the provided context. If certain details are missing, provide a general but realistic technical response based on the candidate's actual skills/stack, without making up false facts.
 - CANDIDATE PERSPECTIVE: Maintain the first-person perspective ("I", "we", "in my project X at company Y") to make it sound like a genuine reflection of the candidate's personal experience. Keep answers structured, concise, confident, and professional.
+
+RESPONSE LANGUAGE & TONE RULES:
+- Language: Output your response strictly in the following language: ${finalLanguage}.
+- Tone: Maintain a ${finalBehaviorTone} tone throughout your response.
 `;
 
-    if (jobDescription && jobDescription.trim()) {
-      sysPrompt += `\nTARGET JOB DETAILS (prioritize aligning answer with these tools/technologies):\n${jobDescription.trim()}\n`;
+    if (finalInstructions && finalInstructions.trim()) {
+      sysPrompt += `\nADDITIONAL INSTRUCTIONS / RULES TO FOLLOW:\n${finalInstructions.trim()}\n`;
     }
 
-    if (candidateResume && candidateResume.trim()) {
-      sysPrompt += `\nCANDIDATE'S ACTUAL EXPERIENCE (anchor your first-person perspective organically using these technologies/methods where relevant):\n${candidateResume.trim()}\n`;
+    if (finalJobDescription && finalJobDescription.trim()) {
+      sysPrompt += `\nTARGET JOB DETAILS (prioritize aligning answer with these tools/technologies):\n${finalJobDescription.trim()}\n`;
+    }
+
+    if (finalCandidateResume && finalCandidateResume.trim()) {
+      sysPrompt += `\nCANDIDATE'S ACTUAL EXPERIENCE (anchor your first-person perspective organically using these technologies/methods where relevant):\n${finalCandidateResume.trim()}\n`;
     }
 
     if (history && Array.isArray(history) && history.length > 0) {
@@ -179,7 +269,7 @@ Please identify the type of content and output the appropriate guidance:
         url = "https://api.groq.com/v1/chat/completions";
         headers["Authorization"] = `Bearer ${finalApiKey}`;
         reqBody = {
-          model: "llama-3.1-8b-instant",
+          model: targetModel || "llama-3.1-8b-instant",
           messages: [
             { role: "system", content: sysPrompt },
             { role: "user", content: finalPrompt },
@@ -191,7 +281,7 @@ Please identify the type of content and output the appropriate guidance:
         url = "https://api.openai.com/v1/chat/completions";
         headers["Authorization"] = `Bearer ${finalApiKey}`;
         reqBody = {
-          model: "gpt-5.4-mini",
+          model: targetModel || "gpt-5.4-mini",
           messages: [
             { role: "system", content: sysPrompt },
             { role: "user", content: finalPrompt },
@@ -306,14 +396,15 @@ Please identify the type of content and output the appropriate guidance:
           // Determine pricing (Standard rates as of 2026)
           let inputPricePerM = 0.15;
           let outputPricePerM = 0.60;
-          let modelName = providerLower;
+          let modelName = targetModel || providerLower;
 
-          if (providerLower === "openai") {
-            modelName = "gpt-5.4-mini";
+          if (modelName === "gpt-5.4-mini") {
             inputPricePerM = 0.75;
             outputPricePerM = 4.50;
-          } else if (providerLower === "groq") {
-            modelName = "llama-3.1-8b-instant";
+          } else if (modelName === "gpt-4o-mini") {
+            inputPricePerM = 0.15;
+            outputPricePerM = 0.60;
+          } else if (modelName === "llama-3.1-8b-instant") {
             inputPricePerM = 0.15;
             outputPricePerM = 0.60;
           }

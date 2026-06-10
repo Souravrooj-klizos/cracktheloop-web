@@ -1,0 +1,608 @@
+{
+  "info": {
+    "_postman_id": "4fc7b22a-2831-4820-b0c6-3bc5566f12d9",
+    "name": "CrackTheLoop API Collection",
+    "description": "API collection for testing Resume/CV Management, Call Sessions, and AI Copilot & Coach Assistant endpoints.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Resume Management",
+      "item": [
+        {
+          "name": "Upload & Parse Resume",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "description": "Resume file (.pdf, .docx, .txt)",
+                  "type": "file",
+                  "src": []
+                },
+                {
+                  "key": "title",
+                  "value": "Senior Software Architect Resume",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/resumes/upload",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "resumes",
+                "upload"
+              ]
+            },
+            "description": "Uploads a PDF, DOCX, or TXT resume and parses it into structured MongoDB fields using GPT-4o-mini."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Resume Manually",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Full Stack Developer\",\n  \"personal_details\": {\n    \"name\": \"John Doe\",\n    \"email\": \"john.doe@example.com\",\n    \"phone\": \"+91 99999 88888\",\n    \"location\": \"Kolkata, India\"\n  },\n  \"summary\": \"Experienced Node.js and React engineer.\",\n  \"skills\": [\"JavaScript\", \"TypeScript\", \"React\", \"Node.js\", \"Express\", \"MongoDB\"],\n  \"education\": [\n    {\n      \"school\": \"Heritage Institute\",\n      \"degree\": \"B.Tech\",\n      \"field_of_study\": \"Information Technology\",\n      \"start_date\": \"2019\",\n      \"end_date\": \"2023\",\n      \"description\": \"First Class\"\n    }\n  ],\n  \"experience\": [\n    {\n      \"company\": \"Tech Solutions\",\n      \"position\": \"Backend Dev\",\n      \"location\": \"Kolkata\",\n      \"start_date\": \"2023-06\",\n      \"end_date\": \"Present\",\n      \"description\": \"Built RESTful APIs in Node.\"\n    }\n  ],\n  \"projects\": [\n    {\n      \"title\": \"Chat App\",\n      \"description\": \"Realtime Chat Application using Socket.io\",\n      \"technologies\": [\"React\", \"Express\", \"Socket.io\"]\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/resumes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "resumes"
+              ]
+            },
+            "description": "Saves a structured resume record manually via JSON input."
+          },
+          "response": []
+        },
+        {
+          "name": "List Resumes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/resumes?search=React&sort=date_desc&page=1&limit=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "resumes"
+              ],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "React",
+                  "description": "Optional search term for title/skills/name"
+                },
+                {
+                  "key": "sort",
+                  "value": "date_desc",
+                  "description": "date_desc, date_asc, title_asc, title_desc"
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Page limit count"
+                }
+              ]
+            },
+            "description": "Retrieves user's resumes with search, pagination, and sorting filters."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Resume Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/resumes/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "resumes",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "66687a38b1d9bf1b51e7fb5c",
+                  "description": "Mongoose ObjectId of the Resume"
+                }
+              ]
+            },
+            "description": "Returns full details of a specific resume document."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Resume Details",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"summary\": \"Updated summary showcasing cloud scaling architectures and Redis setups.\",\n  \"skills\": [\"React\", \"TypeScript\", \"Node.js\", \"Redis\", \"AWS\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/resumes/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "resumes",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "66687a38b1d9bf1b51e7fb5c",
+                  "description": "Mongoose ObjectId of the Resume"
+                }
+              ]
+            },
+            "description": "Allows updating sections of the resume."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Resume",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/resumes/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "resumes",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "66687a38b1d9bf1b51e7fb5c",
+                  "description": "Mongoose ObjectId of the Resume to delete"
+                }
+              ]
+            },
+            "description": "Deletes the resume from database."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Call Sessions",
+      "item": [
+        {
+          "name": "Create Call Session (Standard)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"Senior Backend Architect\",\n  \"company\": \"Fintech Corporation\",\n  \"language\": \"english\",\n  \"behavior_tone\": \"professional\",\n  \"job_description\": \"Minimum 8 years backend. High throughput and scaling requirements using Node, Postgres, and Kafka.\",\n  \"instructions\": \"Focus heavily on message broker patterns and consistency levels.\",\n  \"ai_model\": \"gpt-4o-mini\",\n  \"resume_id\": \"66687a38b1d9bf1b51e7fb5c\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/sessions",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "sessions"
+              ]
+            },
+            "description": "Configures a standard mock interview session."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Free Session (10 min)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"React Engineer\",\n  \"language\": \"english\",\n  \"behavior_tone\": \"encouraging\",\n  \"job_description\": \"Build clean React UI components.\",\n  \"ai_model\": \"gpt-4o-mini\",\n  \"resume_id\": \"66687a38b1d9bf1b51e7fb5c\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/sessions/free",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "sessions",
+                "free"
+              ]
+            },
+            "description": "Creates a free 10-minute session. Note: Cooldown of 12 minutes between free sessions is enforced."
+          },
+          "response": []
+        },
+        {
+          "name": "List Call Sessions",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/sessions?search=Backend&status=created&sort=date_desc&page=1&limit=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "sessions"
+              ],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "Backend",
+                  "description": "Filter by role/company"
+                },
+                {
+                  "key": "status",
+                  "value": "created",
+                  "description": "created, active, completed"
+                },
+                {
+                  "key": "sort",
+                  "value": "date_desc",
+                  "description": "date_desc, date_asc, role_asc"
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page index"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Page count size"
+                }
+              ]
+            },
+            "description": "List all configured call sessions for the user."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Session Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/sessions/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "sessions",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "66688049b1d9bf1b51e7fb7a",
+                  "description": "MongoDB ObjectId OR custom UUID session_id"
+                }
+              ]
+            },
+            "description": "Returns session config, transcript turns, and AI evaluations."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Call Session / Log Transcript",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"active\",\n  \"transcript\": [\n    {\n      \"sender\": \"interviewer\",\n      \"text\": \"What is your approach to handling database replica lags?\",\n      \"timestamp\": \"2026-06-10T12:20:00Z\"\n    },\n    {\n      \"sender\": \"candidate\",\n      \"text\": \"For latency-critical read flows, we fallback to querying the primary replica or utilize a Redis cache write-through pattern.\",\n      \"timestamp\": \"2026-06-10T12:21:00Z\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/sessions/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "sessions",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "66688049b1d9bf1b51e7fb7a",
+                  "description": "MongoDB ObjectId OR UUID session_id"
+                }
+              ]
+            },
+            "description": "Saves live interview transcript turns and logs updates state."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Call Session",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/sessions/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "sessions",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "66688049b1d9bf1b51e7fb7a",
+                  "description": "MongoDB ObjectId OR UUID session_id"
+                }
+              ]
+            },
+            "description": "Deletes the session configuration."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "AI Copilot & Coach Assistant",
+      "item": [
+        {
+          "name": "Live Copilot Completion (SSE Stream)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sessionId\": \"66688049b1d9bf1b51e7fb7a\",\n  \"prompt\": \"How do you design a robust retry queue mechanism in microservices?\",\n  \"requestType\": \"normal\",\n  \"history\": [\n    {\n      \"sender\": \"interviewer\",\n      \"text\": \"Welcome! Can we start with microservices reliability?\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/completion",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "completion"
+              ]
+            },
+            "description": "Invokes the streaming AI Copilot. Returns server-sent events (SSE). Checks credit limit (>10)."
+          },
+          "response": []
+        },
+        {
+          "name": "Compile Evaluation Report",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/sessions/:id/summary",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "sessions",
+                ":id",
+                "summary"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "66688049b1d9bf1b51e7fb7a",
+                  "description": "MongoDB ObjectId OR UUID session_id"
+                }
+              ]
+            },
+            "description": "Processes transcript and compiles final evaluation scorecard report. Deducts 5 credits."
+          },
+          "response": []
+        },
+        {
+          "name": "AI Coach Coaching Session (SSE Stream)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"prompt\": \"Looking at the transcript, how could I have structured my answer on retry policies to sound more senior?\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/sessions/:id/chat",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "sessions",
+                ":id",
+                "chat"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "66688049b1d9bf1b51e7fb7a",
+                  "description": "MongoDB ObjectId OR UUID session_id"
+                }
+              ]
+            },
+            "description": "Interactive, real-time streaming coaching feed based on the completed interview context."
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "jwt_token",
+      "value": "YOUR_JWT_TOKEN_HERE",
+      "type": "string"
+    }
+  ]
+}

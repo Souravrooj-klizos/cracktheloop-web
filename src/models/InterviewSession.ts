@@ -28,6 +28,13 @@ export interface IInterviewSession extends Document {
   token_usages?: mongoose.Types.ObjectId[];
   total_time?: number;
   total_stt_on_time?: number;
+  language: string;
+  behavior_tone: string;
+  job_description?: string;
+  instructions?: string;
+  ai_model: string;
+  resume_id?: mongoose.Types.ObjectId;
+  status: "created" | "active" | "completed";
   created_at: Date;
   updated_at: Date;
 }
@@ -139,6 +146,36 @@ const InterviewSessionSchema = new Schema<IInterviewSession>(
     total_stt_on_time: {
       type: Number,
       default: 0,
+    },
+    language: {
+      type: String,
+      default: "english",
+    },
+    behavior_tone: {
+      type: String,
+      default: "professional",
+    },
+    job_description: {
+      type: String,
+      default: "",
+    },
+    instructions: {
+      type: String,
+      default: "",
+    },
+    ai_model: {
+      type: String,
+      default: "gpt-4o-mini",
+    },
+    resume_id: {
+      type: Schema.Types.ObjectId,
+      ref: "Resume",
+      default: null,
+    },
+    status: {
+      type: String,
+      enum: ["created", "active", "completed"],
+      default: "created",
     },
   },
   {
