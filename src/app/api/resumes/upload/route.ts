@@ -3,8 +3,7 @@ import { connectToDatabase } from "@/lib/db";
 import { Resume } from "@/models/Resume";
 import { TokenUsage } from "@/models/TokenUsage";
 import jwt from "jsonwebtoken";
-import * as pdfParseNamespace from "pdf-parse";
-const pdfParse = ((pdfParseNamespace as any).default || pdfParseNamespace) as any;
+import { PDFParse } from "pdf-parse";
 import mammoth from "mammoth";
 
 const NEXTAUTH_SECRET = process.env.NEXTAUTH_SECRET || "cracktheloop_secret_auth_key_2026_z8y";
@@ -57,7 +56,8 @@ export async function POST(req: NextRequest) {
       const result = await mammoth.extractRawText({ arrayBuffer });
       extractedText = result.value;
     } else if (file.name.endsWith(".pdf")) {
-      const data = await pdfParse(buffer);
+      const parser = new PDFParse({ data: buffer });
+      const data = await parser.getText();
       extractedText = data.text;
     } else if (file.name.endsWith(".txt")) {
       extractedText = new TextDecoder().decode(buffer);
