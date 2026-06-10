@@ -5,15 +5,10 @@ import { useRouter, useParams } from "next/navigation";
 import { 
   Laptop, 
   ArrowLeft, 
-  Download, 
-  ExternalLink, 
   Loader2, 
-  CheckCircle,
-  HelpCircle,
   AlertTriangle,
   Globe,
   RefreshCw,
-  Sparkles
 } from "lucide-react";
 import Link from "next/link";
 import { WindowsIcon, AppleIcon } from "@/app/components/icons/BrandIcons";

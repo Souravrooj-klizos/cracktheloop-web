@@ -5,13 +5,8 @@ import { useRouter, useParams } from "next/navigation";
 import { 
   Laptop, 
   Globe, 
-  Mic, 
-  HelpCircle, 
-  Check, 
   AlertTriangle, 
   Monitor, 
-  Play, 
-  Square,
   Timer, 
   MessageSquare, 
   Sparkles, 
@@ -20,11 +15,7 @@ import {
   LogOut, 
   Loader2, 
   Volume2,
-  FileText,
-  User,
   ArrowRight,
-  Shield,
-  Layers,
   ChevronRight,
   X
 } from "lucide-react";
@@ -311,7 +302,7 @@ export default function LiveSessionPage() {
 
       {/* Screen Shutter Flash Overlay */}
       {showFlash && (
-        <div className="fixed inset-0 bg-white/20 z-[120] flex items-center justify-center backdrop-blur-xs animate-fade-in">
+        <div className="fixed inset-0 bg-white/20 z-120 flex items-center justify-center backdrop-blur-xs animate-fade-in">
           <div className="bg-slate-950/90 border border-slate-800 rounded-xl px-6 py-4 flex items-center gap-3 shadow-2xl">
             <Loader2 className="w-5 h-5 text-(--accent) animate-spin" />
             <span className="text-xs font-bold text-slate-200">{flashMessage}</span>
@@ -495,7 +486,7 @@ export default function LiveSessionPage() {
           <div className="flex flex-col gap-4 overflow-hidden h-full">
             
             {/* Screen share preview card */}
-            <div className="bg-slate-950 border border-slate-800 rounded-xl overflow-hidden aspect-video flex-shrink-0 relative group shadow-lg flex flex-col justify-center items-center text-center p-6 border-slate-700/80">
+            <div className="bg-slate-950 border border-slate-800/60 rounded-xl overflow-hidden aspect-video shrink-0 relative group shadow-lg flex flex-col justify-center items-center text-center p-6">
               {/* Mesh background */}
               <div className="absolute inset-0 opacity-10" style={{
                 backgroundImage: `radial-gradient(circle, rgba(232, 80, 58, 0.4) 0%, transparent 60%)`
@@ -617,7 +608,7 @@ export default function LiveSessionPage() {
             </div>
 
             {/* Manual Query Override input row */}
-            <form onSubmit={handleSendQuery} className="border-t border-slate-850 pt-3 flex gap-2 flex-shrink-0">
+            <form onSubmit={handleSendQuery} className="border-t border-slate-850 pt-3 flex gap-2 shrink-0">
               <input
                 type="text"
                 value={manualQuery}
