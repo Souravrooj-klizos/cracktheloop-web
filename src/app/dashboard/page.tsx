@@ -10,23 +10,16 @@ import {
   ArrowRight,
   User as UserIcon,
   CheckCircle,
-  ExternalLink,
   Zap,
   Gift,
   Copy,
   Check,
-  Users,
   History,
   Lock,
   Volume2,
-  Play,
   Terminal,
-  Download,
-  Info,
   Calendar,
   MessageSquare,
-  AlertTriangle,
-  AlertOctagon
 } from "lucide-react";
 import Link from "next/link";
 import { WindowsIcon, AppleIcon } from "@/app/components/icons/BrandIcons";
@@ -45,13 +38,13 @@ interface SessionData {
 
 // Normalize raw Stripe price IDs stored in legacy records to human-readable tier names
 const PRICE_TO_TIER: Record<string, string> = {
-  "price_1TeCnyEkHwm1l3fZV45CSLvV": "starter",
-  "price_1TeCpEEkHwm1l3fZej0zzJhb": "pro",
-  "price_1TeCpaEkHwm1l3fZj9f7Gh31": "elite",
-  "price_1TgO9FLpVCAm43ah8vQKQWOg": "starter",
-  "price_1TgQxGLpVCAm43ahnYrNotgE": "starter",
-  "price_1TgO9nLpVCAm43ahHiFpXn5o": "pro",
-  "price_1TgQxGLpVCAm43ahl7CIJiRd": "pro",
+  price_1TeCnyEkHwm1l3fZV45CSLvV: "starter",
+  price_1TeCpEEkHwm1l3fZej0zzJhb: "pro",
+  price_1TeCpaEkHwm1l3fZj9f7Gh31: "elite",
+  price_1TgO9FLpVCAm43ah8vQKQWOg: "starter",
+  price_1TgQxGLpVCAm43ahnYrNotgE: "starter",
+  price_1TgO9nLpVCAm43ahHiFpXn5o: "pro",
+  price_1TgQxGLpVCAm43ahl7CIJiRd: "pro",
 };
 
 function normalizeTier(raw?: string): string {
@@ -64,9 +57,13 @@ function DashboardHomeContent() {
 
   function getCookie(name: string): string | null {
     if (typeof document === "undefined") return null;
-    const matches = document.cookie.match(new RegExp(
-      "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-    ));
+    const matches = document.cookie.match(
+      new RegExp(
+        "(?:^|; )" +
+          name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1") +
+          "=([^;]*)",
+      ),
+    );
     return matches ? decodeURIComponent(matches[1]) : null;
   }
 
@@ -97,7 +94,7 @@ function DashboardHomeContent() {
     downloadHUD: false,
     soundCheck: false,
     startCopilot: false,
-    submitFeedback: false
+    submitFeedback: false,
   });
 
   // Interactive UI modals/testers states
@@ -134,7 +131,7 @@ function DashboardHomeContent() {
     if (savedChecklist) {
       try {
         const parsed = JSON.parse(savedChecklist);
-        setChecklist(prev => ({ ...prev, ...parsed }));
+        setChecklist((prev) => ({ ...prev, ...parsed }));
       } catch (e) {
         // Ignored
       }
@@ -150,14 +147,18 @@ function DashboardHomeContent() {
         if (profileRes.ok && profileData.user) {
           let updatedUser = profileData.user;
           // Auto-provision trial if tier is empty or free and has 0 credits (New User)
-          if ((!updatedUser.subscription_tier || updatedUser.subscription_tier === "free") && updatedUser.credits === 0) {
+          if (
+            (!updatedUser.subscription_tier ||
+              updatedUser.subscription_tier === "free") &&
+            updatedUser.credits === 0
+          ) {
             try {
               const trialRes = await fetch("/api/billing/trial", {
                 method: "POST",
-                headers: { 
+                headers: {
                   "Content-Type": "application/json",
-                  "Authorization": `Bearer ${savedToken}`
-                }
+                  Authorization: `Bearer ${savedToken}`,
+                },
               });
               const trialData = await trialRes.json();
               if (trialRes.ok && trialData.user) {
@@ -208,22 +209,25 @@ function DashboardHomeContent() {
       setMicActive(true);
 
       const interval = setInterval(() => {
-        setMicVolume(prev => prev.map(() => Math.floor(Math.random() * 32) + 4));
+        setMicVolume((prev) =>
+          prev.map(() => Math.floor(Math.random() * 32) + 4),
+        );
       }, 80);
 
       setTimeout(() => {
         clearInterval(interval);
-        stream.getTracks().forEach(track => track.stop());
+        stream.getTracks().forEach((track) => track.stop());
         setMicActive(false);
         setMicTesting(false);
         updateChecklist("soundCheck", true);
       }, 4500);
-
     } catch (err) {
       // Permission denied or browser block - fallback to elegant CSS simulation
       setMicActive(true);
       const interval = setInterval(() => {
-        setMicVolume(prev => prev.map(() => Math.floor(Math.random() * 26) + 4));
+        setMicVolume((prev) =>
+          prev.map(() => Math.floor(Math.random() * 26) + 4),
+        );
       }, 85);
 
       setTimeout(() => {
@@ -279,7 +283,7 @@ function DashboardHomeContent() {
         </span>
         <h1 className="text-2xl md:text-3xl font-semibold tracking-tight text-slate-800 flex items-center gap-2" style={{ fontFamily: "var(--font-display)" }}>
           Welcome,{" "}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#E8503A] to-indigo-600">
+          <span className="text-transparent bg-clip-text bg-linear-to-r from-accent to-indigo-600">
             {user?.email?.split("@")[0]}
           </span>
         </h1>
@@ -290,10 +294,8 @@ function DashboardHomeContent() {
 
       {/* Main Grid split */}
       <section className="grid grid-cols-1 lg:grid-cols-3 gap-5 items-start">
-
         {/* Left column - Unified Launchpad Console */}
         <div className="lg:col-span-2 bg-white border border-slate-200/60 rounded-xl p-5 md:p-6 shadow-sm flex flex-col gap-6">
-
           {/* Header Block inside Left Console */}
           <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-3 border-b border-slate-100 pb-4">
             <div>
@@ -315,7 +317,7 @@ function DashboardHomeContent() {
           {/* Checklist Progress Bar */}
           <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden relative -mt-4">
             <div
-              className="bg-gradient-to-r from-(--accent) to-indigo-500 h-full rounded-full transition-all duration-500"
+              className="bg-linear-to-r from-(--accent) to-indigo-500 h-full rounded-full transition-all duration-500"
               style={{ width: `${progressPercent}%` }}
             />
           </div>
@@ -452,12 +454,10 @@ function DashboardHomeContent() {
               </div>
             </div>
           </div>
-
         </div>
 
         {/* Right column - Unified Telemetry Console Card */}
         <div className="bg-white border border-slate-200/60 rounded-xl p-5 shadow-sm flex flex-col gap-5 select-none">
-
           {/* Section 1: Fuel Gauge & Status */}
           <div className="flex flex-col gap-3">
             <span className="text-[11px] text-slate-400 uppercase tracking-wider font-semibold block">
@@ -474,13 +474,16 @@ function DashboardHomeContent() {
               </div>
               <div className="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
                 <div
-                  className={`h-full rounded-full transition-all duration-300 ${(user?.credits ?? 0) < 20
+                  className={`h-full rounded-full transition-all duration-300 ${
+                    (user?.credits ?? 0) < 20
                       ? "bg-rose-500"
                       : (user?.credits ?? 0) < 100
                         ? "bg-amber-500"
                         : "bg-emerald-500"
-                    }`}
-                  style={{ width: `${Math.min(((user?.credits ?? 0) / 300) * 100, 100)}%` }}
+                  }`}
+                  style={{
+                    width: `${Math.min(((user?.credits ?? 0) / 300) * 100, 100)}%`,
+                  }}
                 />
               </div>
               <span className="text-xs text-slate-400 font-medium">1 credit consumes 1 minute stream duration.</span>
@@ -522,7 +525,7 @@ function DashboardHomeContent() {
                   <button
                     onClick={() => copyToClipboard(refLink, "link")}
                     title="Copy referral link"
-                    className="text-slate-400 hover:text-purple-600 transition cursor-pointer flex-shrink-0"
+                    className="text-slate-400 hover:text-purple-600 transition cursor-pointer shrink-0"
                   >
                     {copiedLink ? (
                       <Check className="w-3.5 h-3.5 text-emerald-600" />
@@ -608,21 +611,21 @@ function DashboardHomeContent() {
               </div>
             )}
           </div>
-
         </div>
-
       </section>
 
       {/* Interactive Safety Playbook Modal */}
-      {showPlaybook && mounted && createPortal(
-        <div className="fixed inset-0 bg-slate-900/70 backdrop-blur-md flex justify-center items-center z-[100] p-6 animate-fade-in">
-          <div className="w-full max-w-[520px] bg-white border border-slate-200 rounded-xl p-5 md:p-6 flex flex-col shadow-2xl relative select-none">
-            <button
-              onClick={() => setShowPlaybook(false)}
-              className="text-slate-400 hover:text-slate-700 transition cursor-pointer font-bold absolute top-5 right-5 text-sm"
-            >
-              ✕
-            </button>
+      {showPlaybook &&
+        mounted &&
+        createPortal(
+          <div className="fixed inset-0 bg-slate-900/70 backdrop-blur-md flex justify-center items-center z-100 p-6 animate-fade-in">
+            <div className="w-full max-w-130 bg-white border border-slate-200 rounded-xl p-5 md:p-6 flex flex-col shadow-2xl relative select-none">
+              <button
+                onClick={() => setShowPlaybook(false)}
+                className="text-slate-400 hover:text-slate-700 transition cursor-pointer font-bold absolute top-5 right-5 text-sm"
+              >
+                ✕
+              </button>
 
             <div className="flex items-center gap-3 border-b border-indigo-100 pb-4 mb-5">
               <div className="w-10 h-10 rounded-full bg-indigo-50 border border-indigo-200 flex items-center justify-center animate-pulse shrink-0">
@@ -703,27 +706,29 @@ function DashboardHomeContent() {
                     ? "bg-indigo-600 hover:bg-indigo-700 text-white cursor-pointer shadow-md shadow-indigo-600/10 active:scale-95"
                     : "bg-slate-100 border border-slate-200 text-slate-400 cursor-not-allowed"
                   }`}
-              >
-                {!acknowledged ? "Acknowledge Guidelines above to proceed" : "Confirm Guidelines & Unlock Onboarding"}
-              </button>
+                >
+                  {!acknowledged
+                    ? "Acknowledge Guidelines above to proceed"
+                    : "Confirm Guidelines & Unlock Onboarding"}
+                </button>
+              </div>
             </div>
-
-          </div>
-        </div>,
-        document.body
-      )}
-
+          </div>,
+          document.body,
+        )}
     </main>
   );
 }
 
 export default function DashboardHomePage() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen bg-(--bg-mist) flex justify-center items-center">
-        <Loader2 className="w-10 h-10 text-(--accent) animate-spin" />
-      </div>
-    }>
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-(--bg-mist) flex justify-center items-center">
+          <Loader2 className="w-10 h-10 text-(--accent) animate-spin" />
+        </div>
+      }
+    >
       <DashboardHomeContent />
     </Suspense>
   );

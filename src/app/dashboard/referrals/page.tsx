@@ -12,7 +12,7 @@ import {
   Users,
   Star,
   Link2,
-  TrendingUp
+  TrendingUp,
 } from "lucide-react";
 
 interface ReferredUser {
@@ -36,13 +36,13 @@ interface ReferralData {
 
 // Normalize raw Stripe price IDs stored in legacy records to human-readable tier names
 const PRICE_TO_TIER: Record<string, string> = {
-  "price_1TeCnyEkHwm1l3fZV45CSLvV": "starter",
-  "price_1TeCpEEkHwm1l3fZej0zzJhb": "pro",
-  "price_1TeCpaEkHwm1l3fZj9f7Gh31": "elite",
-  "price_1TgO9FLpVCAm43ah8vQKQWOg": "starter",
-  "price_1TgQxGLpVCAm43ahnYrNotgE": "starter",
-  "price_1TgO9nLpVCAm43ahHiFpXn5o": "pro",
-  "price_1TgQxGLpVCAm43ahl7CIJiRd": "pro",
+  price_1TeCnyEkHwm1l3fZV45CSLvV: "starter",
+  price_1TeCpEEkHwm1l3fZej0zzJhb: "pro",
+  price_1TeCpaEkHwm1l3fZj9f7Gh31: "elite",
+  price_1TgO9FLpVCAm43ah8vQKQWOg: "starter",
+  price_1TgQxGLpVCAm43ahnYrNotgE: "starter",
+  price_1TgO9nLpVCAm43ahHiFpXn5o: "pro",
+  price_1TgQxGLpVCAm43ahl7CIJiRd: "pro",
 };
 
 function normalizeTier(raw?: string): string {
@@ -76,9 +76,13 @@ function ReferralsHubContent() {
 
   function getCookie(name: string): string | null {
     if (typeof document === "undefined") return null;
-    const matches = document.cookie.match(new RegExp(
-      "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-    ));
+    const matches = document.cookie.match(
+      new RegExp(
+        "(?:^|; )" +
+          name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1") +
+          "=([^;]*)",
+      ),
+    );
     return matches ? decodeURIComponent(matches[1]) : null;
   }
 
@@ -180,11 +184,15 @@ function ReferralsHubContent() {
         <span className="text-[10px] text-(--accent) font-black uppercase tracking-widest">
           Referral Command Center
         </span>
-        <h1 className="text-3xl font-black tracking-tight text-slate-800 flex items-center gap-2" style={{ fontFamily: "var(--font-display)" }}>
+        <h1
+          className="text-3xl font-black tracking-tight text-slate-800 flex items-center gap-2"
+          style={{ fontFamily: "var(--font-display)" }}
+        >
           Earn Bonus Fuel Credits
         </h1>
         <p className="text-xs text-slate-500 font-medium">
-          Invite your friends, expand your network, and load up your Stealth Copilot HUD with extra replies.
+          Invite your friends, expand your network, and load up your Stealth
+          Copilot HUD with extra replies.
         </p>
       </section>
 
@@ -249,7 +257,10 @@ function ReferralsHubContent() {
       <section className="grid grid-cols-1 lg:grid-cols-3 gap-5 relative z-10 items-start">
         {/* Share and Link Copy cards */}
         <div className="lg:col-span-2 bg-white border border-slate-200/60 rounded-xl p-5 md:p-6 flex flex-col gap-5 shadow-sm">
-          <h2 className="text-sm font-black text-slate-800 uppercase tracking-widest border-b border-slate-100 pb-3 flex items-center gap-2" style={{ fontFamily: "var(--font-display)" }}>
+          <h2
+            className="text-sm font-black text-slate-800 uppercase tracking-widest border-b border-slate-100 pb-3 flex items-center gap-2"
+            style={{ fontFamily: "var(--font-display)" }}
+          >
             <Gift className="w-5 h-5 text-purple-600" />
             Your Invitation Badges
           </h2>
@@ -268,15 +279,17 @@ function ReferralsHubContent() {
                   </label>
                   <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2.5">
                     <span className="flex-1 font-mono text-sm font-bold text-purple-700 tracking-widest select-all">
-                      {referralData?.referral_code || user?.referral_code || "-"}
+                      {referralData?.referral_code ||
+                        user?.referral_code ||
+                        "-"}
                     </span>
                     <button
                       onClick={() =>
                         copyToClipboard(
                           referralData?.referral_code ||
-                          user?.referral_code ||
-                          "",
-                          "code"
+                            user?.referral_code ||
+                            "",
+                          "code",
                         )
                       }
                       title="Copy code"
@@ -306,11 +319,11 @@ function ReferralsHubContent() {
                       onClick={() =>
                         copyToClipboard(
                           referralData?.referral_link || "",
-                          "link"
+                          "link",
                         )
                       }
                       title="Copy link"
-                      className="text-slate-400 hover:text-sky-650 transition cursor-pointer flex-shrink-0"
+                      className="text-slate-400 hover:text-sky-650 transition cursor-pointer shrink-0"
                     >
                       {copiedLink ? (
                         <Check className="w-4 h-4 text-emerald-600" />
@@ -329,11 +342,24 @@ function ReferralsHubContent() {
                   Referral Rules & Conversions
                 </h4>
                 <p className="font-semibold mb-2 text-slate-650">
-                  Share your unique invite link with friends. When they sign up using your link:
+                  Share your unique invite link with friends. When they sign up
+                  using your link:
                 </p>
                 <ul className="list-disc pl-4 flex flex-col gap-1.5 font-medium">
-                  <li>They instantly receive <span className="text-sky-600 font-bold">50 free credits</span> on signup.</li>
-                  <li>You instantly receive <span className="text-purple-600 font-bold">+{trialReferrerBonus} free credits</span> in your account as the referrer.</li>
+                  <li>
+                    They instantly receive{" "}
+                    <span className="text-sky-600 font-bold">
+                      50 free credits
+                    </span>{" "}
+                    on signup.
+                  </li>
+                  <li>
+                    You instantly receive{" "}
+                    <span className="text-purple-600 font-bold">
+                      +{trialReferrerBonus} free credits
+                    </span>{" "}
+                    in your account as the referrer.
+                  </li>
                 </ul>
               </div>
             </div>
@@ -342,16 +368,22 @@ function ReferralsHubContent() {
 
         {/* How it works sidebar / metadata */}
         <div className="lg:col-span-1 bg-white border border-slate-200/60 rounded-xl p-5 shadow-sm flex flex-col gap-4">
-          <h3 className="text-xs font-black text-slate-800 uppercase tracking-widest border-b border-slate-100 pb-3" style={{ fontFamily: "var(--font-display)" }}>
+          <h3
+            className="text-xs font-black text-slate-800 uppercase tracking-widest border-b border-slate-100 pb-3"
+            style={{ fontFamily: "var(--font-display)" }}
+          >
             Stealth Evasion Specs
           </h3>
           <p className="text-xs text-slate-500 leading-relaxed font-semibold">
-            All referral link clicks and signups are processed via our stealth redirect filters. Referrer IDs are securely hashed to prevent conference tool detection.
+            All referral link clicks and signups are processed via our stealth
+            redirect filters. Referrer IDs are securely hashed to prevent
+            conference tool detection.
           </p>
           <div className="bg-emerald-50 border border-emerald-100/50 rounded-lg p-3 text-[11px] text-emerald-700 font-semibold leading-relaxed flex items-start gap-2">
             <Shield className="w-4 h-4 text-emerald-600 mt-0.5 shrink-0" />
             <span>
-              Referring accounts are entirely decoupled from billing identities to ensure strict screen confidentiality.
+              Referring accounts are entirely decoupled from billing identities
+              to ensure strict screen confidentiality.
             </span>
           </div>
         </div>
@@ -360,7 +392,10 @@ function ReferralsHubContent() {
       {/* Referred Users List Table */}
       {referralData && referralData.referred_users.length > 0 && (
         <section className="bg-white border border-slate-200/60 rounded-xl p-5 md:p-6 flex flex-col gap-5 shadow-sm relative z-10">
-          <h3 className="text-sm font-black text-slate-800 uppercase tracking-widest border-b border-slate-100 pb-3 flex items-center gap-2" style={{ fontFamily: "var(--font-display)" }}>
+          <h3
+            className="text-sm font-black text-slate-800 uppercase tracking-widest border-b border-slate-100 pb-3 flex items-center gap-2"
+            style={{ fontFamily: "var(--font-display)" }}
+          >
             <Users className="w-5 h-5 text-purple-600" />
             Referred Developers List
           </h3>
@@ -392,14 +427,19 @@ function ReferralsHubContent() {
                       </div>
                     </td>
                     <td className="py-4 px-5 text-slate-500">
-                      {new Date(ru.joined_at).toLocaleDateString([], { month: "short", day: "numeric", year: "numeric" })}
+                      {new Date(ru.joined_at).toLocaleDateString([], {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                      })}
                     </td>
                     <td className="py-4 px-5">
                       <span
-                        className={`text-[9px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full border ${ru.is_subscribed
+                        className={`text-[9px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full border ${
+                          ru.is_subscribed
                             ? "text-emerald-600 bg-emerald-50 border-emerald-200/80"
                             : "text-slate-500 bg-slate-50 border-slate-200"
-                          }`}
+                        }`}
                       >
                         {ru.is_subscribed
                           ? normalizeTier(ru.subscription_tier)
@@ -409,7 +449,8 @@ function ReferralsHubContent() {
                     <td className="py-4 px-5 text-right font-black text-amber-500">
                       {ru.bonus_earned !== undefined && ru.bonus_earned > 0 ? (
                         <span className="inline-flex items-center gap-1">
-                          +{ru.bonus_earned} <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
+                          +{ru.bonus_earned}{" "}
+                          <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
                         </span>
                       ) : (
                         "-"
@@ -422,9 +463,6 @@ function ReferralsHubContent() {
           </div>
         </section>
       )}
-
-
-
     </main>
   );
 }

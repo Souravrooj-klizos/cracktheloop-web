@@ -2,13 +2,13 @@
 
 import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
-import { 
-  Shield, 
-  ArrowLeft, 
-  FileText, 
-  Award, 
-  Download, 
-  Sparkles, 
+import {
+  Shield,
+  ArrowLeft,
+  FileText,
+  Award,
+  Download,
+  Sparkles,
   Loader2,
   Calendar,
   MessageSquare,
@@ -17,10 +17,14 @@ import {
   HelpCircle,
   Mic,
   Cpu,
-  TrendingUp
+  TrendingUp,
 } from "lucide-react";
 
-export default function InterviewDetailPage({ params }: { params: Promise<{ id: string }> }) {
+export default function InterviewDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const router = useRouter();
   const { id } = use(params);
 
@@ -31,9 +35,13 @@ export default function InterviewDetailPage({ params }: { params: Promise<{ id: 
 
   function getCookie(name: string): string | null {
     if (typeof document === "undefined") return null;
-    const matches = document.cookie.match(new RegExp(
-      "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-    ));
+    const matches = document.cookie.match(
+      new RegExp(
+        "(?:^|; )" +
+          name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1") +
+          "=([^;]*)",
+      ),
+    );
     return matches ? decodeURIComponent(matches[1]) : null;
   }
 
@@ -49,7 +57,7 @@ export default function InterviewDetailPage({ params }: { params: Promise<{ id: 
     async function loadSession() {
       try {
         const res = await fetch(`/api/interviews/${id}`, {
-          headers: { "Authorization": `Bearer ${savedToken}` }
+          headers: { Authorization: `Bearer ${savedToken}` },
         });
         const data = await res.json();
         if (res.ok) {
@@ -76,12 +84,15 @@ export default function InterviewDetailPage({ params }: { params: Promise<{ id: 
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ provider: "openai", apiKey: "server" })
+        body: JSON.stringify({ provider: "openai", apiKey: "server" }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || data.error || "Failed to create evaluation");
+      if (!res.ok)
+        throw new Error(
+          data.message || data.error || "Failed to create evaluation",
+        );
       setSession((prev: any) => ({ ...prev, report: data.report }));
       alert("Evaluation Report generated successfully!");
     } catch (err: any) {
@@ -107,7 +118,6 @@ export default function InterviewDetailPage({ params }: { params: Promise<{ id: 
 
   return (
     <div className="min-h-screen bg-(--bg-mist) text-(--text-primary) flex flex-col relative pb-16 print:bg-white print:text-black">
-      
       {/* Hide elements when printing */}
       <style jsx global>{`
         @media print {
@@ -147,7 +157,7 @@ export default function InterviewDetailPage({ params }: { params: Promise<{ id: 
         <div className="flex gap-3">
           <button
             onClick={handlePrint}
-            className="px-4 py-2 bg-[#E8503A] hover:bg-[#F06B57] hover:brightness-110 text-white rounded-lg text-xs font-black flex items-center gap-1.5 cursor-pointer transition active:scale-95 shadow-md shadow-[#E8503A]/10 hover:shadow-[#E8503A]/20"
+            className="px-4 py-2 bg-accent hover:bg-accent-bright hover:brightness-110 text-white rounded-lg text-xs font-black flex items-center gap-1.5 cursor-pointer transition active:scale-95 shadow-md shadow-accent/10 hover:shadow-accent/20"
           >
             <Download className="w-3.5 h-3.5 text-white" />
             Export to PDF
@@ -160,16 +170,26 @@ export default function InterviewDetailPage({ params }: { params: Promise<{ id: 
         {/* Title and metadata block */}
         <section className="border-b border-slate-200 pb-6 flex justify-between items-start print:border-black print:pb-4">
           <div className="flex flex-col gap-2">
-            <h1 className="text-3xl font-black tracking-tight text-slate-800 print:text-black" style={{ fontFamily: "var(--font-display)" }}>
+            <h1
+              className="text-3xl font-black tracking-tight text-slate-800 print:text-black"
+              style={{ fontFamily: "var(--font-display)" }}
+            >
               {session.role} Evaluation Report
             </h1>
             <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-slate-500 print:text-black/80 font-semibold mt-1">
               <span className="flex items-center gap-1.5">
-                <Calendar className="w-4 h-4 text-(--accent) no-print" /> 
-                Date: {new Date(session.created_at).toLocaleDateString([], { month: "long", day: "numeric", year: "numeric", hour: "2-digit", minute: "2-digit" })}
+                <Calendar className="w-4 h-4 text-(--accent) no-print" />
+                Date:{" "}
+                {new Date(session.created_at).toLocaleDateString([], {
+                  month: "long",
+                  day: "numeric",
+                  year: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
               </span>
               <span className="flex items-center gap-1.5">
-                <MessageSquare className="w-4 h-4 text-indigo-500 no-print" /> 
+                <MessageSquare className="w-4 h-4 text-indigo-500 no-print" />
                 Turns: {session.transcript?.length || 0} spoken turns
               </span>
               <span className="flex items-center gap-1.5">
@@ -182,11 +202,13 @@ export default function InterviewDetailPage({ params }: { params: Promise<{ id: 
 
         {/* Evaluation Summary Report Grid */}
         <section className="grid grid-cols-1 lg:grid-cols-3 gap-5 items-start relative z-10">
-          
           {/* Main report grading card */}
           <div className="lg:col-span-1 flex flex-col gap-6">
             <div className="bg-white border border-slate-200/60 rounded-xl p-5 shadow-sm print-card flex flex-col gap-4">
-              <h2 className="text-sm font-black text-slate-800 uppercase tracking-widest flex items-center gap-2 border-b border-slate-100 pb-3 print:text-black print:border-black select-none" style={{ fontFamily: "var(--font-display)" }}>
+              <h2
+                className="text-sm font-black text-slate-800 uppercase tracking-widest flex items-center gap-2 border-b border-slate-100 pb-3 print:text-black print:border-black select-none"
+                style={{ fontFamily: "var(--font-display)" }}
+              >
                 <Award className="w-5 h-5 text-(--accent)" />
                 Grading Performance
               </h2>
@@ -198,10 +220,37 @@ export default function InterviewDetailPage({ params }: { params: Promise<{ id: 
                   const techScore = session.report.technical_score;
 
                   const getScoreColors = (val: number) => {
-                    if (val >= 85) return { text: "text-emerald-600", bg: "bg-emerald-500 animate-pulse", track: "bg-emerald-100/50", border: "border-emerald-250/20", label: "Expert" };
-                    if (val >= 70) return { text: "text-teal-600", bg: "bg-teal-500", track: "bg-teal-100/50", border: "border-teal-250/20", label: "Strong" };
-                    if (val >= 50) return { text: "text-amber-600", bg: "bg-amber-500", track: "bg-amber-100/50", border: "border-amber-250/20", label: "Average" };
-                    return { text: "text-rose-600", bg: "bg-rose-500", track: "bg-rose-100/50", border: "border-rose-250/20", label: "Needs Work" };
+                    if (val >= 85)
+                      return {
+                        text: "text-emerald-600",
+                        bg: "bg-emerald-500 animate-pulse",
+                        track: "bg-emerald-100/50",
+                        border: "border-emerald-250/20",
+                        label: "Expert",
+                      };
+                    if (val >= 70)
+                      return {
+                        text: "text-teal-600",
+                        bg: "bg-teal-500",
+                        track: "bg-teal-100/50",
+                        border: "border-teal-250/20",
+                        label: "Strong",
+                      };
+                    if (val >= 50)
+                      return {
+                        text: "text-amber-600",
+                        bg: "bg-amber-500",
+                        track: "bg-amber-100/50",
+                        border: "border-amber-250/20",
+                        label: "Average",
+                      };
+                    return {
+                      text: "text-rose-600",
+                      bg: "bg-rose-500",
+                      track: "bg-rose-100/50",
+                      border: "border-rose-250/20",
+                      label: "Needs Work",
+                    };
                   };
 
                   const overallColors = getScoreColors(score);
@@ -212,10 +261,18 @@ export default function InterviewDetailPage({ params }: { params: Promise<{ id: 
                     <div className="flex flex-col gap-6">
                       {/* Overall score box */}
                       <div className="flex flex-col items-center py-4 bg-slate-50/70 border border-slate-200/50 rounded-xl print-card relative overflow-hidden group">
-                        <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-indigo-500 to-[#E8503A]"></div>
-                        <span className="text-[10px] text-slate-400 uppercase tracking-widest font-black select-none">Overall Score</span>
-                        <span className={`text-5xl font-black mt-2 tracking-tight ${overallColors.text}`}>{score}</span>
-                        <span className={`mt-2.5 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-wider ${overallColors.text} bg-white border border-slate-200/60 shadow-sm`}>
+                        <div className="absolute top-0 left-0 w-full h-0.75 bg-linear-to-r from-indigo-500 to-accent"></div>
+                        <span className="text-[10px] text-slate-400 uppercase tracking-widest font-black select-none">
+                          Overall Score
+                        </span>
+                        <span
+                          className={`text-5xl font-black mt-2 tracking-tight ${overallColors.text}`}
+                        >
+                          {score}
+                        </span>
+                        <span
+                          className={`mt-2.5 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-wider ${overallColors.text} bg-white border border-slate-200/60 shadow-sm`}
+                        >
                           {overallColors.label}
                         </span>
                       </div>
@@ -225,11 +282,15 @@ export default function InterviewDetailPage({ params }: { params: Promise<{ id: 
                         {/* Comm score */}
                         <div className="flex flex-col gap-1.5">
                           <div className="flex justify-between items-center select-none">
-                            <span className="text-slate-500 font-bold print:text-black/80">Communication Flow</span>
-                            <span className={`font-black ${commColors.text}`}>{commScore}/100</span>
+                            <span className="text-slate-500 font-bold print:text-black/80">
+                              Communication Flow
+                            </span>
+                            <span className={`font-black ${commColors.text}`}>
+                              {commScore}/100
+                            </span>
                           </div>
                           <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden border border-slate-200/40">
-                            <div 
+                            <div
                               className={`h-full rounded-full transition-all duration-1000 ${commColors.bg}`}
                               style={{ width: `${commScore}%` }}
                             />
@@ -239,11 +300,15 @@ export default function InterviewDetailPage({ params }: { params: Promise<{ id: 
                         {/* Tech score */}
                         <div className="flex flex-col gap-1.5">
                           <div className="flex justify-between items-center select-none">
-                            <span className="text-slate-500 font-bold print:text-black/80">Technical Accuracy</span>
-                            <span className={`font-black ${techColors.text}`}>{techScore}/100</span>
+                            <span className="text-slate-500 font-bold print:text-black/80">
+                              Technical Accuracy
+                            </span>
+                            <span className={`font-black ${techColors.text}`}>
+                              {techScore}/100
+                            </span>
                           </div>
                           <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden border border-slate-200/40">
-                            <div 
+                            <div
                               className={`h-full rounded-full transition-all duration-1000 ${techColors.bg}`}
                               style={{ width: `${techScore}%` }}
                             />
@@ -255,11 +320,13 @@ export default function InterviewDetailPage({ params }: { params: Promise<{ id: 
                 })()
               ) : (
                 <div className="text-center py-8 flex flex-col items-center gap-4">
-                  <p className="text-xs text-slate-450 italic font-medium leading-relaxed">No report has been compiled for this interview yet.</p>
+                  <p className="text-xs text-slate-450 italic font-medium leading-relaxed">
+                    No report has been compiled for this interview yet.
+                  </p>
                   <button
                     onClick={handleGenerateReport}
                     disabled={generatingReport}
-                    className="no-print w-full py-2.5 bg-[#E8503A] hover:bg-[#F06B57] text-white rounded-lg font-bold text-xs uppercase tracking-wider shadow-md shadow-[#E8503A]/10 hover:brightness-110 active:scale-95 transition flex justify-center items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                    className="no-print w-full py-2.5 bg-accent hover:bg-accent-bright text-white rounded-lg font-bold text-xs uppercase tracking-wider shadow-md shadow-accent/10 hover:brightness-110 active:scale-95 transition flex justify-center items-center gap-1.5 cursor-pointer disabled:opacity-50"
                   >
                     {generatingReport ? (
                       <>
@@ -284,7 +351,11 @@ export default function InterviewDetailPage({ params }: { params: Promise<{ id: 
                 disabled={generatingReport}
                 className="no-print w-full py-2.5 bg-white hover:bg-slate-50 border border-slate-200/60 rounded-lg text-xs font-black uppercase tracking-wider flex justify-center items-center gap-2 transition active:scale-95 text-slate-700 hover:text-slate-900 cursor-pointer disabled:opacity-50 shadow-sm"
               >
-                {generatingReport ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5 text-(--accent)" />}
+                {generatingReport ? (
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                ) : (
+                  <Sparkles className="w-3.5 h-3.5 text-(--accent)" />
+                )}
                 Re-generate Report Evaluation
               </button>
             )}
@@ -292,10 +363,12 @@ export default function InterviewDetailPage({ params }: { params: Promise<{ id: 
 
           {/* Detailed Feedback & Improvements */}
           <div className="lg:col-span-2 flex flex-col gap-5">
-            
             {/* Feedback card */}
             <div className="bg-white border border-slate-200/60 rounded-xl p-5 md:p-6 shadow-sm print-card flex flex-col gap-3">
-              <h2 className="text-sm font-black text-slate-800 uppercase tracking-widest border-b border-slate-100 pb-3 print:text-black print:border-black select-none flex items-center gap-2" style={{ fontFamily: "var(--font-display)" }}>
+              <h2
+                className="text-sm font-black text-slate-800 uppercase tracking-widest border-b border-slate-100 pb-3 print:text-black print:border-black select-none flex items-center gap-2"
+                style={{ fontFamily: "var(--font-display)" }}
+              >
                 <FileText className="w-5 h-5 text-(--accent)" />
                 Interview Evaluation Feedback
               </h2>
@@ -304,13 +377,19 @@ export default function InterviewDetailPage({ params }: { params: Promise<{ id: 
                   {session.report.feedback}
                 </p>
               ) : (
-                <p className="text-xs text-slate-400 italic text-center py-8">Generate the AI Evaluation report to view qualitative feedback.</p>
+                <p className="text-xs text-slate-400 italic text-center py-8">
+                  Generate the AI Evaluation report to view qualitative
+                  feedback.
+                </p>
               )}
             </div>
 
             {/* Improvement Guide card */}
             <div className="bg-white border border-slate-200/60 rounded-xl p-5 md:p-6 shadow-sm print-card flex flex-col gap-3">
-              <h2 className="text-sm font-black text-slate-800 uppercase tracking-widest border-b border-slate-100 pb-3 print:text-black print:border-black select-none flex items-center gap-2" style={{ fontFamily: "var(--font-display)" }}>
+              <h2
+                className="text-sm font-black text-slate-800 uppercase tracking-widest border-b border-slate-100 pb-3 print:text-black print:border-black select-none flex items-center gap-2"
+                style={{ fontFamily: "var(--font-display)" }}
+              >
                 <TrendingUp className="w-5 h-5 text-indigo-500" />
                 Technical Improvement Guide
               </h2>
@@ -319,17 +398,21 @@ export default function InterviewDetailPage({ params }: { params: Promise<{ id: 
                   {session.report.improvement_guide}
                 </p>
               ) : (
-                <p className="text-xs text-slate-400 italic text-center py-8">Generate the AI Evaluation report to view technical guidance details.</p>
+                <p className="text-xs text-slate-400 italic text-center py-8">
+                  Generate the AI Evaluation report to view technical guidance
+                  details.
+                </p>
               )}
             </div>
-
           </div>
-
         </section>
 
         {/* Complete conversation transcript timeline */}
         <section className="bg-white border border-slate-200/60 rounded-xl p-5 md:p-6 shadow-sm print-card relative z-10">
-          <h2 className="text-sm font-black text-slate-800 uppercase tracking-widest border-b border-slate-100 pb-3 print:text-black print:border-black select-none flex items-center gap-2" style={{ fontFamily: "var(--font-display)" }}>
+          <h2
+            className="text-sm font-black text-slate-800 uppercase tracking-widest border-b border-slate-100 pb-3 print:text-black print:border-black select-none flex items-center gap-2"
+            style={{ fontFamily: "var(--font-display)" }}
+          >
             <MessageSquare className="w-5 h-5 text-(--accent)" />
             Chronological Conversation Log
           </h2>
@@ -346,42 +429,57 @@ export default function InterviewDetailPage({ params }: { params: Promise<{ id: 
                   senderIcon = <Mic className="w-3.5 h-3.5 text-sky-500" />;
                   senderName = "Interviewer";
                   senderStyles = "text-sky-600";
-                  bubbleStyles = "bg-sky-50/50 text-slate-700 border-sky-100/70 hover:border-sky-200";
+                  bubbleStyles =
+                    "bg-sky-50/50 text-slate-700 border-sky-100/70 hover:border-sky-200";
                 } else if (turn.sender === "candidate") {
                   senderIcon = <User className="w-3.5 h-3.5 text-indigo-500" />;
                   senderName = "You (Candidate)";
                   senderStyles = "text-indigo-600";
-                  bubbleStyles = "bg-indigo-50/40 text-slate-700 border-indigo-100/50 hover:border-indigo-200";
+                  bubbleStyles =
+                    "bg-indigo-50/40 text-slate-700 border-indigo-100/50 hover:border-indigo-200";
                 } else {
-                  senderIcon = <Cpu className="w-3.5 h-3.5 text-[#E8503A]" />;
+                  senderIcon = <Cpu className="w-3.5 h-3.5 text-accent" />;
                   senderName = "Copilot";
-                  senderStyles = "text-[#E8503A]";
-                  bubbleStyles = "bg-red-50/30 text-slate-700 border-red-100/40 hover:border-red-200";
+                  senderStyles = "text-accent";
+                  bubbleStyles =
+                    "bg-red-50/30 text-slate-700 border-red-100/40 hover:border-red-200";
                 }
 
                 return (
-                  <div key={index} className="flex flex-col gap-1.5 pt-4 first:pt-0">
+                  <div
+                    key={index}
+                    className="flex flex-col gap-1.5 pt-4 first:pt-0"
+                  >
                     <div className="flex justify-between items-center select-none">
-                      <span className={`text-[10px] font-black uppercase tracking-wider flex items-center gap-1.5 ${senderStyles}`}>
+                      <span
+                        className={`text-[10px] font-black uppercase tracking-wider flex items-center gap-1.5 ${senderStyles}`}
+                      >
                         {senderIcon}
                         {senderName}
                       </span>
                       <span className="text-[9px] text-slate-400 font-bold">
-                        {new Date(turn.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                        {new Date(turn.timestamp).toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          second: "2-digit",
+                        })}
                       </span>
                     </div>
-                    <p className={`text-xs px-3.5 py-2.5 rounded-lg border leading-relaxed font-semibold select-text print:text-black print:bg-slate-100 print:border-slate-200 transition-colors duration-200 ${bubbleStyles}`}>
+                    <p
+                      className={`text-xs px-3.5 py-2.5 rounded-lg border leading-relaxed font-semibold select-text print:text-black print:bg-slate-100 print:border-slate-200 transition-colors duration-200 ${bubbleStyles}`}
+                    >
                       {turn.text}
                     </p>
                   </div>
                 );
               })
             ) : (
-              <p className="text-xs text-slate-400 italic py-6 text-center">No transcript data saved.</p>
+              <p className="text-xs text-slate-400 italic py-6 text-center">
+                No transcript data saved.
+              </p>
             )}
           </div>
         </section>
-
       </main>
 
       {/* Footer */}

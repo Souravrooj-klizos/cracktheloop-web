@@ -4,7 +4,6 @@ import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createPortal } from "react-dom";
 import {
-  Shield,
   Sparkles,
   CreditCard,
   Award,
@@ -15,12 +14,6 @@ import {
   ExternalLink,
   Zap,
   Gift,
-  Copy,
-  Check,
-  Users,
-  Star,
-  Link2,
-  TrendingUp,
   Laptop,
 } from "lucide-react";
 import Link from "next/link";
@@ -47,13 +40,13 @@ interface ReferralData {
 
 // Normalize raw Stripe price IDs stored in legacy records to human-readable tier names
 const PRICE_TO_TIER: Record<string, string> = {
-  "price_1TeCnyEkHwm1l3fZV45CSLvV": "starter",
-  "price_1TeCpEEkHwm1l3fZej0zzJhb": "pro",
-  "price_1TeCpaEkHwm1l3fZj9f7Gh31": "elite",
-  "price_1TgO9FLpVCAm43ah8vQKQWOg": "starter",
-  "price_1TgQxGLpVCAm43ahnYrNotgE": "starter",
-  "price_1TgO9nLpVCAm43ahHiFpXn5o": "pro",
-  "price_1TgQxGLpVCAm43ahl7CIJiRd": "pro",
+  price_1TeCnyEkHwm1l3fZV45CSLvV: "starter",
+  price_1TeCpEEkHwm1l3fZej0zzJhb: "pro",
+  price_1TeCpaEkHwm1l3fZj9f7Gh31: "elite",
+  price_1TgO9FLpVCAm43ah8vQKQWOg: "starter",
+  price_1TgQxGLpVCAm43ahnYrNotgE: "starter",
+  price_1TgO9nLpVCAm43ahHiFpXn5o: "pro",
+  price_1TgQxGLpVCAm43ahl7CIJiRd: "pro",
 };
 
 function normalizeTier(raw?: string): string {
@@ -75,9 +68,13 @@ function AccountDetailsContent() {
 
   function getCookie(name: string): string | null {
     if (typeof document === "undefined") return null;
-    const matches = document.cookie.match(new RegExp(
-      "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-    ));
+    const matches = document.cookie.match(
+      new RegExp(
+        "(?:^|; )" +
+          name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1") +
+          "=([^;]*)",
+      ),
+    );
     return matches ? decodeURIComponent(matches[1]) : null;
   }
 
@@ -145,9 +142,12 @@ function AccountDetailsContent() {
         <span className="text-[10px] text-(--accent) font-black uppercase tracking-widest">
           User Dashboard
         </span>
-        <h1 className="text-3xl font-black tracking-tight text-slate-800 flex items-center gap-2" style={{ fontFamily: "var(--font-display)" }}>
+        <h1
+          className="text-3xl font-black tracking-tight text-slate-800 flex items-center gap-2"
+          style={{ fontFamily: "var(--font-display)" }}
+        >
           Welcome back,{" "}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#E8503A] to-indigo-600">
+          <span className="text-transparent bg-clip-text bg-linear-to-r from-accent to-indigo-600">
             {user?.email?.split("@")[0]}
           </span>
         </h1>
@@ -159,7 +159,7 @@ function AccountDetailsContent() {
       {/* Account Info Cards */}
       <section className="grid grid-cols-1 md:grid-cols-2 gap-4 relative z-10">
         {/* Subscription Tier */}
-        <div className="bg-white border border-slate-200/60 rounded-xl p-5 flex flex-col justify-between min-h-[150px] shadow-sm transition hover:shadow-md">
+        <div className="bg-white border border-slate-200/60 rounded-xl p-5 flex flex-col justify-between min-h-37.5 shadow-sm transition hover:shadow-md">
           <div className="flex flex-col gap-1.5">
             <span className="text-[10px] text-slate-400 uppercase tracking-widest font-black">
               Subscription Status
@@ -192,7 +192,7 @@ function AccountDetailsContent() {
         </div>
 
         {/* Copilot Fuel (Credits) */}
-        <div className="bg-white border border-slate-200/60 rounded-xl p-5 flex flex-col justify-between min-h-[150px] shadow-sm transition hover:shadow-md">
+        <div className="bg-white border border-slate-200/60 rounded-xl p-5 flex flex-col justify-between min-h-37.5 shadow-sm transition hover:shadow-md">
           <div className="flex flex-col gap-1.5">
             <span className="text-[10px] text-slate-400 uppercase tracking-widest font-black">
               AI Copilot Fuel
@@ -218,7 +218,10 @@ function AccountDetailsContent() {
         {/* Referral Hub Card Link */}
         <div className="bg-white border border-slate-200/60 rounded-xl p-5 flex flex-col justify-between shadow-sm transition hover:shadow-md">
           <div className="flex flex-col gap-4">
-            <h2 className="text-sm font-black text-slate-800 uppercase tracking-widest border-b border-slate-100 pb-3 flex items-center gap-2 select-none" style={{ fontFamily: "var(--font-display)" }}>
+            <h2
+              className="text-sm font-black text-slate-800 uppercase tracking-widest border-b border-slate-100 pb-3 flex items-center gap-2 select-none"
+              style={{ fontFamily: "var(--font-display)" }}
+            >
               <Gift className="w-5 h-5 text-purple-600" />
               Referral Program Hub
             </h2>
@@ -228,7 +231,8 @@ function AccountDetailsContent() {
                 Invite Friends & Earn Credits
               </h4>
               <p className="text-xs text-slate-500 leading-relaxed font-medium">
-                Get up to 500 bonus credits when your friends join. They'll also get a +20% bonus credit on plan activations.
+                Get up to 500 bonus credits when your friends join. They'll also
+                get a +20% bonus credit on plan activations.
               </p>
             </div>
           </div>
@@ -244,7 +248,10 @@ function AccountDetailsContent() {
         {/* Main Billing Actions Box */}
         <div className="bg-white border border-slate-200/60 rounded-xl p-5 flex flex-col justify-between shadow-sm transition hover:shadow-md">
           <div className="flex flex-col gap-4">
-            <h2 className="text-sm font-black text-slate-800 uppercase tracking-widest border-b border-slate-100 pb-3 flex items-center gap-2 select-none" style={{ fontFamily: "var(--font-display)" }}>
+            <h2
+              className="text-sm font-black text-slate-800 uppercase tracking-widest border-b border-slate-100 pb-3 flex items-center gap-2 select-none"
+              style={{ fontFamily: "var(--font-display)" }}
+            >
               <CreditCard className="w-5 h-5 text-sky-500" />
               Billing Operations Console
             </h2>
@@ -254,14 +261,16 @@ function AccountDetailsContent() {
                 Stripe Customer Billing Portal
               </h4>
               <p className="text-xs text-slate-500 leading-relaxed font-medium">
-                We leverage Stripe for all payment transactions. Access the secure portal to download official invoices, update credit cards, or pause renewals.
+                We leverage Stripe for all payment transactions. Access the
+                secure portal to download official invoices, update credit
+                cards, or pause renewals.
               </p>
             </div>
           </div>
 
           <Link
             href="/pricing"
-            className="mt-5 px-4 py-2.5 bg-[#E8503A] hover:bg-[#F06B57] hover:brightness-110 text-white rounded-lg font-bold text-xs uppercase tracking-wider shadow-md shadow-[#E8503A]/10 hover:shadow-lg transition active:scale-95 flex items-center gap-2 cursor-pointer text-center justify-center w-full"
+            className="mt-5 px-4 py-2.5 bg-accent hover:bg-accent-bright hover:brightness-110 text-white rounded-lg font-bold text-xs uppercase tracking-wider shadow-md shadow-accent/10 hover:shadow-lg transition active:scale-95 flex items-center gap-2 cursor-pointer text-center justify-center w-full"
           >
             Upgrade Hub <ExternalLink className="w-4 h-4" />
           </Link>
@@ -273,7 +282,10 @@ function AccountDetailsContent() {
         {/* Download Stealth Desktop Client Section */}
         <div className="bg-white border border-slate-200/60 rounded-xl p-5 flex flex-col justify-between shadow-sm transition hover:shadow-md">
           <div className="flex flex-col gap-4">
-            <h2 className="text-sm font-black text-slate-800 uppercase tracking-widest border-b border-slate-100 pb-3 flex items-center gap-2 select-none" style={{ fontFamily: "var(--font-display)" }}>
+            <h2
+              className="text-sm font-black text-slate-800 uppercase tracking-widest border-b border-slate-100 pb-3 flex items-center gap-2 select-none"
+              style={{ fontFamily: "var(--font-display)" }}
+            >
               <Laptop className="w-5 h-5 text-indigo-500" />
               Download Stealth Desktop Client
             </h2>
@@ -283,7 +295,9 @@ function AccountDetailsContent() {
                 Native Client with Win32 Display Affinity
               </h4>
               <p className="text-xs text-slate-500 leading-relaxed font-medium">
-                Run the AI Copilot inside a transparent overlay that is completely invisible to Zoom, Teams, Meet, and other screen-sharing tools.
+                Run the AI Copilot inside a transparent overlay that is
+                completely invisible to Zoom, Teams, Meet, and other
+                screen-sharing tools.
               </p>
             </div>
           </div>
@@ -300,7 +314,9 @@ function AccountDetailsContent() {
             </a>
             <button
               onClick={() => {
-                alert("macOS Stealth HUD Companion Client is roadmapped for Q3 2026. Join the early beta circle by submitting your email on the homepage!");
+                alert(
+                  "macOS Stealth HUD Companion Client is roadmapped for Q3 2026. Join the early beta circle by submitting your email on the homepage!",
+                );
               }}
               className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-lg font-bold text-xs uppercase tracking-wider text-slate-800 shadow-xs transition active:scale-95 flex items-center gap-2 cursor-pointer justify-center flex-1 text-center"
             >
@@ -311,9 +327,12 @@ function AccountDetailsContent() {
         </div>
 
         {/* Profile Details */}
-        <div className="bg-white border border-slate-200/60 rounded-xl p-5 flex flex-col justify-between shadow-sm transition hover:shadow-md min-h-[180px]">
+        <div className="bg-white border border-slate-200/60 rounded-xl p-5 flex flex-col justify-between shadow-sm transition hover:shadow-md min-h-45">  
           <div className="flex flex-col gap-4">
-            <h2 className="text-sm font-black text-slate-800 uppercase tracking-widest border-b border-slate-100 pb-3 flex items-center gap-2 select-none" style={{ fontFamily: "var(--font-display)" }}>
+            <h2
+              className="text-sm font-black text-slate-800 uppercase tracking-widest border-b border-slate-100 pb-3 flex items-center gap-2 select-none"
+              style={{ fontFamily: "var(--font-display)" }}
+            >
               <UserIcon className="w-5 h-5 text-(--accent)" />
               Account Security
             </h2>
@@ -336,62 +355,63 @@ function AccountDetailsContent() {
       </section>
 
       {/* Celebratory Success Modal Dialog */}
-      {showCelebration && mounted && createPortal(
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md flex justify-center items-center z-[100] p-6 animate-fade-in">
-          <div className="w-full max-w-[420px] bg-white border border-(--border-light) rounded-xl p-6 flex flex-col items-center text-center shadow-xl relative">
-            <button
-              onClick={handleDismissCelebration}
-              className="text-slate-400 hover:text-slate-700 transition cursor-pointer font-bold absolute top-4 right-4 text-sm"
-            >
-              ✕
-            </button>
+      {showCelebration &&
+        mounted &&
+        createPortal(
+          <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md flex justify-center items-center z-100 p-6 animate-fade-in">
+            <div className="w-full max-w-105 bg-white border border-(--border-light) rounded-xl p-6 flex flex-col items-center text-center shadow-xl relative">
+              <button
+                onClick={handleDismissCelebration}
+                className="text-slate-400 hover:text-slate-700 transition cursor-pointer font-bold absolute top-4 right-4 text-sm"
+              >
+                ✕
+              </button>
 
-            <div className="w-16 h-16 rounded-full bg-emerald-50 border border-emerald-200 flex justify-center items-center mb-6 relative">
-              <CheckCircle className="w-8 h-8 text-emerald-600" />
-              <div className="absolute top-0 right-0 w-3 h-3 bg-indigo-500 rounded-full animate-ping"></div>
-            </div>
-
-            <h3 className="text-xl font-black text-slate-800 tracking-tight flex items-center gap-1.5">
-              <Sparkles className="w-5 h-5 text-amber-500 animate-pulse" />
-              Purchase Successful!
-            </h3>
-            <p className="text-xs text-slate-500 leading-relaxed font-semibold mt-3">
-              Congratulations! Your payment has been confirmed by Stripe. Your
-              account credits have been loaded and your subscription tier is now
-              active.
-            </p>
-
-            <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 w-full flex justify-around my-4">
-              <div className="flex flex-col">
-                <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">
-                  Tier Status
-                </span>
-                <span className="text-xs font-black text-emerald-600 mt-1 uppercase">
-                  Active
-                </span>
+              <div className="w-16 h-16 rounded-full bg-emerald-50 border border-emerald-200 flex justify-center items-center mb-6 relative">
+                <CheckCircle className="w-8 h-8 text-emerald-600" />
+                <div className="absolute top-0 right-0 w-3 h-3 bg-indigo-500 rounded-full animate-ping"></div>
               </div>
-              <div className="w-[1px] bg-slate-200"></div>
-              <div className="flex flex-col">
-                <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">
-                  Credits Loaded
-                </span>
-                <span className="text-xs font-black text-slate-800 mt-1">
-                  {user?.credits ?? "Updated"}
-                </span>
-              </div>
-            </div>
 
-            <button
-              onClick={handleDismissCelebration}
-              className="w-full py-2.5 bg-[#E8503A] hover:bg-[#F06B57] rounded-lg font-bold text-xs text-white uppercase tracking-wider transition active:scale-95 shadow-md flex justify-center items-center gap-1.5 cursor-pointer shadow-[#E8503A]/10"
-            >
-              <Zap className="w-4 h-4 text-white fill-white/20 animate-bounce" />
-              Awesome, Let's Go!
-            </button>
-          </div>
-        </div>,
-        document.body
-      )}
+              <h3 className="text-xl font-black text-slate-800 tracking-tight flex items-center gap-1.5">
+                <Sparkles className="w-5 h-5 text-amber-500 animate-pulse" />
+                Purchase Successful!
+              </h3>
+              <p className="text-xs text-slate-500 leading-relaxed font-semibold mt-3">
+                Congratulations! Your payment has been confirmed by Stripe. Your
+                account credits have been loaded and your subscription tier is
+                now active.
+              </p>
+
+              <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 w-full flex justify-around my-4">
+                <div className="flex flex-col">
+                  <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">
+                    Tier Status
+                  </span>
+                  <span className="text-xs font-black text-emerald-600 mt-1 uppercase">
+                    Active
+                  </span>
+                </div>
+                <div className="w-px bg-slate-200"></div>
+                <div className="flex flex-col">
+                  <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">
+                    Credits Loaded
+                  </span>
+                  <span className="text-xs font-black text-slate-800 mt-1">
+                    {user?.credits ?? "Updated"}
+                  </span>
+                </div>
+              </div>
+
+              <button
+                onClick={handleDismissCelebration}
+                className="w-full py-2.5 bg-accent hover:bg-accent-bright rounded-lg font-bold text-xs text-white uppercase tracking-wider transition active:scale-95 shadow-md flex justify-center items-center gap-1.5 cursor-pointer shadow-accent/10"
+              >
+                <Zap className="w-4 h-4 text-white fill-white/20 animate-bounce" />
+                Awesome, Let's Go!
+              </button>            </div>
+          </div>,
+          document.body,
+        )}
     </main>
   );
 }
