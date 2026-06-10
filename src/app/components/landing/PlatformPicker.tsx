@@ -30,8 +30,8 @@ export default function PlatformPicker() {
         "Standard low-latency voice capture",
       ],
       ctaText: "Start Web Copilot",
-      ctaLink: "/copilot",
-      isDownload: false,
+      ctaLink: "/dashboard/call-sessions",
+      isDownload: false
     },
     {
       id: "windows" as const,
