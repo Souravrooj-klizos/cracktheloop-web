@@ -134,7 +134,7 @@ export default function Sidebar({ user, onLogout }: SidebarProps) {
 
             <Link
               href="/pricing"
-              className="w-full py-2 bg-[#E8503A] hover:bg-[#F06B57] hover:brightness-110 text-white rounded-lg text-center font-semibold text-xs uppercase tracking-wider transition active:scale-95 shadow-sm shadow-[#E8503A]/10 hover:shadow-[#E8503A]/20"
+              className="w-full py-2 bg-accent hover:bg-accent-bright hover:brightness-110 text-white rounded-lg text-center font-semibold text-xs uppercase tracking-wider transition active:scale-95 shadow-sm shadow-accent/10 hover:shadow-accent/20"
             >
               Get Credits
             </Link>
@@ -197,7 +197,7 @@ export default function Sidebar({ user, onLogout }: SidebarProps) {
 
       {/* Mobile Menu Overlay */}
       {mobileMenuOpen && (
-        <div className="md:hidden fixed inset-x-0 top-[57px] bottom-0 bg-white/95 backdrop-blur-md z-30 flex flex-col p-6 justify-between select-none animate-fade-in border-b border-(--border-light) shadow-md overflow-y-auto">
+        <div className="md:hidden fixed inset-x-0 top-14.25 bottom-0 bg-white/95 backdrop-blur-md z-30 flex flex-col p-6 justify-between select-none animate-fade-in border-b border-(--border-light) shadow-md overflow-y-auto">
           <div className="flex flex-col gap-6">
             <span className="text-[11px] text-slate-400 font-semibold uppercase tracking-wider px-2">Navigation</span>
             <nav className="flex flex-col gap-2">
@@ -238,7 +238,7 @@ export default function Sidebar({ user, onLogout }: SidebarProps) {
               <Link
                 href="/pricing"
                 onClick={() => setMobileMenuOpen(false)}
-                className="px-4 py-2 bg-[#E8503A] hover:bg-[#F06B57] hover:brightness-110 text-white rounded-lg font-semibold text-xs uppercase tracking-wider shrink-0 transition"
+                className="px-4 py-2 bg-accent hover:bg-accent-bright hover:brightness-110 text-white rounded-lg font-semibold text-xs uppercase tracking-wider shrink-0 transition"
               >
                 Get Credits
               </Link>
